@@ -10,9 +10,8 @@ This is the summary of my book.
         * 运行Prometheus容器
     * 初识Prometheus配置
         * 使用NodeExporter采集主机信息
-            * 运行NodeExporter
-            * 配置Prometheus采集目标
-            * 重新加载配置
+        * 配置Prometheus采集目标
+        * 重新加载配置
     * Pull Vs Push
     * Promethues生态系统
         * AlertManager

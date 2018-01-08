@@ -1,4 +1,5 @@
 node_modules
 _book
 .vscode
+.vagrant
 npm-debug.log

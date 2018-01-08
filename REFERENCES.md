@@ -7,3 +7,4 @@
 * https://github.com/katosys/kato/issues/43
 * https://www.robustperception.io/tag/tuning/
 * https://www.robustperception.io/how-much-ram-does-my-prometheus-need-for-ingestion/
+* https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
