@@ -1,0 +1,20 @@
+{
+  "name": "prometheus-in-action",
+  "version": "1.0.0",
+  "description": "``` npm install -g gitbook-cli ```",
+  "main": "index.js",
+  "scripts": {
+    "build": "gitbook build",
+    "start": "gitbook serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:moo/prometheus-in-action.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-recently-updated": "github:jwarby/gitbook-plugin-recently-updated"
+  }
+}

@@ -1,0 +1,4 @@
+node_modules
+_book
+.vscode
+npm-debug.log
