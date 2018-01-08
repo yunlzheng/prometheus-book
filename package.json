@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "gitbook build",
-    "start": "gitbook serve"
+    "start": "gitbook serve",
+    "installPlugins": "gitbook install"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,9 @@
   "license": "MIT",
   "dependencies": {
     "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-recently-updated": "github:jwarby/gitbook-plugin-recently-updated"
+    "gitbook-plugin-anchor-navigation": "0.0.1",
+    "gitbook-plugin-image-captions": "^3.1.0",
+    "gitbook-plugin-recently-updated": "github:jwarby/gitbook-plugin-recently-updated",
+    "gitbook-plugin-sectionx": "^3.1.0"
   }
 }

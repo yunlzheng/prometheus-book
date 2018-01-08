@@ -3,6 +3,14 @@
   "description": "",
   "language": "zh-hans",
   "plugins": [
-    "recently-updated"
-  ]
+    "recently-updated",
+    "image-captions",
+    "sectionx",
+    "anchor-navigation"
+  ],
+  "pluginsConfig": {
+      "image-captions": {
+          "caption": "_CAPTION_"
+      }
+  }
 }
