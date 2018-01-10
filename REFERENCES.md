@@ -8,6 +8,10 @@
 
 * https://coreos.com/blog/prometheus-2.0-storage-layer-optimization
 
+### Kubernetes
+
+* https://docs.bitnami.com/kubernetes/how-to/configure-autoscaling-custom-metrics/
+
 ### Others
 
 * https://news.ycombinator.com/item?id=12455045
