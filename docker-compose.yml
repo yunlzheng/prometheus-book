@@ -9,6 +9,7 @@ services:
       - ./prometheus:/etc/prometheus
   node_exporter:
     image: quay.io/prometheus/node-exporter
+    pid: "host"
     ports:
       - 9100:9100
   
