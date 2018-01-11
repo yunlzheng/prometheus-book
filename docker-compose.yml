@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  prometheus:
+    image: quay.io/prometheus/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+  node_exporter:
+    image: quay.io/prometheus/node-exporter
+    ports:
+      - 9100:9100
+  
