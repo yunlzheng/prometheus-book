@@ -1,6 +1,6 @@
-## Prometheus In Action
+## Prometheus实践之路
 
-Prometheus实战
+Prometheus实践之路
 
 ### 全书组织
 
