@@ -19,9 +19,11 @@
         * PushGateway
             * Pull Vs Push
     * [在Linux环境下安装Prometheus](./sources/install_prometheus_in_with_binary.md)
-        * 安装Prometheus Server
-        * 安装NodeExporter采集主机信息
-        * 启用Basic Auth认证
+        * [安装Prometheus Server](./sources/install_prometheus_server_with_binary.md)
+        * [安装NodeExporter采集主机信息](./sources/install_node_exporter_with_binary.md)
+        * [配置Prometheus采集主机信息](./sources/config_prometheus_scarap_node_metrics.md)
+        * [验证部署过程](./sources/verify_prometheus_service_install.md)
+        * [启用Basic Auth认证](./sources/security_prometheus_enable_http_basic_auth.md)
     * [在Docker环境下安装Prometheus](./sources/install_prometheus_in_docker.md)
         * 使用Docker容器启动Prometheus
         * 使用Docker Compose启动Prometheus
@@ -55,7 +57,6 @@
     * 告警模板
     * 第三方集成
         * 与邮件系统集成
-            * 自定义邮件模板
         * 与Slack集成
         * 与Webhook集成
             * 示例：基于Webhook创建自定义扩展
