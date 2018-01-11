@@ -1,6 +1,7 @@
 # 目录
 
 * [Introduction](README.md)
+* [作者](AUTHOR.md)
 * [版本变更历史](CHANGELOGS.md)
 * [第一章 天降奇兵](./chapter0/README.md)
     * [Prometheus简介](./sources/what-is-prometheus.md)
