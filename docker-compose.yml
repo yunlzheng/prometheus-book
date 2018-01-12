@@ -12,4 +12,10 @@ services:
     pid: "host"
     ports:
       - 9100:9100
-  
+  docker_exporter:
+    image: wisecity/docker-metrics-exporter
+    ports:
+      - 9095:9095
+    volumes:
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run:/var/run:rw

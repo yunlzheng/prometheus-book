@@ -23,3 +23,9 @@ scrape_configs:
   static_configs:
   - targets:
     - node_exporter:9100
+- job_name: docker
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - docker_exporter:9095
