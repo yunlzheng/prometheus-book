@@ -29,3 +29,9 @@ scrape_configs:
   static_configs:
   - targets:
     - docker_exporter:9095
+- job_name: cadvisor
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - cadvisor:8080

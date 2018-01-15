@@ -19,3 +19,11 @@ services:
     volumes:
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run:/var/run:rw
+  cadvisor:
+    image: google/cadvisor:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro 
+      - /var/run:/var/run:rw
+      - /var/lib/docker/:/var/lib/docker:ro
