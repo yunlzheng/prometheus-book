@@ -1,0 +1,31 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 5s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: []
+    scheme: http
+    timeout: 10s
+scrape_configs:
+  - job_name: consul_sd
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    consul_sd_configs:
+      - server: consul:8500
+        scheme: http
+        services:
+          - node_exporter
+          - cadvisor
+    relabel_configs:
+    - source_labels:  ["__meta_consul_dc"]
+      regex: "(.*)"
+      replacement: $1
+      action: replace
+      target_label: "dc"
+    - source_labels: ["__meta_consul_tags"]
+      regex: ".*,development,.*"
+      action: keep

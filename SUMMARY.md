@@ -29,7 +29,8 @@
         * 使用Docker容器启动Prometheus
         * 使用Docker Compose启动Prometheus
     * [小结](./chapter0/SUMMARY.md)
-* 第二章 理解Prometheus模型
+
+* [第二章 探索PromQL](sources/exploration_of_promql.md)
     * 什么是Metrics和Lables
         * 数据存储模型
         * 新的存储层

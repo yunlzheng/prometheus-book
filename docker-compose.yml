@@ -1,24 +1,45 @@
 version: '2'
 
 services:
+  consul:
+    image: consul
+    ports:
+      - 8400:8400
+      - 8500:8500
+      - 8600:53/udp
+    command: agent -server -client=0.0.0.0 -dev -node=node0 -bootstrap-expect=1 -data-dir=/tmp/consul
+    labels:
+      SERVICE_IGNORE: 'true'
+  registrator:
+    image: gliderlabs/registrator
+    depends_on:
+      - consul
+    volumes:
+      - /var/run:/tmp:rw
+    command: consul://consul:8500
   prometheus:
     image: quay.io/prometheus/prometheus
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus:/etc/prometheus
+      # - ./prometheus/prometheus_static.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus_consul.yml:/etc/prometheus/prometheus.yml
   node_exporter:
     image: quay.io/prometheus/node-exporter
     pid: "host"
     ports:
       - 9100:9100
+    labels:
+      SERVICE_TAGS: "development"
+      SERVICE_NAME: "node_exporter"
+      SERVICE_TAG_IO_PROMETHEUS_SCRAPED: "true"
   docker_exporter:
     image: wisecity/docker-metrics-exporter
-    ports:
-      - 9095:9095
     volumes:
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run:/var/run:rw
+    labels:
+      SERVICE_TAGS: "production"
   cadvisor:
     image: google/cadvisor:latest
     ports:
@@ -27,3 +48,5 @@ services:
       - /:/rootfs:ro 
       - /var/run:/var/run:rw
       - /var/lib/docker/:/var/lib/docker:ro
+    labels:
+      SERVICE_TAGS: "production,scraped"
