@@ -24,6 +24,12 @@ services:
     volumes:
       # - ./prometheus/prometheus_static.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/prometheus_consul.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ~/grafana/:/var/lib/grafana:rw
   node_exporter:
     image: quay.io/prometheus/node-exporter
     pid: "host"
@@ -40,13 +46,25 @@ services:
       - /var/run:/var/run:rw
     labels:
       SERVICE_TAGS: "production"
-  cadvisor:
-    image: google/cadvisor:latest
+  # cadvisor:
+  #   image: google/cadvisor:latest
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - /:/rootfs:ro 
+  #     - /var/run:/var/run:rw
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   labels:
+  #     SERVICE_TAGS: "production,scraped"
+  jenkins:
+    image: jenkins/jenkins
     ports:
       - 8080:8080
+      - 50000:50000
     volumes:
-      - /:/rootfs:ro 
-      - /var/run:/var/run:rw
-      - /var/lib/docker/:/var/lib/docker:ro
+      - ~/jenkins_home/:/var/jenkins_home/:rw
     labels:
-      SERVICE_TAGS: "production,scraped"
+      SERVICE_NAME: "jenkins"
+      SERVICE_8080_NAME: "jenkins"
+      SERVICE_8080_PORT: "8080"
+      SERVICE_50000_IGNORE: "true"
