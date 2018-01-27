@@ -1,19 +1,42 @@
 # 目录
+
 * [Introduction](README.md)
 * [作者](AUTHOR.md)
 * [版本变更历史](CHANGELOGS.md)
 * [第一章 天降奇兵](./chapter0/README.md)
   * [Prometheus是什么](./sources/what-is-prometheus.md)
   * [Prometheus的核心组件](./sources/prometheus-architecture-and-components.md)
-  * 初识Prometheus
-    * [在Linux下安装Prometheus](./sources/install_prometheus_in_with_binary.md)
-    * [在Docker环境下安装Prometheus](./sources/install_prometheus_in_docker.md)
-  * [百里挑一](./sources/comparison_with_other.md)
+        * Prometheus Server
+        * Exporters
+        * AlertManager
+        * PushGateway
+          * Pull Vs Push
+  * Prometheus简介
+        * 前世今生
+        * 适用场景
+        * 百里挑一
+            * Prometheus Vs Graphite
+            * Prometheus Vs InfluxDB
+            * Prometheus Vs OpenTSDB
+            * Prometheus Vs Nagios
+  * [在Linux环境下安装Prometheus](./sources/install_prometheus_in_with_binary.md)
+        * [安装Prometheus Server](./sources/install_prometheus_server_with_binary.md)
+        * [安装NodeExporter采集主机信息](./sources/install_node_exporter_with_binary.md)
+        * [配置Prometheus采集主机信息](./sources/config_prometheus_scarap_node_metrics.md)
+        * [验证部署过程](./sources/verify_prometheus_service_install.md)
+        * [启用Basic Auth认证](./sources/security_prometheus_enable_http_basic_auth.md)
+  * [在Docker环境下安装Prometheus](./sources/install_prometheus_in_docker.md)
+        * 使用Docker容器启动Prometheus
+        * 使用Docker Compose启动Prometheus
   * [小结](./chapter0/SUMMARY.md)
 * [第二章 探索PromQL](sources/exploration_of_promql.md)
-  * [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)
+  * 什么是Metrics和Lables
   * [Prometheus Query Language](./sources/prometheus-query-language.md)
   * Metrics类型
+        * Counter
+        * Gauges
+        * Histograms
+        * Summaries
   * 新的存储层
   * 最佳实践
   * 小结
@@ -33,7 +56,7 @@
         * 与Slack集成
         * 与Webhook集成
             * 示例：基于Webhook创建自定义扩展
-  * 小结
+    * 小结
 * 第四章 可视化一切
   * Grafana简介
   * 安装Grafana
