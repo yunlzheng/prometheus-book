@@ -13,8 +13,11 @@
   - [小结](./chapter0/SUMMARY.md)
 - [第二章 探索PromQL](sources/exploration_of_promql.md)
   - [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)
-  - [Prometheus Query Language](./sources/prometheus-query-language.md)
   - [Metrics类型](./sources/prometheus-metrics-types.md)
+  - [初识PromQL](./sources/prometheus-query-language.md)
+  - [时间序列选择器](./sources/prometheus-time-series-selectors.md)
+  - [PromQL操作符](./sources/prometheus-promql-operators.md)
+  - PromQL内置函数
   - 新的存储层
   - 最佳实践
   - 小结

@@ -8,120 +8,132 @@
 
 ### Counter：只增不减的计数器
 
-Counter类型好比计数器，用于统计类似于：CPU使用时间，API访问总次数，异常发生次数等等场景。这些指标的特点就是增加不减少。
+计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_counter.jpeg)
+对于Counter类型的指标，只包含一个inc()方法，用于计数器+1
 
-Counter类型，Counter类型好比计数器，用于统计类似于：CPU时间，API访问总次数，异常发生次数等等场景。这些指标的特点就是增加不减少。
+一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
 
-Example: 容器CPU使用率
+通过指标io_namespace_http_requests_total我们可以：
 
-在使用cAdvisor采集容器数据时，我们会得到监控指标**container_cpu_user_seconds_total**，该指标的的数据类型为Counter用户反映当前容器在各个CPU内核上已经使用的CPU总时间。
-
-通过Prometheus直接查询该指标我们会得到以下数据
+* 查询应用的请求总量
 
 ```
-container_cpu_usage_seconds_total{beta_kubernetes_io_arch="amd64",beta_kubernetes_io_os="linux",container_name="mysql",cpu="cpu03",id="/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod74ab5e96_6209_11e7_9990_00163e122a49.slice/docker-fb332c4ede82562be6eaebe3eef6376d3f37b3402a7fd570c7c95f8963012c0b.scope",image="docker.io/mysql@sha256:d178dffba8d81afedc251498e227607934636e06228ac63d58b72f9e9ec271a6",instance="dev-4",job="kubernetes-nodes",kubernetes_io_hostname="dev-4",name="k8s_mysql_go-todo-mysql-3723120250-vf8wx_default_74ab5e96-6209-11e7-9990-00163e122a49_0",namespace="default",pod_name="go-todo-mysql-3723120250-vf8wx"}
-container_cpu_usage_seconds_total{beta_kubernetes_io_arch="amd64",beta_kubernetes_io_os="linux",container_name="mysql",cpu="cpu01",id="/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod74ab5e96_6209_11e7_9990_00163e122a49.slice/docker-fb332c4ede82562be6eaebe3eef6376d3f37b3402a7fd570c7c95f8963012c0b.scope",image="docker.io/mysql@sha256:d178dffba8d81afedc251498e227607934636e06228ac63d58b72f9e9ec271a6",instance="dev-4",job="kubernetes-nodes",kubernetes_io_hostname="dev-4",name="k8s_mysql_go-todo-mysql-3723120250-vf8wx_default_74ab5e96-6209-11e7-9990-00163e122a49_0",namespace="default",pod_name="go-todo-mysql-3723120250-vf8wx"}
+# PromQL
+sum(io_namespace_http_requests_total)
 ```
 
-如果使用图形化查询我们可以看出
+![](http://p2n2em8ut.bkt.clouddn.com/httP_request_total.png)
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_cpu_counter.png)
-
-因此当我们需要统计容器CPU的使用率时，我们需要使用rate()函数计算该Counter在过去一段时间内在每一个时间序列上的每秒的平均增长率
+* 查询每秒Http请求量
 
 ```
-rate(container_cpu_user_seconds_total[5m]) * 100
+# PromQL
+sum(rate(io_wise2c_gateway_requests_total[5m]))
 ```
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_cpu_usgae.png)
+![](http://p2n2em8ut.bkt.clouddn.com/http_request_rate.png)
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_guage.jpg)
+* 查询当前应用请求量Top N的URI
+
+```
+# PromQL
+topk(10, sum(io_namespace_http_requests_total) by (path))
+```
 
 ### Gauge: 可增可减的仪表盘
 
-Gauge类型，英文直译的话叫“计量器”，但是和Counter的翻译太类似了，因此我个人更喜欢使用”仪表盘“这个称呼。仪表盘的特点就是数值是可以增加或者减少的。因此Gauge适合用于如：当前内存使用率，当前CPU使用率，当前温度，当前速度等等一系列的监控指标。
+对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
 
-Example：主机负载信息
+对于Gauge指标的对象则包含两个主要的方法inc()以及dec(),用户添加或者减少计数。在这里我们使用Gauge记录当前正在处理的Http请求数量。
 
-在使用NodeExporter时，指标node_load1可以反映当前主机的负载情况，而其类型则是Gauge，因此在查询主机负载变化时比较简单，直接使用node_load1即可查询出当前所有主机的负载情况
+通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量:
 
 ```
-node_load1{app="node-exporter",instance="192.168.2.2:9100",job="kubernetes-service-endpoints",kubernetes_name="node-exporter",kubernetes_namespace="default",name="node-exporter",nodeIp="192.168.2.2:9100"}
-node_load1{app="node-exporter",instance="192.168.2.3:9100",job="kubernetes-service-endpoints",kubernetes_name="node-exporter",kubernetes_namespace="default",name="node-exporter",nodeIp="192.168.2.3:9100"}
+# PromQL
+io_namespace_http_inprogress_requests{}
 ```
-
-![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_node_load.png)
 
 ### Histogram: 自带分区统计的分布统计图
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_histogram.png)
+主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。
 
-Histogram这个比较直接柱状图图，更多的是用于统计一些数据分布的情况，用于计算在一定范围内的分布情况，同时还提供了度量指标值的总和。
+以请求响应时间requests_latency_seconds为例，假如我们需要记录http请求响应时间符合在分布范围{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}中的次数时。
 
-Example：
-以Kubernates的API Server度量指标apiserver_request_latencies为例，该指标反映了Kubernates的API请求响应延迟时间。该指标会在一次监控数据抓取过程中返回2中Metrics Key
+使用Histogram构造器可以创建Histogram监控指标。默认的buckets范围为{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}。如何需要覆盖默认的buckets，可以使用.buckets(double... buckets)覆盖。
 
-```
-apiserver_request_latencies_bucket
-apiserver_request_latencies_count
-apiserver_request_latencies_sum
-```
+Histogram会自动创建3个指标，分别为：
 
-apiserver_request_latencies_bucket反映在各个API响应延迟范围(le)内总数
+* 事件发生总次数： basename_count
 
 ```
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="+Inf",resource="podpresets",verb="WATCH"}	773
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="500000",resource="endpoints",verb="DELETE"}	85
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="1e+06",resource="configmaps",verb="PUT"}	1
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="1e+06",resource="daemonsets",verb="WATCHLIST"}	0
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="2e+06",resource="replicationcontrollers",verb="GET"}	6
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="125000",resource="deployments",verb="PATCH"}	12
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="+Inf",resource="configmaps",verb="DELETE"}	9
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="125000",resource="replicasets",verb="GET"}	1331
-apiserver_request_latencies_bucket{instance="192.168.2.2:6443",job="kubernetes-apiservers",le="+Inf",resource="persistentvolumes",verb="LIST"}	3
+# 实际含义： 当前一共发生了2次http请求
+io_namespace_http_requests_latency_seconds_histogram_count{path="/",method="GET",code="200",} 2.0
 ```
 
-apiserver_request_latencies_count反映对各个资源API的请求次数
+* 所有事件产生值的大小的总和: basename_sum
 
 ```
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="replicasets",verb="PUT"}	3030
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="deployments",verb="PUT"}	2454
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="clusterroles",verb="WATCH"}	1527
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="replicationcontrollers",verb="WATCHLIST"}	7
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="clusterroles",verb="POST"}	42
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="resourcequotas",verb="LIST"}	304
-apiserver_request_latencies_count{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="pods",verb="DELETE"}	913
+# 实际含义： 发生的2次http请求总的响应时间为13.107670803000001 秒
+io_namespace_http_requests_latency_seconds_histogram_sum{path="/",method="GET",code="200",} 13.107670803000001
 ```
 
-而apiserver_request_latencies_sum则反映出对各个资源API操作延迟时间的总量
+* 事件产生的值分布在bucket中的次数： basename_bucket{le="上包含"}
 
 ```
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="replicationcontrollers",verb="LIST"}	554991
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="clusterroles",verb="LIST"}	33586061
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="configmaps",verb="DELETE"}	16466
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="pods",verb="WATCH"}	3430725671235
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="secrets",verb="LIST"}	5843
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="nodes",verb="LIST"}	92849
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="persistentvolumes",verb="LIST"}	9302
-apiserver_request_latencies_sum{instance="192.168.2.2:6443",job="kubernetes-apiservers",resource="serviceaccounts",verb="WATCH"}	1378625982766
-```
-
-在Exporter获取的度量指标当中通常会以一下形式表现：
-
-```
-<base_name>_bucket{ label1=value1, label2=value2 }
+# 在总共2次请求当中。http请求响应时间 <=0.005 秒 的请求次数为0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.005",} 0.0
+# 在总共2次请求当中。http请求响应时间 <=0.01 秒 的请求次数为0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.01",} 0.0
+# 在总共2次请求当中。http请求响应时间 <=0.025 秒 的请求次数为0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.025",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.05",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.075",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.1",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.25",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.5",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="0.75",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="1.0",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="2.5",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="5.0",} 0.0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="7.5",} 2.0
+# 在总共2次请求当中。http请求响应时间 <=10 秒 的请求次数为0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="10.0",} 2.0
+# 在总共2次请求当中。http请求响应时间 10 秒 的请求次数为0
+io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="+Inf",} 2.0
 ```
 
 ### Summary：客户端定义的分布统计图
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog/prometheus_summary.png)
+Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。
 
-Summary摘要和Histogram柱状图比较类似，主要用于计算在一定时间窗口范围内度量指标对象的总数以及所有对量指标值的总和。
+Summary和Histogram都提供了对于事件的计数_count以及值的汇总_sum。 因此使用_count,和_sum时间序列可以计算出相同的内容，例如http每秒的平均响应时间：rate(basename_sum[5m]) / rate(basename_count[5m])。
 
-例如：
+同时Summary和Histogram都可以计算和统计样本的分布情况，比如中位数，9分位数等等。其中 0.0<= 分位数Quantiles <= 1.0。
 
-apiserver_request_latencies_summary
-apiserver_request_latencies_summary_count
-apiserver_request_latencies_summary_sum
+不同在于Histogram可以通过histogram_quantile函数在服务器端计算分位数。 而Sumamry的分位数则是直接在客户端进行定义。因此对于分位数的计算。 Summary在通过PromQL进行查询时有更好的性能表现，而Histogram则会消耗更多的资源。相对的对于客户端而言Histogram消耗的资源更少。
+
+Summary指标，会对应多个时间序列：
+
+* 事件发生总的次数
+
+```
+# 含义：当前http请求发生总次数为12次
+io_namespace_http_requests_latency_seconds_summary_count{path="/",method="GET",code="200",} 12.0
+```
+
+* 事件产生的值的总和
+
+```
+# 含义：这12次http请求的总响应时间为 51.029495508s
+io_namespace_http_requests_latency_seconds_summary_sum{path="/",method="GET",code="200",} 51.029495508
+```
+
+* 事件产生的值的分布情况
+
+```
+# 含义：这12次http请求响应时间的中位数是3.052404983s
+io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="200",quantile="0.5",} 3.052404983
+# 含义：这12次http请求响应时间的9分位数是8.003261666s
+io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="200",quantile="0.9",} 8.003261666
+```
