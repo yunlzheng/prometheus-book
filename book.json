@@ -1,15 +1,31 @@
 {
   "title": "Prometheus In Action",
+  "author": "yunlzheng",
   "description": "",
   "language": "zh-hans",
+  "links" : {
+    "sidebar" : {
+        "Github" : "http://github.com/yunlzheng"
+    }
+  },
   "plugins": [
     "image-captions",
     "sectionx",
-    "anchor-navigation"
+    "anchor-navigation",
+    "splitter",
+    "anchor-navigation",
+    "-sharing"
   ],
   "pluginsConfig": {
       "image-captions": {
           "caption": "_CAPTION_"
+      },
+      "toc2": {
+        "addClass": true,
+        "className": "toc"
+      },
+      "theme-default": {
+        "showLevel": true
       }
   }
 }
