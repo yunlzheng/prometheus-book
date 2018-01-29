@@ -60,6 +60,7 @@
   - 扩展Spring Boot应用支持应用指标采集
   - 小结
 - 第六章 Prometheus服务发现
+  - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - 基于文件的服务发现机制
         - 创建文件
         - 配置Prometheus使用基于文件的动态发现
