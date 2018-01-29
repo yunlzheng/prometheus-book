@@ -60,17 +60,19 @@
   - 扩展Spring Boot应用支持应用指标采集
   - 小结
 - 第六章 Prometheus服务发现
-  - 基于文件的服务发现
+  - 基于文件的服务发现机制
         - 创建文件
         - 配置Prometheus使用基于文件的动态发现
         - 定义刷新时间
-  - 基于Consul的服务发现
+  - 基于Consul的服务发现机制
         - Consul介绍
         - Consul的安装和使用
         - 注册Exporter到Consul
         - 配置Prometheus使用Consul动态发现
+  - 基于DNS的服务发现机制
+  - 服务发现与Relabel机制
   - 小结
-- [第七章 运行和管理Prometheus](./chapter7/READMD.md)
+- [第七章 集群与高可用](./chapter7/READMD.md)
   - 数据管理
         - 本地存储
         - 创建快照
@@ -83,7 +85,8 @@
   - 使用Promgen管理Prometheus
   - 从1.0迁移到2.0
   - [总结](./chapter4/SUMMARY.md)
-- 第八章 Kubernetes监控实战
+- 第八章 使用Prometheus Opertor管理Prometheus
+- 第九章 Kubernetes监控实战
   - Kubernetes简介
   - 搭建Kubernetes本地测试环境
   - Prometheus Vs Heapster

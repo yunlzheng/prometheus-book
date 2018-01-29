@@ -1,6 +1,6 @@
-## Prometheus实践之路
+## Prometheus: 云原生监控之道
 
-Prometheus实践之路
+Prometheus: 云原生监控之道
 
 ### 全书组织
 
