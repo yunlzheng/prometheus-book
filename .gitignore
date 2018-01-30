@@ -3,3 +3,4 @@ _book
 .vscode
 .vagrant
 npm-debug.log
+**/**/.vagrant

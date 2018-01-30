@@ -30,6 +30,8 @@ Prometheus: 云原生监控之道
 book
  |- CHANGELOGS.md 版本更新历史
  |- SUMMARY.md 目录
+ |- examples 示例代码
+    |- ch[n] 各个章节的示例代码以及测试环境
  |- chapter[n] 章节
     |- static/ 静态文件资源
     |- README.md 章节头
