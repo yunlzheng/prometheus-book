@@ -4,6 +4,7 @@
 - [作者](AUTHOR.md)
 - [版本变更历史](CHANGELOGS.md)
 - [第一章 天降奇兵](./chapter0/README.md)
+  - [为什么需要监控](./sources/why-monitor.md)
   - [Prometheus是什么](./sources/what-is-prometheus.md)
   - [Prometheus的核心组件](./sources/prometheus-architecture-and-components.md)
   - 初识Prometheus
