@@ -1,3 +1,5 @@
+# 神兵天降
+
 ## 为什么需要监控
 
 * Know when things go wrong
@@ -6,12 +8,20 @@
 * Trending to see changes over time, and drive technical/business decisions
 * To feed into other systems/processes（eg. QA, security, automation）
 
+## 回顾一下过去
+
+* 基础设施
+* 应用架构
+* old monitor system
+
 ## 监控的挑战
+
+### 基本挑战
 
 Themes common among companies o've talk to:
 
 * Monitoring tools are limited, both technically and conceptually.
-* Tools don;t scale weel and are unwieldy to manage.
+* Tools don‘t scale weel and are unwieldy to manage.
 * Operation practices don't align with the business
 
 For example:
@@ -20,9 +30,13 @@ Your customers care about increased latency and it;s in your SLAs. You can only 
 
 Result: Engineers continously worken up for non-issues, get fatigued.
 
+### 应用架构的演变
+
+### 基础设施的演变
+
 ## Fundamental Challenge is Limited Visibility
 
-## Prometheus
+## Prometheus来了
 
 Inspired by Google's Borgmon monitoring system.
 
