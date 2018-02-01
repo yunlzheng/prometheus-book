@@ -1,4 +1,4 @@
-## Prometheus的核心组件
+# Prometheus的核心组件
 
 Prometheus主要包含以下组件：
 
