@@ -4,7 +4,28 @@ Prometheus主要包含以下组件：
 
 ![Prometheus架构](../chapter0/static/architecture.svg)
 
-* Prometheus Server: 负责采集以及存储时间序列数据；
-* Exporter: 用于向Prometheus Server暴露目标监控指标的EndPoint， 社区提供了大量的Exporter可以使Prometheus实现对服务器，容器，中间件等监控数据采集。
-* AlertManager: 用于处理由Prometheus产生的告警，实现与第三方如，邮件，Slack,Webhook的集成。
-* Push Gateway: Prometheus代理层，支持客户端向Push Gateway主动Push数据。Prometheus与Push Gateway之间依然通过Pull的形式收集数据。
+## Prometheus Server
+
+Prometheus Server是Prometheus组件中的核心部分，Prometheus Server的第一个能力是监控目标的检索和管理能力，Prometheus Server可以通过静态配置管理监控目标，也可以使用外部的Service Discovery服务动态管理监控目标。
+其次Prometheus Server需要对采集到的监控数据进行存储，因此Prometheus Server本身也是一个时序数据库，在本地将采集到的监控数据按照时序的方式存在在本地磁盘当中。最后Prometheus Server对外提供了自定义的PromQL语言，支持用户按需查询监控数据。
+
+Prometheus Server内置了一个Express Browser的UI，可以在这个UI上直接通过PromQL查询数据，并且可以通过图表的形式进行展示。
+
+Prometheus Server还可以从其他的Prometheus Server实例中获取数据，因此在大规模监控的情况下，我们可以通过功能分区以及联邦集群的方式对Prometheus Server进行扩展。
+
+## Exporters
+
+Exporter通过将监控数据采集的EndPoint暴露给Prometheus Server, Prometheus Server通过访问该Exporter提供的Endpoint端点，即可获取到需要采集的监控数据。
+
+一般来说我们将Exporter一般可以分为几类：
+
+* 直接采集：这一类Exporter直接内置了对Prometheus监控的支持，比如cAdvisor,Kubernetes,Etcd,gokit等，都直接内置了用于向Prometheus暴露监控数据的端点；
+* 间接采集：间接采集，原有监控目标并不直接支持Prometheus，因此我们需要通过Prometheus提供的Client Library编写该监控目标的监控采集程序。例如： Mysql Exporter,JMX Exporter, Consul Exporter等。
+
+## AlertManager
+
+在Promtheus Server中我们可以基于PromQL创建告警规则，如果满足PromQL定义的规则，则会产生一条告警，而告警的后续处理流程则由AlertManager进行管理。在AlertManager我们可以与邮件，Slack等等内置的通知方式进行集成，也可以通过Webhook自定义告警处理方式。AlertManager即Prometheus提醒的告警处理中心。
+
+## PushGateway
+
+由于Prometheus数据采集基于Pull模型进行设计，因此对于网络环境的配置上，必须要让Prometheus Server能够直接与Exporter进行通讯。 当这种网络需求无法直接满足时，我们则可以利用PushGateway来进行中转。可以通过PushGateway将内部网络的监控数据主动Push到Gateway当中。而Prometheus Server则可以采用同样Pull的方式从PushGateway中获取到监控数据。
