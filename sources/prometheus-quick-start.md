@@ -183,8 +183,6 @@ sudo systemctl restart prometheus
 
 访问[http://192.168.33.10:9090/metrics](http://192.168.33.10:9090/metrics),我们可以查看当前Prometheus Server自身的监控指标数据。
 
-
-
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus-metrics.png)
 
 回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Console标签。我们可以通过,输入表达式http_requests_total来查看Prometheus Server的Http请求量的情况。在UI中输入表达式
@@ -207,8 +205,6 @@ http_requests_total{handler='query'}
 count(http_requests_total)
 ```
 
-### 使用统计图表
-
 Prometheus的Expression Browser的UI中，我们还可以直接通过表达式计算实时产生统计图表.回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Graph标签。
 
 输入以下表达式，我们可以统计当前Prometheus Server每秒接收的请求次数速率。
@@ -218,3 +214,34 @@ rate(http_requests_total[1m])
 ```
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_graph.png)
+
+这里使用的表达式即Prometheus提供的PromQL查询语言，通过PromQL我们可以方便的按需对数据进行查询，过滤，分片，聚合等操作，同时PromQL中还提供了大量的内置函数，从而实现复杂的数据统计分析需求。
+
+## 任务和实例
+
+在Prometheus中每一个可以用于采集数据的端点被称为一个实例(Instance)。实例通过URL端点的形式将自身采集到的监控数据样本对外暴露。而Prometheus则直接从这些URL端点中获取监控数据。
+而一组用于相同采集目的的实例，或者同一个采集进程的多个副本，称可以为一个任务(Job)。
+
+```
+* job: api-server
+    * instance 1: 1.2.3.4:5670
+    * instance 2: 1.2.3.4:5671
+    * instance 3: 5.6.7.8:5670
+    * instance 4: 5.6.7.8:5671
+```
+
+回到prometheus.yml配置中，我们可以看到scrape_configs节点，定义了一个scrape_config的数组，每一个scrape_config配置项即对应了一个Job。当使用static_configs定义监控目标时，targets即对应一个任务中的多个实例。
+
+```
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+```
+
+![http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
+
+我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务(Job)以及每个任务对应的实例(Instance)信息。
+
+因此当我们需要采集不同的监控指标(如主机，Mysql, Nginx)时，我们只需要运行相应的监控采集程序，并且让Prometheus Server知道这些Exporter实例的访问地址。这些用于向Prometheus暴露监控URL端点的程序我们可以称为一个Exporter。

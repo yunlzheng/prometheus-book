@@ -1,4 +1,10 @@
-# 使用NodeExporter采集主机信息
+# 使用Prometheus监控主机
+
+上一小节，我们已经部署完成了一个Prometheus Server的实例，并且通过修改配置文件，使Prometheus Server可以采集自身的监控指标。并且我们可以通过Prometheus内置的UI，直接对数据进行查询，过滤，聚合。同时还可以直接以图表的形式对数据进行展示。
+
+同时我们也知道，为了满足特定监控目的的需求，我们需要运行单独Exporter程序。从而使Prometheus Server可以从该Exporter暴露的监控端点获取监控数据。
+
+接下来，我们将尝试通过部署Node Exporter实现对主机监控指标(cpu,mem,disk等)的采集。
 
 ## 创建用户
 
@@ -47,9 +53,13 @@ WantedBy=multi-user.target
 service node_exporter start
 ```
 
+NodeExporter启动后，访问[http://192.168.33.10:9100/metrics](http://192.168.33.10:9100/metrics),我们可以获取到当前NodeExporter所在主机的当前资源使用情况的监控数据。
+
+![http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png)
+
 ## 配置Prometheus采集主机信息
 
-编辑文件/etc/prometheus/prometheus.yml，并添加以下内容：
+编辑配置文件/etc/prometheus/prometheus.yml，并添加以下内容：
 
 ```
     - job_name: 'node_exporter'
@@ -57,6 +67,8 @@ service node_exporter start
         static_configs:
         - targets: ['localhost:9100']
 ```
+
+这里我们添加了一个新的Job名字为node_exporter。并且定义了一个实例为localhost:9100。
 
 完整的Prometheus配置文件/etc/prometheus/prometheus.yml如下：
 
@@ -74,3 +86,43 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9100']
 ```
+
+重新启动Prometheus Server
+
+```
+sudo service prometheus restart
+```
+
+## 验证结果
+
+访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)查看所有的采集目标实例，这是我们可以看到新的采集任务：node_exporter以及相应的实例。
+
+![http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png)
+
+这是我们可以通过PromQL语言在，Prometheus UI上直接查询主机相关资源的使用情况。
+
+例如:
+
+按CPU mode查询主机的CPU使用率：
+
+```
+avg without (cpu)(irate(node_cpu{mode!="idle"}[5m]))
+```
+
+![](http://p2n2em8ut.bkt.clouddn.com/host_stats_cpu.png)
+
+按主机查询主机内存使用量：
+
+```
+sum(node_memory_MemTotal - node_memory_MemFree - node_memory_Buffers - node_memory_Cached) by (instance)
+```
+
+![](http://p2n2em8ut.bkt.clouddn.com/host_stats_mem_used.png)
+
+按主机查询各个磁盘的IO状态:
+
+```
+sum(irate(node_disk_io_time_ms{device!~'^(md\\\\d+$|dm-)'}[5m]) / 1000) by (instance, device)
+```
+
+![](http://p2n2em8ut.bkt.clouddn.com/host_status_disk_io.png)

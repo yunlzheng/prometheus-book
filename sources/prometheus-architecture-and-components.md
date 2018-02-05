@@ -1,13 +1,14 @@
 # Prometheus的核心组件
 
-Prometheus主要包含以下组件：
+上一部分，我们通过部署Node Exporter成功获取到当前主机的资源使用情况。接下来我们将从Prometheus架构部分详细介绍组成Prometheus生态的各个组件。
+
+下图展示Prometheus的基本架构：
 
 ![Prometheus架构](../chapter0/static/architecture.svg)
 
 ## Prometheus Server
 
-Prometheus Server是Prometheus组件中的核心部分，Prometheus Server的第一个能力是监控目标的检索和管理能力，Prometheus Server可以通过静态配置管理监控目标，也可以使用外部的Service Discovery服务动态管理监控目标。
-其次Prometheus Server需要对采集到的监控数据进行存储，因此Prometheus Server本身也是一个时序数据库，在本地将采集到的监控数据按照时序的方式存在在本地磁盘当中。最后Prometheus Server对外提供了自定义的PromQL语言，支持用户按需查询监控数据。
+在之前章节中我们通过部署Prometheus Server大致对Prometheus Server有了初步的认识。Prometheus Server是Prometheus组件中的核心部分，Prometheus Server的第一个能力是监控目标的检索和管理能力，Prometheus Server可以通过静态配置管理监控目标，也可以使用外部的Service Discovery服务动态管理监控目标。其次Prometheus Server需要对采集到的监控数据进行存储，因此Prometheus Server本身也是一个时序数据库，在本地将采集到的监控数据按照时序的方式存在在本地磁盘当中。最后Prometheus Server对外提供了自定义的PromQL语言，支持用户按需查询监控数据。
 
 Prometheus Server内置了一个Express Browser的UI，可以在这个UI上直接通过PromQL查询数据，并且可以通过图表的形式进行展示。
 

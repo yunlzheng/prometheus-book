@@ -7,7 +7,7 @@
   - [监控系统的发展](./sources/why-monitor.md)
   - [Prometheus来了](./sources/what-is-prometheus.md)
   - [初识Prometheus](./sources/prometheus-quick-start.md)
-  - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md)
+  - [使用Prometheus监控主机](./sources/prometheus-quick-start-node-exporter.md)
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
   - [百里挑一](./sources/comparison_with_other.md)
   - [小结](./chapter0/SUMMARY.md)
