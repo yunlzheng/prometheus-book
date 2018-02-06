@@ -11,7 +11,7 @@
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
   - [百里挑一](./sources/comparison_with_other.md)
   - [小结](./chapter0/SUMMARY.md)
-- [第二章 探索PromQL](sources/exploration_of_promql.md)
+- [第二章 探索PromQL](./chapter2/README.md)
   - [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
