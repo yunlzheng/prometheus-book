@@ -6,7 +6,8 @@
   "scripts": {
     "build": "gitbook build",
     "start": "gitbook serve",
-    "installPlugins": "gitbook install"
+    "installPlugins": "gitbook install",
+    "pdf": "gitbook pdf"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
     "gitbook-plugin-anchor-navigation": "0.0.1",
     "gitbook-plugin-image-captions": "^3.1.0",
     "gitbook-plugin-recently-updated": "github:jwarby/gitbook-plugin-recently-updated",
-    "gitbook-plugin-sectionx": "^3.1.0"
+    "gitbook-plugin-sectionx": "^3.1.0",
+    "svgexport": "^0.3.2"
   }
 }
