@@ -16,9 +16,10 @@
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
   - [PromQL操作符](./sources/prometheus-promql-operators.md)
-  - PromQL内置函数
-  - 新的存储层
-  - 最佳实践
+  - [PromQL内置函数](./sources/prometheus-promql-functions.md)
+  - [使用HTTP API](./sources/prometheus-promql-with-http-api.md)
+  - [新的存储层](./sources/prometheus-storage-v2.md)
+  - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
 - 第三章 Prometheus告警处理
   - AlertManaer简介

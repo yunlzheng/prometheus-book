@@ -103,9 +103,9 @@ sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (inst
 
 通过上面的几个简单例子我们可以看出，通过指标名称(metric name)以及指标的维度labels，通过Prometheus提供的PromQL查询语言，我们可以根据样本特征对时序数据进行过滤。同时多条时间序列之间的数据还可以进行聚合以及数学操作，从而形成一条新的时间序列。
 
-在PromQL中如果表达式返回的是一组时序数据，并且每条时间序列只包含给定时间戳（瞬时）的单个样本数据 这些返回数据的类型在Prometheus中我们称为瞬时向量(Instant vector)。
+在PromQL中如果表达式返回的是一组时序数据，并且每条时间序列只包含给定时间戳（瞬时）的单个样本数据 这些返回数据的类型在Prometheus中我们称为瞬时数据(Instant vector)。
 
-### 瞬时向量(Instant vector)
+### 瞬时数据(Instant vector)
 
 例如，使用如下表达式，会可以过滤并查询到一组时间序列以及给定时间戳（瞬时，一般为最后一次采集数据的时戳）的单个样本数据。
 
@@ -121,9 +121,9 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 ```
 并且这组时间序列的样本数据共享相同的时间蹉。
 
-这一类表达式，我们称为**瞬时向量选择器**，瞬时向量选择器返回的数据类型为**瞬时向量**。
+这一类表达式，我们称为**瞬时数据选择器**，瞬时数据选择器返回的数据类型为**瞬时数据**。
 
-瞬时向量选择器，至少包含一个指标名称(例如http_request_total)，或者一个不会匹配到空字符串的标签过滤器(例如{code="200"})。
+瞬时数据选择器，至少包含一个指标名称(例如http_request_total)，或者一个不会匹配到空字符串的标签过滤器(例如{code="200"})。
 
 因此以下两种方式，均为合法的表达式：
 
@@ -146,9 +146,9 @@ http_request_total{} # 合法
 {__name__=~"node_disk_bytes_read|node_disk_bytes_written"} # 合法
 ```
 
-### 区间向量(Range vector)
+### 区间数据(Range vector)
 
-除了瞬时向量以外，PromQL表达式还可以查询区间向量，区间向量和瞬时向量非常相似，区别在于区间向量返回是从当前时刻开始选择的一个范围的样本数据。返回区间向量类型的表达式，我们称为**区间向量选择器**。
+除了瞬时数据以外，PromQL表达式还可以查询区间数据，区间数据和瞬时数据非常相似，区别在于区间数据返回是从当前时刻开始选择的一个范围的样本数据。返回区间数据类型的表达式，我们称为**区间数据选择器**。
 
 例如：
 
@@ -186,9 +186,9 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 * w - 周
 * y - 年
 
-### 纯量(Scalar): 一个浮点型的数字值
+### 标量(Scalar): 一个浮点型的数字值
 
-纯量只有一个数字，没有时序
+标量只有一个数字，没有时序
 
 例如：
 
@@ -196,7 +196,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 10
 ```
 
-> 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时向量。
+> 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时数据。
 
 ### 字符串(String): 一个简单的字符串值
 
