@@ -1,10 +1,10 @@
 # 初识Prometheus
 
-这一个小节，我们将带来读者在本地基于搭建一个单实例的Prometheus Server,并且基于它我们快快速认识和熟悉一下Prometheus。
+本节将带来读者在本地基于搭建一个单实例的Prometheus Server，以此让读者能够对Prometheus有一个直观的认识。
 
 ## 环境准备
 
-我们使用[Vagrant](https://www.vagrantup.com)创建了一个ubuntu/xenial64本地的虚拟机。我们将在该环境下安装部署Prometheus
+我们使用[Vagrant](https://www.vagrantup.com)创建了一个ubuntu/xenial64本地的虚拟机。我们将在该环境下安装部署Prometheus。
 
 这里我们使用Vagrantfile来定义我们的基础环境，我们使用ubuntu/xenial64作为基础镜像，并且为虚拟机分配了一个私有的IP地址192.168.33.10，通过该IP地址我们可以直接在本地访问运行在该虚拟机中的服务。
 
@@ -49,7 +49,7 @@ Bringing machine 'default' up with 'virtualbox' provider...
 ==> default: flag to force provisioning. Provisioners marked to run always will still run.
 ```
 
-启动完成后，我们可以通过命令vagrant ssh登录到该虚拟机
+启动完成后，我们可以通过命令vagrant ssh登录到该虚拟机。
 
 ```
 $ vagrant ssh
@@ -72,7 +72,7 @@ ubuntu@ubuntu-xenial:~$
 
 ## 如何获取二进制包
 
-Prometheus的源代码托管在github的仓库[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)在下，在[releases](https://github.com/prometheus/prometheus/releases)链接下我们可以找到Prometheus所有已发布版本的软件包。
+Prometheus的源代码托管在Github的仓库[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)在下，在[releases](https://github.com/prometheus/prometheus/releases)链接下可以找到Prometheus所有已发布版本的软件包。
 
 ## 安装Prometheus Server
 
@@ -120,7 +120,7 @@ scrape_configs:
 $ sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
 ```
 
-这里我们让Prometheus Server每15秒，轮训一次[http://localhost:9090/metrics](http://localhost:9090/metrics)Prometheus Server自己暴露的监控指标。
+这里我们让Prometheus Server每15秒，轮询一次Prometheus Server暴露的监控采集地址[http://localhost:9090/metrics](http://localhost:9090/metrics)。
 
 ### 运行Prometheus
 
@@ -177,15 +177,15 @@ sudo systemctl restart prometheus
 
 ## 使用Expression Browser
 
-目前为止我们即完成了Prometheus Server的部署，在Prometheus启动完成后，访问[http://192.168.33.10:9090/](http://192.168.33.10:9090/)即可访问Prometheus内置的UI程序Expression Browser。
+到目前为止我们已经完成了Prometheus Server的部署，在Prometheus启动完成后，访问[http://192.168.33.10:9090/](http://192.168.33.10:9090/)即可访问Prometheus内置的UI程序Expression Browser。
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
 
-访问[http://192.168.33.10:9090/metrics](http://192.168.33.10:9090/metrics),我们可以查看当前Prometheus Server自身的监控指标数据。
+访问[http://192.168.33.10:9090/metrics](http://192.168.33.10:9090/metrics)，我们可以查看当前Prometheus Server自身的监控指标数据。
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus-metrics.png)
 
-回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Console标签。我们可以通过,输入表达式http_requests_total来查看Prometheus Server的Http请求量的情况。在UI中输入表达式
+回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Console标签。我们可以通过，输入表达式http_requests_total来查看Prometheus Server的Http请求量的情况。在UI中输入表达式。
 
 ```
 http_requests_total
@@ -193,7 +193,7 @@ http_requests_total
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_total_console.png)
 
-我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。那我们可以通过表达式：
+我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。则通过在表达式中对样本特征进行限定来获取响应的数据：
 
 ```
 http_requests_total{handler='query'}
@@ -205,9 +205,9 @@ http_requests_total{handler='query'}
 count(http_requests_total)
 ```
 
-Prometheus的Expression Browser的UI中，我们还可以直接通过表达式计算实时产生统计图表.回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Graph标签。
+使用Prometheus的Expression Browser UI，我们还可以直接通过表达式计算实时产生统计图表.回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Graph标签。
 
-输入以下表达式，我们可以统计当前Prometheus Server每秒接收的请求次数速率。
+输入以下表达式，可以统计当前Prometheus Server每秒接收的请求次数速率。
 
 ```
 rate(http_requests_total[1m])
@@ -215,12 +215,12 @@ rate(http_requests_total[1m])
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_graph.png)
 
-这里使用的表达式即Prometheus提供的PromQL查询语言，通过PromQL我们可以方便的按需对数据进行查询，过滤，分片，聚合等操作，同时PromQL中还提供了大量的内置函数，从而实现复杂的数据统计分析需求。
+这里使用的表达式即Prometheus提供的PromQL查询语言，通过PromQL我们可以方便的按需对数据进行查询，过滤，分片，聚合等操作，同时PromQL中还提供了大量的内置函数，可以实现复杂的数据统计分析需求。
 
 ## 任务和实例
 
-在Prometheus中每一个可以用于采集数据的端点被称为一个实例(Instance)。实例通过URL端点的形式将自身采集到的监控数据样本对外暴露。而Prometheus则直接从这些URL端点中获取监控数据。
-而一组用于相同采集目的的实例，或者同一个采集进程的多个副本，称可以为一个任务(Job)。
+在Prometheus中每一个可以用于采集数据的端点被称为一个实例（Instance）。实例通过URL端点的形式将自身采集到的监控数据样本对外暴露。而Prometheus则直接从这些URL端点中获取监控数据。
+一组用于相同采集目的的实例，或者同一个采集进程的多个副本，称可以为一个任务（Job）。
 
 ```
 * job: api-server
@@ -242,6 +242,6 @@ scrape_configs:
 
 ![http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
 
-我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务(Job)以及每个任务对应的实例(Instance)信息。
+我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务以及每个任务对应的实例信息。
 
-因此当我们需要采集不同的监控指标(如主机，Mysql, Nginx)时，我们只需要运行相应的监控采集程序，并且让Prometheus Server知道这些Exporter实例的访问地址。这些用于向Prometheus暴露监控URL端点的程序我们可以称为一个Exporter。
+因此当我们需要采集不同的监控指标(例如：主机、MySQL、Nginx)时，我们只需要运行相应的监控采集程序，并且让Prometheus Server知道这些Exporter实例的访问地址。这些用于向Prometheus暴露监控URL端点的程序我们可以称为一个Exporter。

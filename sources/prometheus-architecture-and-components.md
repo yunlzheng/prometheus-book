@@ -10,22 +10,22 @@
 
 在之前章节中我们通过部署Prometheus Server大致对Prometheus Server有了初步的认识。Prometheus Server是Prometheus组件中的核心部分，Prometheus Server的第一个能力是监控目标的检索和管理能力，Prometheus Server可以通过静态配置管理监控目标，也可以使用外部的Service Discovery服务动态管理监控目标。其次Prometheus Server需要对采集到的监控数据进行存储，因此Prometheus Server本身也是一个时序数据库，在本地将采集到的监控数据按照时序的方式存在在本地磁盘当中。最后Prometheus Server对外提供了自定义的PromQL语言，支持用户按需查询监控数据。
 
-Prometheus Server内置了一个Express Browser的UI，可以在这个UI上直接通过PromQL查询数据，并且可以通过图表的形式进行展示。
+Prometheus Server内置了一个Express Browser的UI，可以在这个UI上直接通过PromQL查询数据，并且可以通过图表的形式展示。
 
 Prometheus Server还可以从其他的Prometheus Server实例中获取数据，因此在大规模监控的情况下，我们可以通过功能分区以及联邦集群的方式对Prometheus Server进行扩展。
 
 ## Exporters
 
-Exporter通过将监控数据采集的EndPoint暴露给Prometheus Server, Prometheus Server通过访问该Exporter提供的Endpoint端点，即可获取到需要采集的监控数据。
+Exporter将监控数据采集的EndPoint暴露给Prometheus Server，Prometheus Server通过访问该Exporter提供的Endpoint端点，即可获取到需要采集的监控数据。
 
-一般来说我们将Exporter一般可以分为几类：
+一般来说我们可以将Exporter分为2类：
 
-* 直接采集：这一类Exporter直接内置了对Prometheus监控的支持，比如cAdvisor,Kubernetes,Etcd,gokit等，都直接内置了用于向Prometheus暴露监控数据的端点；
-* 间接采集：间接采集，原有监控目标并不直接支持Prometheus，因此我们需要通过Prometheus提供的Client Library编写该监控目标的监控采集程序。例如： Mysql Exporter,JMX Exporter, Consul Exporter等。
+* 直接采集：这一类Exporter直接内置了对Prometheus监控的支持，比如cAdvisor，Kubernetes，Etcd，gokit等，都直接内置了用于向Prometheus暴露监控数据的端点。
+* 间接采集：间接采集，原有监控目标并不直接支持Prometheus，因此我们需要通过Prometheus提供的Client Library编写该监控目标的监控采集程序。例如： Mysql Exporter，JMX Exporter，Consul Exporter等。
 
 ## AlertManager
 
-在Promtheus Server中我们可以基于PromQL创建告警规则，如果满足PromQL定义的规则，则会产生一条告警，而告警的后续处理流程则由AlertManager进行管理。在AlertManager我们可以与邮件，Slack等等内置的通知方式进行集成，也可以通过Webhook自定义告警处理方式。AlertManager即Prometheus提醒的告警处理中心。
+在Promtheus Server中我们可以基于PromQL创建告警规则，如果满足PromQL定义的规则，则会产生一条告警，而告警的后续处理流程则由AlertManager进行管理。在AlertManager中我们可以与邮件，Slack等等内置的通知方式进行集成，也可以通过Webhook自定义告警处理方式。AlertManager即Prometheus提醒的告警处理中心。
 
 ## PushGateway
 

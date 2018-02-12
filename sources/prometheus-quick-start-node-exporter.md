@@ -1,18 +1,20 @@
 # 使用Prometheus监控主机
 
-上一小节，我们已经部署完成了一个Prometheus Server的实例，并且通过修改配置文件，使Prometheus Server可以采集自身的监控指标。并且我们可以通过Prometheus内置的UI，直接对数据进行查询，过滤，聚合。同时还可以直接以图表的形式对数据进行展示。
+上一小节，我们已经部署了一个Prometheus Server的实例，并且通过修改Prometheus的配置文件，使Prometheus Server可以采集自身的监控指标。并且我们可以通过Prometheus内置的UI，直接对数据进行查询，过滤，聚合。还可以直接以图表的形式对数据进行展示。
 
-同时我们也知道，为了满足特定监控目的的需求，我们需要运行单独Exporter程序。从而使Prometheus Server可以从该Exporter暴露的监控端点获取监控数据。
+除此之外也了解到，为了满足特定监控目的的需求，需要运行单独Exporter程序，从而使Prometheus Server可以从该Exporter暴露的监控端点获取监控数据。
 
-接下来，我们将尝试通过部署Node Exporter实现对主机监控指标(cpu,mem,disk等)的采集。
+接下来，我们将尝试通过部署Node Exporter实现对主机监控指标（CPU，内存，磁盘）的采集。
 
-## 创建用户
+## 安装Node Exporter
+
+### 创建用户
 
 ```
 sudo useradd --no-create-home node_exporter
 ```
 
-## 获取并安装软件包
+### 获取并安装软件包
 
 ```
 cd ~
@@ -25,7 +27,7 @@ sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
 rm -rf node_exporter-0.15.1.linux-amd64.tar.gz node_exporter-0.15.1.linux-amd64
 ```
 
-## 创建Node Exporter的Service Unit文件
+### 创建Node Exporter的Service Unit文件
 
 ```
 sudo vim /etc/systemd/system/node_exporter.service
@@ -47,17 +49,19 @@ ExecStart=/usr/local/bin/node_exporter
 WantedBy=multi-user.target
 ```
 
-## 启动Node Exporter
+### 启动Node Exporter
 
 ```
 service node_exporter start
 ```
 
-NodeExporter启动后，访问[http://192.168.33.10:9100/metrics](http://192.168.33.10:9100/metrics),我们可以获取到当前NodeExporter所在主机的当前资源使用情况的监控数据。
+NodeExporter启动后，访问[http://192.168.33.10:9100/metrics](http://192.168.33.10:9100/metrics)，我们可以获取到当前NodeExporter所在主机的当前资源使用情况的监控数据。
 
 ![http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png)
 
-## 配置Prometheus采集主机信息
+## 配置主机监控采集任务
+
+### 配置Prometheus采集主机信息
 
 编辑配置文件/etc/prometheus/prometheus.yml，并添加以下内容：
 
@@ -93,9 +97,9 @@ scrape_configs:
 sudo service prometheus restart
 ```
 
-## 验证结果
+### 验证结果
 
-访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)查看所有的采集目标实例，这是我们可以看到新的采集任务：node_exporter以及相应的实例。
+访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)查看所有的采集目标实例，这时我们可以看到新的采集任务：node_exporter以及相应的实例。
 
 ![http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png)
 
@@ -103,7 +107,7 @@ sudo service prometheus restart
 
 例如:
 
-按CPU mode查询主机的CPU使用率：
+按CPU模式查询主机的CPU使用率：
 
 ```
 avg without (cpu)(irate(node_cpu{mode!="idle"}[5m]))

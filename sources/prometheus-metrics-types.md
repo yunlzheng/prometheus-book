@@ -1,4 +1,4 @@
-## 指标类型Metric Type
+## 指标类型
 
 之前我们讲过Prometheus对于所有的数据样本，使用了metrics name和labels唯一标示一条时间序列。而这些监控的样本数据，在不同的场景下又具有不同的意义。比如http_request_total采集到的监控样本数据反应的是当前系统的所有Http总量，因此当我们观察数据变化时，会发现对于一条http_request_total所反应的时序数据是一条持续增长的样本。而又比如container_cpu_usage一条时序数据则反映出的则是一条变化的曲线。
 

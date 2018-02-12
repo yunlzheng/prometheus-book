@@ -4,13 +4,13 @@
 
 一般来说在Prometheus社区我们能够找到大量已经实现的Exporter，例如监控主机时我们会使用Node Exporter，监控Mysql数据库时我们会用到Mysql Exporter。监控容器的运行指标时，则使用cAdvisor。
 
-而在一些情况下我们可能需要实现自己的Exporter。例如我们要获取一些业务相关的监控指标，又或者是现成的Exporter无法直接提供我们需要的监控指标时,我们需要创建自定义的Exporter或者对现有Exporter进行补充。
+而在一些情况下我们可能需要实现自己的Exporter。例如我们要获取一些业务相关的监控指标，又或者是现成的Exporter无法直接提供我们需要的监控指标时，我们需要创建自定义的Exporter或者对现有Exporter进行补充。
 
 本文中我们将介绍如何在Spring Boot基础上使用Prometheus Java Client实现自定义Exporter用于采集Docker Runtime Metrics数据。
 
 ### 指标类型
 
-Prometheus中定义了四种指标类型： Counter, Gauge,Histogram以及Summary。 首先我们先了解一下这四种基本类型的定义以及使用场景
+Prometheus中定义了四种指标类型： Counter、Gauge、Histogram以及Summary。首先我们先了解一下这四种基本类型的定义以及使用场景
 
 * Counter计数器，只增不减
 

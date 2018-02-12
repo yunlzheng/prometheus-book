@@ -4,15 +4,15 @@
 
 在之前的部分我们讲Prometheus除了是监控系统以外，本身也是一个时序（time series）数据库。从本质上将Prometheus将所有的数据，按照时间序列进行存储。每一条时间序列都通过唯一定义的指标名称即Metric名称以及一组key-value的键值对组成，这组键值对被称为Labels。
 
-对于所有采集到的样本数据都有一下几部分组成：
+对于所有采集到的样本数据由一下几部分组成：
 
-* 指标名称Mrtics,
+* 指标名称Mrtics
 * 用于描述样本的维度的键值对Labels
 * 样本的采集时间
 * 当前样本的值。
 
 ```
-<--Metrics Name--><--------Labels-----------><--Timestamp--><-Value->
+<--指标名称--><--------     标签     -----------><-- 时间戳 --><- 值 ->
 http_request_total{status="200", method="GET"}@1434417560938 => 94355
 http_request_total{status="200", method="GET"}@1434417561287 => 94334
 http_request_total{status="200", method="GET"}@1434417562344 => 94383
@@ -29,20 +29,20 @@ http_request_total{status="200", method="POST"}@1434417562344 => 4833
 如果将Prometheus存储的数据理解为一个二维的平面，如下所示，我们则可以看到每一个唯一的指标名称+键值对采集到的样本数据，组成了以时间为X轴的一条间序数据。
 
 ```
-series
+序列
   ^   
-  │   . . . . . . . . . . . . . . . . .   . . . . .   request_total{path="/status",method="GET"}
-  │     . . . . . . . . . . . . . . . . . . . . . .   request_total{path="/",method="POST"}
+  │   . . . . . . . . . . . . . . . . .   . .   request_total{path="/status",method="GET"}
+  │     . . . . . . . . . . . . . . . . . . .   request_total{path="/",method="POST"}
   │         . . . . . . .
-  │       . . .     . . . . . . . . . . . . . . . .                  ... 
-  │     . . . . . . . . . . . . . . . . .   . . . .   
-  │     . . . . . . . . . .   . . . . . . . . . . .   errors_total{path="/status",method="POST"}
-  │           . . .   . . . . . . . . .   . . . . .   errors_total{path="/health",method="GET"}
+  │       . . .     . . . . . . . . . . . . .                  ... 
+  │     . . . . . . . . . . . . . . . . .   .   
+  │     . . . . . . . . . .   . . . . . . . .   errors_total{path="/status",method="POST"}
+  │           . . .   . . . . . . . . .   . .   errors_total{path="/health",method="GET"}
   │         . . . . . . . . .       . . . . .
-  │       . . .     . . . . . . . . . . . . . . . .                  ... 
-  │     . . . . . . . . . . . . . . . .   . . . . 
+  │       . . .     . . . . . . . . . . . . .                  ... 
+  │     . . . . . . . . . . . . . . . .   . . 
   v
-    <-------------------- time --------------------->
+    <------------------ 时间 ---------------->
 ```
 
 ### 指标名称和标签
