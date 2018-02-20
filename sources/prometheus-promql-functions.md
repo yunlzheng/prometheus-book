@@ -18,7 +18,7 @@
 
 ```ceil(v instant-vector)```
 
-将向量中的所有元素样本值舍入为最接近的整数。
+将向量中的所有元素样本值向上取整。
 
 ## changes()
 
@@ -91,7 +91,7 @@ deriv只适用于仪表盘。
 floor(v instant-vector)
 ```
 
-将v中所有元素的样本舍入到最接近的整数。
+将v中所有元素的样本值向下取整。
 
 ## histogram_quantile()
 

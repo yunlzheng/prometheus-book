@@ -21,6 +21,7 @@
     "gitbook-plugin-image-captions": "^3.1.0",
     "gitbook-plugin-recently-updated": "github:jwarby/gitbook-plugin-recently-updated",
     "gitbook-plugin-sectionx": "^3.1.0",
+    "gitbook-plugin-splitter": "^0.0.8",
     "svgexport": "^0.3.2"
   }
 }
