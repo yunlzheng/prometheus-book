@@ -99,50 +99,107 @@ floor(v instant-vector)
 
 ## holt_winters()
 
+```holt_winters(v range-vector, sf scalar, tf scalar)```
+
 ## hour()
+
+```hour(v=vector(time()) instant-vector)```
 
 ## idelta()
 
+```idelta(v range-vector)```
+
 ## increase()
+
+```increase()```
 
 ## irate()
 
+```irate()```
+
 ## label_join()
+
+```label_join(v instant-vector, dst_label string, separator string, src_label_1 string, src_label_2 string, ...)```
 
 ## label_replace()
 
+```label_replace(v instant-vector, dst_label string, replacement string, src_label string, regex string)```
+
 ## ln()
+
+```ln(v instant-vector)```
 
 ## log2()
 
+```log2()```
+
 ## log10()
+
+```log10()```
 
 ## minute()
 
+```minute()```
+
 ## month()
+
+```month()```
 
 ## predict_linear()
 
+```predict_linear()```
+
 ## rate()
+
+```rate()```
 
 ## resets()
 
+```resets()```
+
 ## round()
+
+```round(v instant-vector, to_nearest=1 scalar)```
 
 ## scalar()
 
+```scalar(v instant-vector)```
+
 ## sort()
+
+```sort(v instant-vector)```
 
 ## sort_desc()
 
+```sort_desc(v instant-vector)```
+
 ## sqrt()
+
+```sqrt(v instant-vector)```
 
 ## time()
 
+```time()```
+
 ## timestamp()
+
+```timestamp(v instant-vector)```
 
 ## vector()
 
+```vector()```
+
 ## year()
 
+```year(v=vector(time()) instant-vector)```
+
 ## <aggregation>_over_time()
+
+* ```avg_over_time(range-vector)```
+* ```min_over_time(range-vector)```
+* ```max_over_time(range-vector)```
+* ```sum_over_time(range-vector)```
+* ```count_over_time(range-vector)```
+* ```quantile_over_time(scalar, range-vector)```
+* ```stddev_over_time(range-vector)```
+* ```stdvar_over_time(range-vector)```
