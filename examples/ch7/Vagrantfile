@@ -18,4 +18,6 @@ Vagrant.configure("2") do |config|
     dc2.vm.network "private_network", ip: "192.168.77.12"
   end
 
+  config.vm.provision "shell", path: "install.sh"
+
 end
