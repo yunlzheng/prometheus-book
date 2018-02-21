@@ -6,18 +6,19 @@ Vagrant.configure("2") do |config|
   config.vm.define "core" do |core|
     core.vm.box = "ubuntu/xenial64"
     core.vm.network "private_network", ip: "192.168.77.10"
+    core.vm.provision "shell", path: "install_federation.sh"
   end
 
   config.vm.define "dc1" do |dc1|
     dc1.vm.box = "ubuntu/xenial64"
     dc1.vm.network "private_network", ip: "192.168.77.11"
+    dc1.vm.provision "shell", path: "install.sh"
   end
 
   config.vm.define "dc2" do |dc2|
     dc2.vm.box = "ubuntu/xenial64"
     dc2.vm.network "private_network", ip: "192.168.77.12"
+    dc2.vm.provision "shell", path: "install.sh"
   end
-
-  config.vm.provision "shell", path: "install.sh"
 
 end
