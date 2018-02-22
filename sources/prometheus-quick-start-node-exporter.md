@@ -1,4 +1,4 @@
-# 使用Prometheus监控主机
+# 使用NodeExporter监控主机
 
 上一小节，我们已经部署了一个Prometheus Server的实例，并且通过修改Prometheus的配置文件，使Prometheus Server可以采集自身的监控指标。并且我们可以通过Prometheus内置的UI，直接对数据进行查询，过滤，聚合。还可以直接以图表的形式对数据进行展示。
 

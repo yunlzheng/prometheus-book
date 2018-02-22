@@ -7,7 +7,7 @@
   - [监控系统的发展](./sources/why-monitor.md)
   - [Prometheus来了](./sources/what-is-prometheus.md)
   - [初识Prometheus](./sources/prometheus-quick-start.md)
-  - [使用Prometheus监控主机](./sources/prometheus-quick-start-node-exporter.md)
+  - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md)
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
   - [百里挑一](./sources/comparison_with_other.md)
   - [小结](./chapter0/SUMMARY.md)
@@ -22,6 +22,7 @@
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
 - 第三章 Prometheus告警处理
+  - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
   - AlertManaer简介
   - 部署AlertManager
         - 使用二进制包部署AlertManager
@@ -37,6 +38,7 @@
         - 与Slack集成
         - 与Webhook集成
             - 示例：基于Webhook创建自定义扩展
+  - 使用Recoding Rules优化性能
   - 小结
 - 第四章 可视化一切
   - Grafana简介
@@ -80,7 +82,6 @@
   - 远程数据存储
         - 远程读
         - 远程写
-  - [分片](./sources/scale-promethues-with-functional-sharding.md)
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
   - 使用Prometheus Opertor管理Prometheus
   - 使用Promgen管理Prometheus
