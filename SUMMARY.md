@@ -3,15 +3,14 @@
 - [Introduction](README.md)
 - [作者](AUTHOR.md)
 - [版本变更历史](CHANGELOGS.md)
-- [第一章 天降奇兵](./chapter0/README.md)
-  - [监控系统的发展](./sources/why-monitor.md)
-  - [Prometheus来了](./sources/what-is-prometheus.md)
+- [第1章 天降奇兵](./chapter0/README.md)
+  - [Prometheus的崛起](./sources/why-monitor.md)
   - [初识Prometheus](./sources/prometheus-quick-start.md)
   - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md)
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
   - [百里挑一](./sources/comparison_with_other.md)
   - [小结](./chapter0/SUMMARY.md)
-- [第二章 探索PromQL](./chapter2/README.md)
+- [第2章 探索PromQL](./chapter2/README.md)
   - [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
@@ -21,12 +20,10 @@
   - [新的存储层](./sources/prometheus-storage-v2.md)
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
-- 第三章 Prometheus告警处理
+- 第3章 Prometheus告警处理
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
+  - [自定义Prometheus告警规则](./sources/prometheus-alert-rule.md)
   - [部署AlertManager](./sources/install-alert-manager.md)
-        - 使用二进制包部署AlertManager
-        - 使用容器部署AlertManager
-  - 自定义Prometheus告警规则
   - 基于Label的动态告警处理
         - 通知对象Receivers
         - 告警路由规则Route
@@ -39,7 +36,7 @@
             - 示例：基于Webhook创建自定义扩展
   - 使用Recoding Rules优化性能
   - 小结
-- 第四章 可视化一切
+- 第4章 可视化一切
   - Grafana简介
   - 安装Grafana
         - 使用二进制包安装Grafana
@@ -50,7 +47,7 @@
         - 共享你的仪表盘
   - 基于Grafana的告警配置
   - 小结
-- 第五章 扩展Prometheus
+- 第5章 扩展Prometheus
   - 常用Exporter
         - 使用NodeExporter采集主机数据
         - 使用MysqlExporter采集Mysql Server数据
@@ -60,7 +57,7 @@
   - 使用Golang创建自定义Metrics
   - 扩展Spring Boot应用支持应用指标采集
   - 小结
-- 第六章 Prometheus服务发现
+- 第6章 Prometheus服务发现
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - 基于文件的服务发现机制
         - 创建文件
@@ -74,7 +71,7 @@
   - 基于DNS的服务发现机制
   - 服务发现与Relabel机制
   - 小结
-- [第七章 集群与高可用](./chapter7/READMD.md)
+- [第7章 集群与高可用](./chapter7/READMD.md)
   - 数据管理
         - 本地存储
         - 创建快照
@@ -86,8 +83,7 @@
   - 使用Promgen管理Prometheus
   - 从1.0迁移到2.0
   - [总结](./chapter4/SUMMARY.md)
-- 第八章 使用Prometheus Opertor管理Prometheus
-- 第九章 Kubernetes监控实战
+- 第8章 Kubernetes监控实战
   - Kubernetes简介
   - 搭建Kubernetes本地测试环境
   - Prometheus Vs Heapster
@@ -98,5 +94,6 @@
   - 采集集群节点状态指标
   - 使用Grafana创建可视化仪表盘
   - 基于Prometheus实现应用的弹性伸缩
+  - 使用Prometheus Opertor管理Prometheus
   - 总结
 - [参考资料](./REFERENCES.md)

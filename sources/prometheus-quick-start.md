@@ -1,12 +1,12 @@
 # 初识Prometheus
 
-本节将带来读者在本地基于搭建一个单实例的Prometheus Server，以此让读者能够对Prometheus有一个直观的认识。
+本节将带来读者在本地搭建一个单实例的Prometheus Server，以此让读者能够对Prometheus有一个直观的认识。
 
 ## 环境准备
 
 我们使用[Vagrant](https://www.vagrantup.com)创建了一个ubuntu/xenial64本地的虚拟机。我们将在该环境下安装部署Prometheus。
 
-这里我们使用Vagrantfile来定义我们的基础环境，我们使用ubuntu/xenial64作为基础镜像，并且为虚拟机分配了一个私有的IP地址192.168.33.10，通过该IP地址我们可以直接在本地访问运行在该虚拟机中的服务。
+这里使用Vagrantfile来定义基础环境，使用ubuntu/xenial64作为基础镜像，并且为虚拟机分配了一个私有的IP地址192.168.33.10，通过该IP地址可以直接在本地访问运行在该虚拟机中的服务。
 
 Vagrantfile内容如下：
 
@@ -76,7 +76,7 @@ ubuntu@ubuntu-xenial:~$
 
 ## 安装Prometheus Server
 
-### 创建本地用户
+#### 创建本地用户
 
 ```
 sudo useradd --no-create-home prometheus
@@ -88,7 +88,7 @@ sudo chown prometheus:prometheus /etc/prometheus
 sudo chown prometheus:prometheus /var/lib/prometheus
 ```
 
-### 获取并安装软件包
+#### 获取并安装软件包
 
 ```
 cd ~
@@ -101,7 +101,7 @@ sudo cp prometheus-2.0.0.linux-amd64/prometheus /usr/local/bin/
 sudo chown prometheus:prometheus /usr/local/bin/prometheus
 ```
 
-### 创建Prometheus配置文件
+#### 创建Prometheus配置文件
 
 创建配置文件：/etc/prometheus/prometheus.yml
 
@@ -122,7 +122,7 @@ $ sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
 
 这里我们让Prometheus Server每15秒，轮询一次Prometheus Server暴露的监控采集地址[http://localhost:9090/metrics](http://localhost:9090/metrics)。
 
-### 运行Prometheus
+#### 运行Prometheus
 
 ```
 $ sudo -u prometheus /usr/local/bin/prometheus \
@@ -142,7 +142,7 @@ level=info ts=2018-02-05T05:58:12.762288533Z caller=main.go:394 msg="Loading con
 level=info ts=2018-02-05T05:58:12.764189762Z caller=main.go:371 msg="Server is ready to receive requests.
 ```
 
-### 创建Prometheus Server的Service Unit文件
+#### 创建Prometheus Server的Service Unit文件
 
 ```
 sudo vim /etc/systemd/system/prometheus.service

@@ -8,13 +8,13 @@
 
 ## 安装Node Exporter
 
-### 创建用户
+#### 创建用户
 
 ```
 sudo useradd --no-create-home node_exporter
 ```
 
-### 获取并安装软件包
+#### 获取并安装软件包
 
 ```
 cd ~
@@ -27,7 +27,7 @@ sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
 rm -rf node_exporter-0.15.1.linux-amd64.tar.gz node_exporter-0.15.1.linux-amd64
 ```
 
-### 创建Node Exporter的Service Unit文件
+#### 创建Node Exporter的Service Unit文件
 
 ```
 sudo vim /etc/systemd/system/node_exporter.service
@@ -49,7 +49,7 @@ ExecStart=/usr/local/bin/node_exporter
 WantedBy=multi-user.target
 ```
 
-### 启动Node Exporter
+#### 启动Node Exporter
 
 ```
 service node_exporter start
@@ -61,7 +61,7 @@ NodeExporter启动后，访问[http://192.168.33.10:9100/metrics](http://192.168
 
 ## 配置主机监控采集任务
 
-### 配置Prometheus采集主机信息
+#### 配置Prometheus采集主机信息
 
 编辑配置文件/etc/prometheus/prometheus.yml，并添加以下内容：
 
@@ -97,7 +97,7 @@ scrape_configs:
 sudo service prometheus restart
 ```
 
-### 验证结果
+#### 验证结果
 
 访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)查看所有的采集目标实例，这时我们可以看到新的采集任务：node_exporter以及相应的实例。
 
