@@ -23,8 +23,7 @@
   - 小结
 - 第三章 Prometheus告警处理
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
-  - AlertManaer简介
-  - 部署AlertManager
+  - [部署AlertManager](./sources/install-alert-manager.md)
         - 使用二进制包部署AlertManager
         - 使用容器部署AlertManager
   - 自定义Prometheus告警规则
