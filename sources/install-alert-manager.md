@@ -4,14 +4,117 @@ Alertmanager和Prometheus Server一样均采用Golang实现，并且没有第三
 
 ## 使用二进制包部署AlertManager
 
+#### 获取并安装软件包
+
 Alertmanager最新版本的下载地址可以从Prometheus官方网站[https://prometheus.io/download/](https://prometheus.io/download/)获取。
 
 ```
 curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.14.0/alertmanager-0.14.0.linux-amd64.tar.gz
+
+tar xvf alertmanager-0.14.0.linux-amd64.tar.gz
+sudo cp alertmanager-0.14.0.linux-amd64/alertmanager /usr/local/bin/
+sudo cp alertmanager-0.14.0.linux-amd64/amtool /usr/local/bin/
+
+sudo chown prometheus:prometheus /usr/local/bin/alertmanager
+sudo chown prometheus:prometheus /usr/local/bin/amtool
+
+sudo mkdir -p /data/alertmanager
+sudo chown prometheus:prometheus /data/alertmanager
 ```
 
-## 使用容器部署AlertManager
+#### 创建alertmanager配置文件
 
 ```
-docker pull quay.io/prometheus/alertmanager:v0.14.0
+sudo vim /etc/prometheus/alertmanager.yml
 ```
+
+配置文件中，目前只写入基本配置即可，如下所示：
+
+```
+route:
+  receiver: 'default-receiver'
+receivers:
+  - name: default-receiver
+```
+
+#### 创建Alertmanager的Sevice Unit文件
+
+```
+sudo vim /etc/systemd/system/alertmanager.service
+```
+
+```
+[Unit]
+Description=Alertmanager
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/alertmanager \
+    --config.file=/etc/prometheus/alertmanager.yml \
+    --storage.path=/data/alertmanager/
+
+[Install]
+WantedBy=multi-user.target
+```
+
+--config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。
+
+加载并且启动alertmanager
+
+```
+sudo systemctl daemon-reload
+sudo systemctl status alertmanager
+sudo systemctl enable alertmanager
+sudo systemctl restart alertmanager
+```
+
+#### 查看运行状态
+
+Alertmanager启动后可以通过9093端口访问，[http://192.168.33.10:9093](http://192.168.33.10:9093)
+
+![Alertmanager页面](http://p2n2em8ut.bkt.clouddn.com/alertmanager.png)
+
+Alert菜单下我们可以查看Alertmanager接收到的告警内容。Silences菜单下则可以通过UI创建静默规则，这部分我们会在后续部分介绍。进入Status菜单，可以看到当前系统的运行状态以及配置信息。
+
+## 关联Prometheus与Alertmanager
+
+前面已经介绍过告警在Prometheus的架构中被划分成两个独立的部分。Prometheus负责产生告警，而Alertmanager负责告警产生后的后续处理。因此Alertmanager部署完成后，需要在Prometheus中设置Alertmanager相关的信息。
+
+编辑Prometheus配置文件prometheus.yml,并添加一下内容
+
+```
+alerting:
+  alertmanagers:
+    - static_configs:
+        targets: ['localhost:9093']
+```
+
+重启Prometheus服务:
+
+```
+sudo systemctl restart prometheus
+```
+
+重启成功后，可以从[http://192.168.33.10:9090/config](http://192.168.33.10:9090/config)查看alerting配置是否生效。
+
+此时，再次尝试手动拉高系统CPU使用率：
+
+```
+cat /dev/zero>/dev/null
+```
+
+等待Prometheus告警进行触发状态:
+
+![](http://p2n2em8ut.bkt.clouddn.com/prometheus-alert-firing-with-manager.png)
+
+查看Alertmanager UI此时可以看到Alertmanager接收到的告警信息。
+
+![](http://p2n2em8ut.bkt.clouddn.com/alertmanager-alert.png)
+
+## 接下来
+
+目前为止，我们已经成功安装部署了Alertmanager并且与Prometheus关联，能够正常接收来自Prometheus的告警信息。接下来我们将详细介绍Alertmanager是如何处理这些接收到的告警信息的。

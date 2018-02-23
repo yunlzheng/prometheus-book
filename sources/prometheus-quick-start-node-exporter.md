@@ -115,6 +115,14 @@ avg without (cpu)(irate(node_cpu{mode!="idle"}[5m]))
 
 ![](http://p2n2em8ut.bkt.clouddn.com/host_stats_cpu.png)
 
+查询主机CPU总体使用率：
+
+```
+sum(avg without (cpu)(irate(node_cpu{mode!='idle'}[5m]))) by (instance)
+```
+
+![](http://p2n2em8ut.bkt.clouddn.com/node_cpu.png)
+
 按主机查询主机内存使用量：
 
 ```

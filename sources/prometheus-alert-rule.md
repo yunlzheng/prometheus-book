@@ -91,3 +91,73 @@ ALERTS{alertname="<alert name>", alertstate="pending|firing", <additional alert 
 ```
 
 样本值为1表示当前告警处于活动状态（pending或者firing），当告警从活动状态转换为非活动状态时，样本值则为0。
+
+## 自定义主机监控告警规则
+
+修改Prometheus配置文件prometheus.yml,添加以下配置：
+
+```
+rule_files:
+  - /etc/prometheus/rules/*.rules
+```
+
+
+在目录/etc/prometheus/rules/下创建告警文件hoststats-alert.rules，内容如下：
+
+```
+groups:
+- name: hostStatsAlert
+  rules:
+  - alert: hostCpuUsageAlert
+    expr: sum(avg without (cpu)(irate(node_cpu{mode!='idle'}[5m]))) by (instance) > 0.85
+    for: 1m
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{ $labels.instance }} CPU usgae high"
+      description: "{{ $labels.instance }} CPU usage above 85% (current value: {{ $value }})"
+  - alert: hostMemUsageAlert
+    expr: (node_memory_MemTotal - node_memory_MemAvailable)/node_memory_MemTotal > 0.85
+    for: 1m
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{ $labels.instance }} MEM usgae high"
+      description: "{{ $labels.instance }} MEM usage above 85% (current value: {{ $value }})"
+```
+
+重启Prometheus服务
+
+```
+sudo service prometheus restart
+```
+
+访问Prometheus UI[http://192.168.33.10:9090/rules](http://192.168.33.10:9090/rules)可以查看当前以加载的规则文件。
+
+![告警规则](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-rules.png)
+
+切换到Alerts标签[http://192.168.33.10:9090/alerts](http://192.168.33.10:9090/alerts)可以查看当前告警的活动状态。
+
+![告警活动状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-alert.png)
+
+此时，我们可以手动拉高系统的CPU使用率，验证Prometheus的告警流程，在虚拟机上运行一下命令：
+
+```
+cat /dev/zero>/dev/null
+```
+
+运行命令后查看CPU使用率情况，如下图所示：
+
+![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usgae_high.png)
+
+Prometheus首次检测到满足触发条件后，hostCpuUsageAlert显示由一条告警处于活动状态。由于告警规则中设置了1m的等待时间，当前告警状态为PENDING，如下图所示：
+
+![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_alert_pending.png)
+
+如果1分钟后告警条件持续满足，则会实际触发告警并且告警状态为FIRING，如下图所示：
+
+![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_alert_firing.png)
+
+## 接下来
+
+在这一小节中介绍了如何配置和使用Prometheus提供的告警能力，并且尝试实现了对主机CPU以及内存的告警规则设置。目前为止，我们只能通过Prometheus UI查看当前告警的活动状态。接下来，接下来我们将尝试利用Prometheus体系中的另一个组件Alertmanager对这些触发的告警进行处理，实现告警通知。

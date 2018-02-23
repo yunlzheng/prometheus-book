@@ -65,6 +65,15 @@ fi
 # 创建service文件
 cp -f /vagrant/node_exporter.service /etc/systemd/system/node_exporter.service
 
+############################
+#### 安装NodeExporter ######
+############################
+cd ~
+if [ ! -f alertmanager-0.14.0.linux-amd64.tar.gz ]; then
+    curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.14.0/alertmanager-0.14.0.linux-amd64.tar.gz
+    tar xvf alertmanager-0.14.0.linux-amd64.tar.gz
+fi
+
 # 启动服务
 sudo systemctl daemon-reload
 sudo systemctl start node_exporter
