@@ -24,14 +24,13 @@
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
   - [自定义Prometheus告警规则](./sources/prometheus-alert-rule.md)
   - [部署AlertManager](./sources/install-alert-manager.md)
+  - [基于Label的动态告警处理](./sources/alert-manager-routes.md)
   - [告警接收器](./sources/alert-manager-receiver.md)
      - 与邮件系统集成
      - 与Slack集成
      - 与微信集成
      - 与钉钉集成
-  - 基于Label的动态告警处理
   - 抑制机制 inhibit
-  
   - 使用Recoding Rules优化性能
   - 小结
 - 第4章 可视化一切
