@@ -25,11 +25,10 @@
   - [自定义Prometheus告警规则](./sources/prometheus-alert-rule.md)
   - [部署AlertManager](./sources/install-alert-manager.md)
   - [基于Label的动态告警处理](./sources/alert-manager-routes.md)
-  - [告警接收器](./sources/alert-manager-receiver.md)
-     - 与邮件系统集成
-     - 与Slack集成
-     - 与微信集成
-     - 与钉钉集成
+  - [邮件系统集成](./sources/alert-manager-with-smtp.md)
+  - Slack集成
+  - 微信集成
+  - 自定义Webhook集成其它服务
   - 抑制机制 inhibit
   - 使用Recoding Rules优化性能
   - 小结
