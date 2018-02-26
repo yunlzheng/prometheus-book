@@ -30,7 +30,7 @@
   - [抑制机制 inhibit](./sources/alert-manager-inhibit.md)
   - [临时屏蔽告警通知](./sources/alert-manager-mute.md)
   - [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
-  - 小结
+  - [小结](./chapter3/SUMMARY.md)
 - 第4章 可视化一切
   - Grafana简介
   - 安装Grafana
