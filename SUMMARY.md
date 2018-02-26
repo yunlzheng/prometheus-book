@@ -20,17 +20,16 @@
   - [新的存储层](./sources/prometheus-storage-v2.md)
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
-- 第3章 Prometheus告警处理
+- [第3章 Prometheus告警处理](./chapter3/README.md)
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
   - [自定义Prometheus告警规则](./sources/prometheus-alert-rule.md)
   - [部署AlertManager](./sources/install-alert-manager.md)
   - [基于Label的动态告警处理](./sources/alert-manager-routes.md)
-  - [邮件系统集成](./sources/alert-manager-with-smtp.md)
-  - Slack集成
-  - 微信集成
-  - 自定义Webhook集成其它服务
-  - 抑制机制 inhibit
-  - 使用Recoding Rules优化性能
+  - [内置告警接收器Receiver](./sources/alert-manager-with-smtp.md)
+  - [使用Webhook扩展Alertmanager](./sources/alert-manager-extension-with-webhook.md)
+  - [抑制机制 inhibit](./sources/alert-manager-inhibit.md)
+  - [临时屏蔽告警通知](./sources/alert-manager-mute.md)
+  - [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   - 小结
 - 第4章 可视化一切
   - Grafana简介

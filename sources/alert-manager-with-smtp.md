@@ -1,4 +1,4 @@
-# 告警接收器Receiver
+# 内置告警接收器Receiver
 
 前面小节已经讲过，在Alertmanager中路由负责对告警信息进行分组匹配，并将像告警接收器发送通知。告警接收器可以通过以下形式进行配置：
 
@@ -89,54 +89,3 @@ global:
 ## 与Slack集成
 
 ## 与Pushover集成
-
-## 使用WebHook
-
-```
-name: <string>
-webhook_configs:
-  [ - <webhook_config>, ... ]
-```
-
-```
-# Whether or not to notify about resolved alerts.
-[ send_resolved: <boolean> | default = true ]
-
-# The endpoint to send HTTP POST requests to.
-url: <string>
-
-# The HTTP client's configuration.
-[ http_config: <http_config> | default = global.http_config ]
-```
-
-当使用Webhook时，Alertmanager会按照以下格式对外发送HTTP Post请求：
-
-```
-{
-  "version": "4",
-  "groupKey": <string>,    // key identifying the group of alerts (e.g. to deduplicate)
-  "status": "<resolved|firing>",
-  "receiver": <string>,
-  "groupLabels": <object>,
-  "commonLabels": <object>,
-  "commonAnnotations": <object>,
-  "externalURL": <string>,  // backlink to the Alertmanager.
-  "alerts": [
-    {
-      "labels": <object>,
-      "annotations": <object>,
-      "startsAt": "<rfc3339>",
-      "endsAt": "<rfc3339>"
-    },
-    ...
-  ]
-}
-```
-
-### 与企业微信集成
-
-使用Webhook与企业微信集成
-
-### 与钉钉集成
-
-使用Webhook与钉钉集成
