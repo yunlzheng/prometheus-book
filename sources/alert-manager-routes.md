@@ -1,6 +1,6 @@
 # 基于Label的动态告警处理
 
-在前面章节中已经简单介绍过，在Alertmanager中通过路由(Route)来定义告警的处理方式。路由是一个基于标签匹配的树状匹配结构。根据接收到告警的标签匹配响应的处理方式。这里将详细介绍路由相关的内容。
+在前面章节中已经简单介绍过，在Alertmanager中通过路由(Route)来定义告警的处理方式。路由是一个基于标签匹配的树状匹配结构。根据接收到告警的标签匹配相应的处理方式。这里将详细介绍路由相关的内容。
 
 ## 路由配置
 
@@ -35,9 +35,9 @@ routes:
 
 有的时候为了能够一次性收集和发送更多的相关信息时，可以通过**group_wait**参数设置等待时间，如果在等待时间内当前group接收到了新的告警，这些告警将会合并为一个通知向receiver发送。
 
-而**group_interval**配置选择，则用于定义相同的Gourp之间发送告警通知的时间间隔。
+而**group_interval**配置，则用于定义相同的Gourp之间发送告警通知的时间间隔。
 
-如果已经成功为警报发送通知, 则再次发送通告之前要等待时间可以通过**repeat_interval**参数进行设置。
+如果警报已经成功发送通知, 如果想设置发送告警通知之前要等待时间，则可以通过**repeat_interval**参数进行设置。
 
 ## 案例
 
@@ -61,8 +61,8 @@ route:
       team: frontend
 ```
 
-默认情况下所有的告警都会发送给集群管理员，因此在Alertmanager的配置文件的根路由中，对告警信息按照集群以及告警的名称对告警进行分组。 
+默认情况下所有的告警都会发送给集群管理员default-receiver，因此在Alertmanager的配置文件的根路由中，对告警信息按照集群以及告警的名称对告警进行分组。
 
-如果告警时来源于数据库服务如mysql或者cassandra，此时则需要将告警发送给响应的数据库管理员。这里定义了一个单独子路由，如果告警中包含service标签，并且service为mysql或者cassandra,则向database-pager发送告警通知，由于这里没有定义group_by等属性，这些属性的配置信息将从上级路由继承，database-pager将会接收到按cluser和alertname进行分组的告警通知。
+如果告警时来源于数据库服务如mysql或者cassandra，此时则需要将告警发送给相应的数据库管理员(database-pager)。这里定义了一个单独子路由，如果告警中包含service标签，并且service为mysql或者cassandra,则向database-pager发送告警通知，由于这里没有定义group_by等属性，这些属性的配置信息将从上级路由继承，database-pager将会接收到按cluser和alertname进行分组的告警通知。
 
 而某些告警规则来源可能来源于开发团队的定义，这些告警中通过添加标签team来标示这些告警的创建者。在Alertmanager配置文件的告警路由下，定义单独子路由用于处理这一类的告警通知，如果匹配到告警中包含标签team，并且team的值为frontend，Alertmanager将会按照标签product和environment对告警进行分组。此时如果应用出现异常，开发团队就能清楚的知道哪一个环境(environment)中的哪一个应用程序出现了问题，可以快速对应用进行问题定位。

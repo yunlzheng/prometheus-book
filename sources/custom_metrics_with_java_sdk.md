@@ -20,7 +20,6 @@ Prometheus中定义了四种指标类型： Counter、Gauge、Histogram以及Sum
 
 * Histogram主要用于统计监控数据的大小或者事件发生的次数的分布情况
 
-
 ### Docker Runtime Metrics API
 
 在使用Docker的过程中如果我们需要查看某些容器的运行时指标数据时，我们会使用docker stats命令来查看该容器的实时状态。

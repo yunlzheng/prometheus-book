@@ -193,7 +193,7 @@ http_requests_total
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_total_console.png)
 
-我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。则通过在表达式中对样本特征进行限定来获取响应的数据：
+我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。则通过在表达式中对样本特征进行限定来获取相应的数据：
 
 ```
 http_requests_total{handler='query'}

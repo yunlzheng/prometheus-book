@@ -37,9 +37,9 @@ receivers:
   - name: default-receiver
 ```
 
-Alertmanager的配置主要包含两个部分：路由(route)以及接收器(receivers)。所有的告警信息都会从配置中的顶级路由(route)进入路由数，根据路由规则将告警信息发送给响应的接收器。
+Alertmanager的配置主要包含两个部分：路由(route)以及接收器(receivers)。所有的告警信息都会从配置中的顶级路由(route)进入路由树，根据路由规则将告警信息发送给相应的接收器。
 
-在Alertmanager中我们可以定义一组接收器，比如我们可以按照角色(比如系统运维，数据库管理员)来划分多个接收器。接收者可以使用邮件，Slack以及其它方式接收告警信息。
+在Alertmanager中可以定义一组接收器，比如可以按照角色(比如系统运维，数据库管理员)来划分多个接收器。接收器可以关联邮件，Slack以及其它方式接收告警信息。
 
 当前配置文件中定义了一个默认的接收者default-receiver由于这里没有设置接收方式，目前只相当于一个占位符。关于接收器的详细介绍会在后续章节介绍。
 
@@ -86,7 +86,7 @@ Alertmanager启动后可以通过9093端口访问，[http://192.168.33.10:9093](
 
 ![Alertmanager页面](http://p2n2em8ut.bkt.clouddn.com/alertmanager.png)
 
-Alert菜单下我们可以查看Alertmanager接收到的告警内容。Silences菜单下则可以通过UI创建静默规则，这部分我们会在后续部分介绍。进入Status菜单，可以看到当前系统的运行状态以及配置信息。
+Alert菜单下可以查看Alertmanager接收到的告警内容。Silences菜单下则可以通过UI创建静默规则，这部分我们会在后续部分介绍。进入Status菜单，可以看到当前系统的运行状态以及配置信息。
 
 ## 关联Prometheus与Alertmanager
 

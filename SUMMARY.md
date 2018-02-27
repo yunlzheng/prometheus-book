@@ -17,7 +17,7 @@
   - [PromQL操作符](./sources/prometheus-promql-operators.md)
   - [PromQL内置函数](./sources/prometheus-promql-functions.md)
   - [在HTTP API中使用PromQL](./sources/prometheus-promql-with-http-api.md)
-  - [新的存储层](./sources/prometheus-storage-v2.md)
+  <!-- - [新的存储层](./sources/prometheus-storage-v2.md) -->
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
 - [第3章 Prometheus告警处理](./chapter3/README.md)

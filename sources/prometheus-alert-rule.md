@@ -1,9 +1,8 @@
 # 自定义Prometheus告警规则
 
-Prometheus中的告警规则允许你基于PromQL表达式定义报警条件，并且将告警通知发送到外部服务如Alertmanager中。
+Prometheus中的告警规则允许你基于PromQL表达式定义告警触发条件，Prometheus后端对这些触发规则进行周期性计算，当满足触发条件后则会触发告警通知。默认情况下，用户可以通过Prometheus的Web界面查看这些告警规则以及告警的触发状态。当Promthues与Alertmanager关联之后，可以将告警发送到外部服务如Alertmanager中并通过Alertmanager可以对这些告警进行进一步的处理。
 
-在Prometheus全局配置文件中，可以通过rule_files指定一个或者多个告警规则文件的路径。
-Prometheus启动后会自动扫描这些路径下规则文件中定义的内容，并且根据这些规则计算是否向外部发送通知。计算告警触发条件的周期可以通过global下的evaluation_interval进行配置。
+可以在Prometheus全局配置文件中通过__rule_files__指定一组告警规则文件的访问路径。Prometheus启动后会自动扫描这些路径下规则文件中定义的内容，并且根据这些规则计算是否向外部发送通知。计算告警触发条件的周期可以通过global下的evaluation_interval进行配置。
 
 ```
 global:
@@ -27,9 +26,10 @@ groups:
       severity: page
     annotations:
       summary: High request latency
+      description: description info
 ```
 
-在告警规则文件中，我们可以将一组相关的规则设置定义在一个group下。每一个group中我们可以定义多个告警规则(rule)。一条告警规则主要由以下几部分组成：
+在告警规则文件中，我们可以将一组相关的规则设置定义在一个group下。在每一个group中我们可以定义多个告警规则(rule)。一条告警规则主要由以下几部分组成：
 
 * alert: 告警规则的名称。
 * expr: 基于PromQL表达式告警触发条件，用于计算是否有时间序列满足该条件。
@@ -41,7 +41,9 @@ Prometheus根据global.evaluation_interval定义的周期计算PromQL表达式�
 
 ## 模板化
 
-告警规则中label和annotations的值可以进行模板化。例如通过$labels变量可以访问当前告警实例的所有标签以及标签值。$value则可以获取当前PromQL表达式计算的样本值。
+一般来说，在告警规则文件的annotations中使用summary描述告警的概要信息，description用于描述告警的详细信息。同时Alertmanager的UI也会根据这两个标签值，显示告警信息。为了让告警信息具有更好的可读性，Prometheus支持模板化label和annotations的中标签的值。
+
+通过$labels.<labelname>变量可以访问当前告警实例中指定标签的值。$value则可以获取当前PromQL表达式计算的样本值。
 
 ```
 # To insert a firing element's label values:
@@ -50,7 +52,7 @@ Prometheus根据global.evaluation_interval定义的周期计算PromQL表达式�
 {{ $value }}
 ```
 
-示例如下：
+例如，可以通过模板化优化summary以及description的内容的可读性：
 
 ```
 groups:
@@ -78,9 +80,9 @@ groups:
 
 ## 查看告警状态
 
-用户可以通过Prometheus WEB界面中的Alerts菜单查看当前Prometheus下的所有告警规则，以及其当前所处的活动状态。
+如下所示，用户可以通过Prometheus WEB界面中的Alerts菜单查看当前Prometheus下的所有告警规则，以及其当前所处的活动状态。
 
-> 补充图示
+![告警活动状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-alert.png)
 
 同时对于已经pending或者firing的告警，Prometheus也会将它们存储到时间序列ALERTS{}中。
 
@@ -92,7 +94,7 @@ ALERTS{alertname="<alert name>", alertstate="pending|firing", <additional alert 
 
 样本值为1表示当前告警处于活动状态（pending或者firing），当告警从活动状态转换为非活动状态时，样本值则为0。
 
-## 自定义主机监控告警规则
+## 实例：定义主机监控告警
 
 修改Prometheus配置文件prometheus.yml,添加以下配置：
 

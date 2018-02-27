@@ -4,7 +4,7 @@ Prometheus通过指标名称Metrics Name以及对应的一组键值对Labels唯�
 
 ## 查询基础
 
-当Prometheus通过Exporter采集到响应的监控指标样本数据后，我们就可以通过PromQL对监控样本数据进行查询。
+当Prometheus通过Exporter采集到相应的监控指标样本数据后，我们就可以通过PromQL对监控样本数据进行查询。
 
 ### 基本查询
 
