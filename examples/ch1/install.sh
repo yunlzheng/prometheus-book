@@ -66,7 +66,7 @@ fi
 cp -f /vagrant/node_exporter.service /etc/systemd/system/node_exporter.service
 
 ############################
-#### 安装NodeExporter ######
+#### Alertmanager ######
 ############################
 cd ~
 if [ ! -f alertmanager-0.14.0.linux-amd64.tar.gz ]; then

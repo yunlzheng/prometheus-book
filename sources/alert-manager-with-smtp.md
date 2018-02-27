@@ -86,6 +86,45 @@ global:
   [ smtp_require_tls: <bool> | default = true ]
 ```
 
+以腾讯邮箱为例:
+
+```
+global:
+  smtp_smarthost: smtp.exmail.qq.com:465
+  smtp_from: systemadmin@wise2c.com
+  auth_username: systemadmin@wise2c.com
+  auth_identity: systemadmin@wise2c.com
+  auth_password: HelloWise2c
+
+receivers:
+  - name: default-receiver
+    email_configs:
+      - to: yunl.zheng@gmail.com
+```
+
 ## 与Slack集成
 
-## 与Pushover集成
+```
+# Whether or not to notify about resolved alerts.
+[ send_resolved: <boolean> | default = false ]
+
+# The Slack webhook URL.
+[ api_url: <secret> | default = global.slack_api_url ]
+
+# The channel or user to send notifications to.
+channel: <tmpl_string>
+
+# API request data as defined by the Slack webhook API.
+[ color: <tmpl_string> | default = '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}' ]
+[ username: <tmpl_string> | default = '{{ template "slack.default.username" . }}' ]
+[ title: <tmpl_string> | default = '{{ template "slack.default.title" . }}' ]
+[ title_link: <tmpl_string> | default = '{{ template "slack.default.titlelink" . }}' ]
+[ icon_emoji: <tmpl_string> ]
+[ icon_url: <tmpl_string> ]
+[ pretext: <tmpl_string> | default = '{{ template "slack.default.pretext" . }}' ]
+[ text: <tmpl_string> | default = '{{ template "slack.default.text" . }}' ]
+[ fallback: <tmpl_string> | default = '{{ template "slack.default.fallback" . }}' ]
+
+# The HTTP client's configuration.
+[ http_config: <http_config> | default = global.http_config ]
+```
