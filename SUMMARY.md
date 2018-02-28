@@ -31,7 +31,7 @@
   <!-- - [临时屏蔽告警通知](./sources/alert-manager-mute.md) -->
   - [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   - [小结](./chapter3/SUMMARY.md)
-- 第4章 可视化一切
+- [第4章 可视化一切](./chapter4/README.md)
   - Grafana简介
   - 安装Grafana
         - 使用二进制包安装Grafana
@@ -42,7 +42,7 @@
         - 共享你的仪表盘
   - 基于Grafana的告警配置
   - 小结
-- 第5章 扩展Prometheus
+- [第5章 扩展Prometheus](./chapter5/README.md)
   - 常用Exporter
         - 使用NodeExporter采集主机数据
         - 使用MysqlExporter采集Mysql Server数据
@@ -52,7 +52,7 @@
   - 使用Golang创建自定义Metrics
   - 扩展Spring Boot应用支持应用指标采集
   - 小结
-- 第6章 Prometheus服务发现
+- [第6章 Prometheus服务发现](./chapter6/README.md)
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - 基于文件的服务发现机制
         - 创建文件
@@ -78,7 +78,7 @@
   - 使用Promgen管理Prometheus
   - 从1.0迁移到2.0
   - [总结](./chapter4/SUMMARY.md)
-- 第8章 Kubernetes监控实战
+- [第8章 Kubernetes监控实战](./chapter8/READMD.md)
   - Kubernetes简介
   - 搭建Kubernetes本地测试环境
   - Prometheus Vs Heapster

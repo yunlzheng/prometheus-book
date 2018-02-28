@@ -4,7 +4,7 @@
 
 在Alertmanager中可以使用如下配置定义基于webhook的告警接收器receiver。一个receiver可以对应一组webhook配置。
 
-```
+```yaml
 name: <string>
 webhook_configs:
   [ - <webhook_config>, ... ]
@@ -12,7 +12,7 @@ webhook_configs:
 
 每一项webhook_config的具体配置格式如下：
 
-```
+```yaml
 # Whether or not to notify about resolved alerts.
 [ send_resolved: <boolean> | default = true ]
 
@@ -27,7 +27,7 @@ send_resolved用于指定是否在告警消除时发送回执消息。url则是�
 
 当用户定义webhook用于接收告警信息后，当告警被触发时，Alertmanager会按照以下格式向这些url地址发送HTTP Post请求，请求内容如下：
 
-```
+```json
 {
   "version": "4",
   "groupKey": <string>,    // key identifying the group of alerts (e.g. to deduplicate)
@@ -43,8 +43,7 @@ send_resolved用于指定是否在告警消除时发送回执消息。url则是�
       "annotations": <object>,
       "startsAt": "<rfc3339>",
       "endsAt": "<rfc3339>"
-    },
-    ...
+    }
   ]
 }
 ```
@@ -53,7 +52,7 @@ send_resolved用于指定是否在告警消除时发送回执消息。url则是�
 
 这里我们尝试使用Golang创建用于接收webhook告警通知的服务。首先创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification。
 
-```
+```golang
 package model
 
 import "time"
@@ -80,7 +79,7 @@ type Notification struct {
 
 这里使用gin-gonic框架创建用于接收Webhook通知的Web服务。定义路由/webhook接收来自Alertmanager的POST请求。
 
-```
+```golang
 package main
 
 import (
@@ -131,7 +130,7 @@ webhook机器人创建成功后，用户就可以使用任何方式向该地址�
 
 例如，可以向webhook地址以POST形式发送以下
 
-```
+```json
 {
      "msgtype": "markdown",
      "markdown": {
@@ -165,7 +164,7 @@ $ curl -l -H "Content-type: application/json" -X POST -d '{"msgtype": "markdown"
 
 这里定义结构体DingTalkMarkdown用于映射Dingtalk的消息体。
 
-```
+```golang
 package model
 
 type At struct {
@@ -187,7 +186,7 @@ type Markdown struct {
 
 定义转换器将Alertmanager发送的告警通知转换为Dingtalk的消息体。
 
-```
+```golang
 package transformer
 
 import (
@@ -239,7 +238,7 @@ notifier包中使用golang的net/http包实现与Dingtalk群机器人的交互�
 通过包transformer.TransformToMarkdown将Alertmanager告警通知与Dingtalk消息进行映射。
 
 
-```
+```golang
 package notifier
 
 import (
@@ -294,7 +293,7 @@ func Send(notification model.Notification, dingtalkRobot string) (err error) {
 
 首先为程序添加命令行参数支持，用于在启动时添加全局的Dingtalk群聊机器人地址。
 
-```
+```golang
 package main
 
 import (
@@ -344,3 +343,20 @@ func main() {
   c.JSON(http.StatusOK, gin.H{"message": "send to dingtalk successful!"})
 }
 ```
+
+##### 使用Dingtalk扩展
+
+运行并启动dingtalk webhook服务之后，修改Alertmanager配置文件, 为default-receiver添加webhook配置，如下所示：
+
+```
+receivers:
+  - name: default-receiver
+    email_configs:
+      - to: yunl.zheng@wise2c.com
+	webhook_configs:
+	  - url: http://localhost:8080/webhook
+```
+
+重启Alertmanager服务后，手动拉高虚拟机CPU使用率触发告警条件，此时Dingtalk即可接收到响应的告警通知信息:
+
+![钉钉群机器人告警信息](http://p2n2em8ut.bkt.clouddn.com/alertmanager-dingtalk-test-result.png)
