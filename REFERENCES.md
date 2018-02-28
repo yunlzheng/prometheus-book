@@ -11,6 +11,7 @@
 ### Kubernetes
 
 * https://docs.bitnami.com/kubernetes/how-to/configure-autoscaling-custom-metrics/
+* https://github.com/kubernetes/kube-state-metrics
 
 ### Others
 
@@ -20,9 +21,7 @@
 * https://github.com/katosys/kato/issues/43
 * https://www.robustperception.io/tag/tuning/
 * https://www.robustperception.io/how-much-ram-does-my-prometheus-need-for-ingestion/
-
 * https://jaxenter.com/prometheus-product-devops-mindset-130860.html
-
 * https://www.slideshare.net/brianbrazil/so-you-want-to-write-an-exporter
 
 ### PromSQL
