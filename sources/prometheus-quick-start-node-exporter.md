@@ -1,10 +1,10 @@
 # 使用NodeExporter监控主机
 
-上一小节，我们已经部署了一个Prometheus Server的实例，并且通过修改Prometheus的配置文件，使Prometheus Server可以采集自身的监控指标。并且我们可以通过Prometheus内置的UI，直接对数据进行查询，过滤，聚合。还可以直接以图表的形式对数据进行展示。
+在上一小节中，我们尝试了部署Prometheus Server，并且采集了Prometheus自身的一些运行指标数据。通过Prometheus内置的UI可以对这些采集到的样本数据进行查询，过滤以及聚合，同时Prometheus内置的UI还支持简单的图形化显示需求。
 
-除此之外也了解到，为了满足特定监控目的的需求，需要运行单独Exporter程序，从而使Prometheus Server可以从该Exporter暴露的监控端点获取监控数据。
+在Prometheus Server中将用于获取监控样本数据的服务成为一个Target实例(例如,Prometheus自身)。对于某些应用和服务而言它们可能内置了对Prometheus的支持，而对于没有内置Prometheus支持的监控需求，需要运行单独采集程序程序这些程序成为Exporter，通过这些Exporter程序，可以使Prometheus可以从这些Exporter暴露的端口获取到特定的监控数据。
 
-接下来，我们将尝试通过部署Node Exporter实现对主机监控指标（CPU，内存，磁盘）的采集。
+接下来，为了能够采集到主机的监控指标（CPU，内存，磁盘），用户需要在需要监控的主机上运行一个Node Exporter程序，实现对主机监控的支持。
 
 ## 安装Node Exporter
 

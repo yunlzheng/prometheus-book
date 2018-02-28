@@ -48,7 +48,7 @@
         - 使用MysqlExporter采集Mysql Server数据
         - 使用RabbitMQExporter采集RabbitMQ数据
         - 使用Cadvisor采集容器数据
-  - [使用Java创建自定义Metrics](sources/custom_metrics_with_java_sdk.md)
+  - [使用Spring Boot创建自定义Exporter](sources/custom_metrics_with_java_sdk.md)
   - 使用Golang创建自定义Metrics
   - 扩展Spring Boot应用支持应用指标采集
   - 小结

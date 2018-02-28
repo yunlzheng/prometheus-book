@@ -1,5 +1,7 @@
 # 使用Webhook扩展Alertmanager
 
+> TODO: 考虑是否补充微信集成案例
+
 在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。
 
 在Alertmanager中可以使用如下配置定义基于webhook的告警接收器receiver。一个receiver可以对应一组webhook配置。
@@ -48,9 +50,9 @@ send_resolved用于指定是否在告警消除时发送回执消息。url则是�
 }
 ```
 
-### 使用Golang创建Webhook服务
+### 使用Golang创建webhook服务
 
-这里我们尝试使用Golang创建用于接收webhook告警通知的服务。首先创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification。
+首先我们尝试使用Golang创建用于接收webhook告警通知的服务。首先创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification。
 
 ```golang
 package model
@@ -110,11 +112,11 @@ func main() {
 
 ### 与钉钉集成
 
-这里我们将继续扩展我们的webhook服务，以支持将来自Alertmanager的告警通知转发到钉钉品台。钉钉，阿里巴巴出品，专为中国企业打造的免费智能移动办公平台，提供了即时通讯以及移动办公等丰富的功能。
+钉钉，阿里巴巴出品，专为中国企业打造的免费智能移动办公平台，提供了即时通讯以及移动办公等丰富的功能。
 
 [钉钉群机器人](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.8M9OKD&treeId=257&articleId=105733&docType=1)是钉钉群的高级扩展功能。群机器人可以将第三方服务的信息聚合到群聊中，实现自动化的信息同步。例如：通过聚合GitHub，GitLab等源码管理服务，实现源码更新同步；通过聚合Trello，JIRA等项目协调服务，实现项目信息同步。不仅如此，群机器人支持Webhook协议的自定义接入，支持更多可能性。这里我们将演示如果将Alertmanager运维报警提醒通过自定义机器人聚合到钉钉群。
 
-完整的示例代码可以从github仓库[https://github.com/yunlzheng/alertmanaer-dingtalk-webhook](https://github.com/yunlzheng/alertmanaer-dingtalk-webhook)中获取。
+这里将继续扩展webhook服务，以支持将Alertmanager的告警通知转发到钉钉平台。完整的示例代码可以从github仓库[https://github.com/yunlzheng/alertmanaer-dingtalk-webhook](https://github.com/yunlzheng/alertmanaer-dingtalk-webhook)中获取。
 
 ##### 自定义webhook群机器人
 
@@ -357,6 +359,6 @@ receivers:
 	  - url: http://localhost:8080/webhook
 ```
 
-重启Alertmanager服务后，手动拉高虚拟机CPU使用率触发告警条件，此时Dingtalk即可接收到响应的告警通知信息:
+重启Alertmanager服务后，手动拉高虚拟机CPU使用率触发告警条件，此时Dingtalk即可接收到相应的告警通知信息:
 
 ![钉钉群机器人告警信息](http://p2n2em8ut.bkt.clouddn.com/alertmanager-dingtalk-test-result.png)

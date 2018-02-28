@@ -1,6 +1,6 @@
 ## 使用二进制包安装Prometheus
 
-本小节我们尝试在Ubuntu/trusty版本下基于二进制软件包安装Prometheus并且通过NodeExporter采集主机监控数据。
+本小节将在Ubuntu/trusty版本下基于二进制软件包安装Prometheus并且通过NodeExporter采集主机监控数据。
 
 ### 安装Prometheus Server
 

@@ -1,6 +1,6 @@
 # Prometheus的核心组件
 
-上一部分，我们通过部署Node Exporter成功获取到当前主机的资源使用情况。接下来我们将从Prometheus架构部分详细介绍组成Prometheus生态的各个组件。
+上一小结，我们通过部署Node Exporter成功获取到当前主机的资源使用情况。接下来我们将从Prometheus架构部分详细介绍组成Prometheus生态的各个组件。
 
 下图展示Prometheus的基本架构：
 
