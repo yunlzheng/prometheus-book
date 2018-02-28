@@ -1,12 +1,16 @@
 # 使用Webhook扩展Alertmanager
 
-## 使用Webhook
+在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。
+
+在Alertmanager中可以使用如下配置定义基于webhook的告警接收器receiver。一个receiver可以对应一组webhook配置。
 
 ```
 name: <string>
 webhook_configs:
   [ - <webhook_config>, ... ]
 ```
+
+每一项webhook_config的具体配置格式如下：
 
 ```
 # Whether or not to notify about resolved alerts.
@@ -19,7 +23,9 @@ url: <string>
 [ http_config: <http_config> | default = global.http_config ]
 ```
 
-当使用Webhook时，Alertmanager会按照以下格式对外发送HTTP Post请求：
+send_resolved用于指定是否在告警消除时发送回执消息。url则是用于接收webhook请求的地址。http_configs则是在需要对请求进行SSL配置时使用。
+
+当用户定义webhook用于接收告警信息后，当告警被触发时，Alertmanager会按照以下格式向这些url地址发送HTTP Post请求，请求内容如下：
 
 ```
 {
@@ -45,7 +51,7 @@ url: <string>
 
 ### 使用Golang创建Webhook服务
 
-创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification
+这里我们尝试使用Golang创建用于接收webhook告警通知的服务。首先创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification。
 
 ```
 package model
@@ -72,7 +78,7 @@ type Notification struct {
 }
 ```
 
-这里使用gin-gonic框架创建用于接收Webhook通知的Web服务。定义路由/wenhook接收来自Alertmanager的POST请求。
+这里使用gin-gonic框架创建用于接收Webhook通知的Web服务。定义路由/webhook接收来自Alertmanager的POST请求。
 
 ```
 package main
