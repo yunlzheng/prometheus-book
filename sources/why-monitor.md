@@ -25,12 +25,12 @@ Nagios启动后周期性的调用插件去检查服务器状态。Nagios提供�
 
 * 过高的运维成本，比如Zabbix或者Nagios这类工具网络需要有专业的人员进行安装，配置和管理，而且过程并不简单；
 * 同时很难对监控系统自身做扩展，以适应监控规模的变化；
-* 同时监控系统本身也会限制技术和业务本身；
+* 监控系统本身也会限制技术和业务本身；
 * 监控指标与业务分离，无法有效的支撑业务需求；
 
-好比客户可能关注的是服务的可用性，以及服务的SLA等级，而监控系统却只能根据CPU使用率去产生告警。 业务和监控指标之间无法有效协作。
+好比客户可能关注的是服务的可用性，以及服务的SLA等级，而监控系统却只能根据CPU使用率去产生告警，业务和监控系统之间无法有效协作。
 
-除了这些基本的挑战以外，应用架构以及基础设施架构的变化同样也带来了巨大的挑战。
+除了这些问题以外，新时代特别是云原生应用的兴起，架构以及基础设施架构的变化也为监控系统带来了巨大的挑战。
 
 从单体架构到微服务架构，通过各个小的独立的进程支撑整个业务，每一个部分都可以独立根据需求进行独立开发，独立部署，独立伸缩。应用程序无论从结构，还是实例都是不断演进变化的。
 
@@ -77,9 +77,7 @@ Prometheus同时提供超过10种以上的客户端SDK，基于这些客户端SD
 
 ### 完整的监控支持
 
-Prometheus作为系统监控方案(不同于应用监控APM)，提供了完整的监控支持，包括但不限于：基础设施监控，中间件监控，应用监控;
-
-提供了完整的可视化，以及告警支持，并且易于集成。
+Prometheus作为系统监控方案(不同于应用监控APM)，提供了完整的监控支持，包括但不限于：基础设施监控、中间件监控、应用监控。同时提供了完整的可视化，以及告警支持，并且易于集成。
 
 ## 强大的数据模型
 
@@ -120,16 +118,16 @@ Prometheus是如此简单，因此你可以在每个数据中心，每个团队�
 
 同时Prometheus还支持与其他的监控系统进行集成：Graphite， Statsd， Collected， Scollector， muini， Nagios等。
 
-同时Prometheus还存在官方的第三方实现的监控数据采集支持：JMX， CloudWatch， EC2， MySQL， PostgresSQL， Haskell， Bash， SNMP， Consul， Haproxy， Mesos， Bind， CouchDB， Diango， Memcached， RabbitMQ， Redis， RethinkDB， Rsyslog等等。
+Prometheus社区还提供了大量第三方实现的监控数据采集支持：JMX， CloudWatch， EC2， MySQL， PostgresSQL， Haskell， Bash， SNMP， Consul， Haproxy， Mesos， Bind， CouchDB， Diango， Memcached， RabbitMQ， Redis， RethinkDB， Rsyslog等等。
 
 ### 可视化
 
-Prometheus Server中自带了一个Prometheus UI，通过这个UI我们可以方便的直接对数据进行查询，并且可以直接以图的形式展示数据。同时Prometheus还提供了一个独立的基于Ruby On Rails的Dashboard解决方案Promdash。最新的Grafana可视化工具也已经提供了完整的Prometheus支持，基于Grafana可以创建更加精美的监控图标。基于Prometheus提供的API还可以实现自己的监控可视化UI。
+Prometheus Server中自带了一个Prometheus UI，通过这个UI可以方便的直接对数据进行查询，并且支持直接以图形化的形式展示数据。同时Prometheus还提供了一个独立的基于Ruby On Rails的Dashboard解决方案Promdash。最新的Grafana可视化工具也已经提供了完整的Prometheus支持，基于Grafana可以创建更加精美的监控图标。基于Prometheus提供的API还可以实现自己的监控可视化UI。
 
 ### 开放性
 
 通常来说当我们需要监控一个应用程序时，一般需要该应用程序提供对相应监控系统协议的支持。因此应用程序会与所选择的监控系统进行绑定。为了减少这种绑定所带来的限制。对于决策者而言要么你就直接在应用中集成该监控系统的支持，要么就在外部创建单独的服务来适配不同的监控系统。
 
-而对于Prometheus来说，使用Prometheus的client library的输出格式不止支持Prometheus的格式化数据，也可以输出支持其它监控系统的格式化数据，比如Graphite等。
+而对于Prometheus来说，使用Prometheus的client library的输出格式不止支持Prometheus的格式化数据，也可以输出支持其它监控系统的格式化数据，比如Graphite。
 
 因此你甚至可以在不使用Prometheus的情况下，采用Prometheus的client library来让你的应用程序支持监控数据采集。

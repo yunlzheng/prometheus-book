@@ -2,9 +2,9 @@
 
 在上一小节中，我们尝试了部署Prometheus Server，并且采集了Prometheus自身的一些运行指标数据。通过Prometheus内置的UI可以对这些采集到的样本数据进行查询，过滤以及聚合，同时Prometheus内置的UI还支持简单的图形化显示需求。
 
-在Prometheus Server中将用于获取监控样本数据的服务成为一个Target实例(例如,Prometheus自身)。对于某些应用和服务而言它们可能内置了对Prometheus的支持，而对于没有内置Prometheus支持的监控需求，需要运行单独采集程序程序这些程序成为Exporter，通过这些Exporter程序，可以使Prometheus可以从这些Exporter暴露的端口获取到特定的监控数据。
+在Prometheus Server中将用于获取监控样本数据的服务称为一个target实例(例如Prometheus自身)。对于某些应用和服务而言它们可能内置了对Prometheus的支持，而对于没有内置Prometheus支持的监控需求，需要运行单独的采集程序，这些程序被称为Exporter，通过这些Exporter程序，可以使Prometheus可以从这些Exporter间接的获取到相应的监控数据。
 
-接下来，为了能够采集到主机的监控指标（CPU，内存，磁盘），用户需要在需要监控的主机上运行一个Node Exporter程序，实现对主机监控的支持。
+接下来，为了能够采集到主机的监控指标（CPU，内存，磁盘），我们需要在主机上运行一个Node Exporter程序，实现对主机监控的支持。
 
 ## 安装Node Exporter
 

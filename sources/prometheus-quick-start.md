@@ -128,9 +128,7 @@ $ sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
 $ sudo -u prometheus /usr/local/bin/prometheus \
   --config.file /etc/prometheus/prometheus.yml \
   --storage.tsdb.path /var/lib/prometheus/
-```
 
-```
 level=info ts=2018-02-05T05:58:12.438943323Z caller=main.go:215 msg="Starting Prometheus" version="(version=2.0.0, branch=HEAD, revision=0a74f98628a0463dddc90528220c94de5032d1a0)"
 level=info ts=2018-02-05T05:58:12.439697472Z caller=main.go:216 build_context="(go=go1.9.2, user=root@615b82cb36b6, date=20171108-07:11:59)"
 level=info ts=2018-02-05T05:58:12.4403636Z caller=main.go:217 host_details="(Linux 4.4.0-112-generic #135-Ubuntu SMP Fri Jan 19 11:48:36 UTC 2018 x86_64 ubuntu-xenial (none))"
@@ -177,13 +175,13 @@ sudo systemctl restart prometheus
 
 ## 使用Expression Browser
 
-到目前为止我们已经完成了Prometheus Server的部署，在Prometheus启动完成后，访问[http://192.168.33.10:9090/](http://192.168.33.10:9090/)即可访问Prometheus内置的UI程序Expression Browser。
+到目前为止我们已经完成了Prometheus Server的部署，在Prometheus启动完成后，通过Vagrant中定义的private_network地址即可访问虚拟机中运行的服务。访问[http://192.168.33.10:9090/](http://192.168.33.10:9090/)即可打开Prometheus内置的UI程序Expression Browser。
 
-![](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
+![expression browser](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
 
 访问[http://192.168.33.10:9090/metrics](http://192.168.33.10:9090/metrics)，我们可以查看当前Prometheus Server自身的监控指标数据。
 
-![](http://p2n2em8ut.bkt.clouddn.com/prometheus-metrics.png)
+![Prometheus自身运行数据](http://p2n2em8ut.bkt.clouddn.com/prometheus-metrics.png)
 
 回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Console标签。我们可以通过，输入表达式http_requests_total来查看Prometheus Server的Http请求量的情况。在UI中输入表达式。
 
@@ -191,7 +189,7 @@ sudo systemctl restart prometheus
 http_requests_total
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_total_console.png)
+![使用PromQL查询语句](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_total_console.png)
 
 我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。则通过在表达式中对样本特征进行限定来获取相应的数据：
 
@@ -213,7 +211,7 @@ count(http_requests_total)
 rate(http_requests_total[1m])
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_graph.png)
+![数据可视化](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_graph.png)
 
 这里使用的表达式即Prometheus提供的PromQL查询语言，通过PromQL我们可以方便的按需对数据进行查询，过滤，分片，聚合等操作，同时PromQL中还提供了大量的内置函数，可以实现复杂的数据统计分析需求。
 
@@ -230,7 +228,7 @@ rate(http_requests_total[1m])
     * instance 4: 5.6.7.8:5671
 ```
 
-回到prometheus.yml配置中，我们可以看到scrape_configs节点，定义了一个scrape_config的数组，每一个scrape_config配置项即对应了一个Job。当使用static_configs定义监控目标时，targets即对应一个任务中的多个实例。
+回到prometheus.yml配置中，可以看到scrape_configs部分定义了一个scrape_config的数组，每一个scrape_config配置项即对应了一个Job。当使用static_configs定义监控目标时，targets即对应一个任务中的多个实例。
 
 ```
 scrape_configs:
@@ -240,7 +238,7 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 
-![http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
+![target列表以及状态](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
 
 我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务以及每个任务对应的实例信息。
 
