@@ -1,6 +1,6 @@
-# Prometheus的崛起
+# Prometheus简介
 
-## Prometheus简介
+> TODO: 替换草图
 
 Prometheus受启发于Google的Brogmon监控系统（相似的Kubernetes是从Google的Brog系统演变而来），从2012年开始由前Google工程师在Soundcloud以开源软件的形式进行研发，并且于2015年早期对外发布早期版本。2016年5月正式成为继Kubernetes之后的第二个正式加入CNCF基金会的项目，同年6月正式发布1.0版本。2017年底发布了基于全新存储层的2.0版本，能更好地与容器平台，云平台配合。
 
@@ -56,9 +56,21 @@ Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的clie
 
 ##### 强大的数据模型
 
-Prometheus是一个完全开源的监控系统，所有采集的监控数据均以指标(metric)的形式保存在内置的时间序列数据库当中(TSDB)。所有的样本除了基本的指标名称以外，还包含一系列用于描述该样本特征的标签(键值对)。基于这些维度我们可以方便的对监控数据进行聚合，过滤，裁剪。
+Prometheus是一个完全开源的监控系统，所有采集的监控数据均以指标(metric)的形式保存在内置的时间序列数据库当中(TSDB)。所有的样本除了基本的指标名称以外，还包含一系列用于描述该样本特征的标签(键值对)。
 
-##### 强大的查询语言
+如下所示：
+
+```
+http_request_status{code='200',content_path='/api/path', environment='produment'} => [value1@timestamp1,value2@timestamp2...]
+
+http_request_status{code='200',content_path='/api/path2', environment='produment'} => [value1@timestamp1,value2@timestamp2...]
+```
+
+当采集HTTP请求状态样本数据时，每一条时间序列表示由指标名称以及一组标签唯一标示。每条时间序列按照时间序列记录了一系列的样本值。
+
+这些表示维度的标签可能来源于你的监控对象，比如code=404或者content_path=/api/path。也可能来源于的你的环境定义，比如environment=produment。基于这些维度我们可以方便的对监控数据进行聚合，过滤，裁剪。
+
+##### 强大的查询语言PromQl
 
 同时Prometheus内置了一个强大的自定义查询语言PromQL,通过PromQL可以对采集到的进行查询，聚合。同时PromQL还被应用于数据可视化(结合其他工具如Grafana)以及告警当中。
 

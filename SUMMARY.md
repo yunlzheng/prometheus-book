@@ -4,11 +4,12 @@
 - [作者](AUTHOR.md)
 - [版本变更历史](CHANGELOGS.md)
 - [第1章 天降奇兵](./chapter0/README.md)
-  - [Prometheus的崛起](./sources/why-monitor.md)
+  - [Prometheus简介](./sources/why-monitor.md)
   - [初识Prometheus](./sources/prometheus-quick-start.md)
-  - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md)
+  <!-- - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md) -->
+  - [任务和实例](./sources/prometheus-job-and-instance.md)
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
-  - [百里挑一](./sources/comparison_with_other.md)
+  <!-- - [百里挑一](./sources/comparison_with_other.md) -->
   - [小结](./chapter0/SUMMARY.md)
 - [第2章 探索PromQL](./chapter2/README.md)
   - [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)

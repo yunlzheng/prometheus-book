@@ -1,245 +1,220 @@
 # 初识Prometheus
 
-本节将带来读者在本地搭建一个单实例的Prometheus Server，以此让读者能够对Prometheus有一个直观的认识。
+为了能够更加直观的了解Prometheus Server，接下来我们将在本地部署一个Prometheus Server实例，并且配合Node Exporter程序实现对本地主机指标的监控。
 
-## 环境准备
+## 运行Prometheus Server
 
-我们使用[Vagrant](https://www.vagrantup.com)创建了一个ubuntu/xenial64本地的虚拟机。我们将在该环境下安装部署Prometheus。
+Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里指需要下载，解压并且添加基本的配置即可正常启动Prometheus Server。
 
-这里使用Vagrantfile来定义基础环境，使用ubuntu/xenial64作为基础镜像，并且为虚拟机分配了一个私有的IP地址192.168.33.10，通过该IP地址可以直接在本地访问运行在该虚拟机中的服务。
-
-Vagrantfile内容如下：
-
-``` Vagrantfile
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.network "private_network", ip: "192.168.33.10"
-end
+可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包，目前这里采用最新的稳定版本2.1.0。
 
 ```
-
-启动虚拟机
-
-```
-$ vagrant up
-Bringing machine 'default' up with 'virtualbox' provider...
-==> default: Clearing any previously set forwarded ports...
-==> default: Clearing any previously set network interfaces...
-==> default: Preparing network interfaces based on configuration...
-    default: Adapter 1: nat
-    default: Adapter 2: hostonly
-==> default: Forwarding ports...
-    default: 22 (guest) => 2222 (host) (adapter 1)
-==> default: Running 'pre-boot' VM customizations...
-==> default: Booting VM...
-==> default: Waiting for machine to boot. This may take a few minutes...
-    default: SSH address: 127.0.0.1:2222
-    default: SSH username: ubuntu
-    default: SSH auth method: password
-==> default: Machine booted and ready!
-[default] GuestAdditions 5.1.30 running --- OK.
-==> default: Checking for guest additions in VM...
-==> default: Configuring and enabling network interfaces...
-==> default: Mounting shared folders...
-    default: /Workspace/books/prometheus-in-action/examples/ch1
-==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
-==> default: flag to force provisioning. Provisioners marked to run always will still run.
+curl -LO  https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.dar
+win-amd64.tar.gz
+tar -xzf prometheus-2.1.0.darwin-amd64.tar.gz
 ```
 
-启动完成后，我们可以通过命令vagrant ssh登录到该虚拟机。
-
-```
-$ vagrant ssh
-Welcome to Ubuntu 16.04.2 LTS (GNU/Linux 4.4.0-112-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  Get cloud support with Ubuntu Advantage Cloud Guest:
-    http://www.ubuntu.com/business/services/cloud
-
-96 packages can be updated.
-1 update is a security update.
-
-
-Last login: Wed Jan 31 01:41:40 2018 from 10.0.2.2
-ubuntu@ubuntu-xenial:~$
-```
-
-## 如何获取二进制包
-
-Prometheus的源代码托管在Github的仓库[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)在下，在[releases](https://github.com/prometheus/prometheus/releases)链接下可以找到Prometheus所有已发布版本的软件包。
-
-## 安装Prometheus Server
-
-#### 创建本地用户
-
-```
-sudo useradd --no-create-home prometheus
-
-sudo mkdir /etc/prometheus
-sudo mkdir /var/lib/prometheus
-
-sudo chown prometheus:prometheus /etc/prometheus
-sudo chown prometheus:prometheus /var/lib/prometheus
-```
-
-#### 获取并安装软件包
-
-```
-cd ~
-curl -LO https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz
-tar xvf prometheus-2.0.0.linux-amd64.tar.gz
-```
-
-```
-sudo cp prometheus-2.0.0.linux-amd64/prometheus /usr/local/bin/
-sudo chown prometheus:prometheus /usr/local/bin/prometheus
-```
-
-#### 创建Prometheus配置文件
-
-创建配置文件：/etc/prometheus/prometheus.yml
+解压后当前目录会包含默认的prometheus配置文件promethes.yml
 
 ```
 global:
-  scrape_interval: 15s
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
 scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
-    scrape_interval: 5s
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
     static_configs:
       - targets: ['localhost:9090']
 ```
 
-```
-$ sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
-```
-
-这里我们让Prometheus Server每15秒，轮询一次Prometheus Server暴露的监控采集地址[http://localhost:9090/metrics](http://localhost:9090/metrics)。
-
-#### 运行Prometheus
+启动prometheus服务：
 
 ```
-$ sudo -u prometheus /usr/local/bin/prometheus \
-  --config.file /etc/prometheus/prometheus.yml \
-  --storage.tsdb.path /var/lib/prometheus/
-
-level=info ts=2018-02-05T05:58:12.438943323Z caller=main.go:215 msg="Starting Prometheus" version="(version=2.0.0, branch=HEAD, revision=0a74f98628a0463dddc90528220c94de5032d1a0)"
-level=info ts=2018-02-05T05:58:12.439697472Z caller=main.go:216 build_context="(go=go1.9.2, user=root@615b82cb36b6, date=20171108-07:11:59)"
-level=info ts=2018-02-05T05:58:12.4403636Z caller=main.go:217 host_details="(Linux 4.4.0-112-generic #135-Ubuntu SMP Fri Jan 19 11:48:36 UTC 2018 x86_64 ubuntu-xenial (none))"
-level=info ts=2018-02-05T05:58:12.445696612Z caller=web.go:380 component=web msg="Start listening for connections" address=0.0.0.0:9090
-level=info ts=2018-02-05T05:58:12.445720858Z caller=main.go:314 msg="Starting TSDB"
-level=info ts=2018-02-05T05:58:12.445785952Z caller=targetmanager.go:71 component="target manager" msg="Starting target manager..."
-level=info ts=2018-02-05T05:58:12.761069867Z caller=main.go:326 msg="TSDB started"
-level=info ts=2018-02-05T05:58:12.762288533Z caller=main.go:394 msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
-level=info ts=2018-02-05T05:58:12.764189762Z caller=main.go:371 msg="Server is ready to receive requests.
+cd prometheus-2.1.0.darwin-amd64
+./prometheus
 ```
 
-#### 创建Prometheus Server的Service Unit文件
+正常的情况下，你可以看到一下输出内容：
 
 ```
-sudo vim /etc/systemd/system/prometheus.service
+level=info ts=2018-03-01T08:29:55.267373515Z caller=main.go:225 msg="Starting Prometheus" version="(version=2.1.0, branch=HE
+AD, revision=85f23d82a045d103ea7f3c89a91fba4a93e6367a)"
+level=info ts=2018-03-01T08:29:55.267470248Z caller=main.go:226 build_context="(go=go1.9.2, user=root@6e784304d3ff, date=201
+80119-12:07:34)"
+level=info ts=2018-03-01T08:29:55.267493241Z caller=main.go:227 host_details=(darwin)
+level=info ts=2018-03-01T08:29:55.267516357Z caller=main.go:228 fd_limits="(soft=10240, hard=9223372036854775807)"
+level=info ts=2018-03-01T08:29:55.270981001Z caller=main.go:499 msg="Starting TSDB ..."
+level=info ts=2018-03-01T08:29:55.271374269Z caller=web.go:383 component=web msg="Start listening for connections" address=0.0.0.0:9090
+level=info ts=2018-03-01T08:29:55.284051013Z caller=main.go:509 msg="TSDB started"
+level=info ts=2018-03-01T08:29:55.284145773Z caller=main.go:585 msg="Loading configuration file" filename=prometheus.yml
+level=info ts=2018-03-01T08:29:55.287734643Z caller=main.go:486 msg="Server is ready to receive web requests."
+level=info ts=2018-03-01T08:29:55.287978197Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager...
 ```
 
-```
-[Unit]
-Description=Prometheus
-Wants=network-online.target
-After=network-online.target
+启动完成后，可以通过[http://localhost:9090](http://localhost:9090)访问Prometheus的UI界面。
 
-[Service]
-User=prometheus
-Group=prometheus
-Type=simple
-ExecStart=/usr/local/bin/prometheus \
-    --config.file /etc/prometheus/prometheus.yml \
-    --storage.tsdb.path /var/lib/prometheus/ \
-    --web.console.templates=/etc/prometheus/consoles \
-    --web.console.libraries=/etc/prometheus/console_libraries
+![Prometheus UI](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
 
-[Install]
-WantedBy=multi-user.target
-```
+## 运行node exporter
+
+在Prometheus的架构设计中，Prometheus Server主要负责数据的收集，存储并且对外提供数据查询支持。而实际的监控样本数据的收集这是由Exporter完成。Exporter可以是一个独立运行的进程，对外暴露一个用于获取监控数据的HTTP服务。 Prometheus Server只需要定时从这些Exporter暴露的HTTP服务获取监控数据即可。
+
+为了能够采集到主机的运行指标。这里需要使用[node exporter](https://github.com/prometheus/node_exporter)，node exporter可以获取到所在主机大量的运行数据，典型的包括CPU、内存，磁盘、网络等等监控样本。
+
+node exporter同样采用Golang编写，并且不存在任何的第三方依赖，只需要下载，解压即可运行。可以从[https://prometheus.io/download/](https://prometheus.io/download/)获取最新的node exporter版本的二进制包。
 
 ```
-sudo systemctl daemon-reload
-sudo systemctl status prometheus
-sudo systemctl enable prometheus
-sudo systemctl restart prometheus
+curl -OL https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.darwin-amd64.tar.gz
+tar -xzf node_exporter-0.15.2.darwin-amd64.tar.gz
 ```
 
-## 使用Expression Browser
-
-到目前为止我们已经完成了Prometheus Server的部署，在Prometheus启动完成后，通过Vagrant中定义的private_network地址即可访问虚拟机中运行的服务。访问[http://192.168.33.10:9090/](http://192.168.33.10:9090/)即可打开Prometheus内置的UI程序Expression Browser。
-
-![expression browser](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
-
-访问[http://192.168.33.10:9090/metrics](http://192.168.33.10:9090/metrics)，我们可以查看当前Prometheus Server自身的监控指标数据。
-
-![Prometheus自身运行数据](http://p2n2em8ut.bkt.clouddn.com/prometheus-metrics.png)
-
-回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Console标签。我们可以通过，输入表达式http_requests_total来查看Prometheus Server的Http请求量的情况。在UI中输入表达式。
+运行node exporter:
 
 ```
-http_requests_total
+cd node_exporter-0.15.2.darwin-amd64
+./node_exporter
 ```
 
-![使用PromQL查询语句](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_total_console.png)
-
-我们还可以通过返回数据样本中标签对数据进行过滤，例如我们只关心handler=query的请求次数。则通过在表达式中对样本特征进行限定来获取相应的数据：
+启动成功后，可以看到一下输出：
 
 ```
-http_requests_total{handler='query'}
+INFO[0000] Starting node_exporter (version=0.15.2, branch=HEAD, revision=98bc64930d34878b84a0f87dfe6e1a6da61e532d)  source="
+node_exporter.go:43"
+INFO[0000] Build context (go=go1.9.2, user=root@d5c4792c921f, date=20171205-14:51:43)  source="node_exporter.go:44"
+INFO[0000] No directory specified, see --collector.textfile.directory  source="textfile.go:57"
+INFO[0000] Enabled collectors:                           source="node_exporter.go:50"
+INFO[0000]  - time                                       source="node_exporter.go:52"
+INFO[0000]  - meminfo                                    source="node_exporter.go:52"
+INFO[0000]  - textfile                                   source="node_exporter.go:52"
+INFO[0000]  - filesystem                                 source="node_exporter.go:52"
+INFO[0000]  - netdev                                     source="node_exporter.go:52"
+INFO[0000]  - cpu                                        source="node_exporter.go:52"
+INFO[0000]  - diskstats                                  source="node_exporter.go:52"
+INFO[0000]  - loadavg                                    source="node_exporter.go:52"
+INFO[0000] Listening on :9100                            source="node_exporter.go:76"
 ```
 
-如果只需要计算当前表达式返回的时间序列的条数则可以使用count函数进行计算。
+访问[http://localhost:9100/](http://localhost:9100/)可以看到以下页面：
+
+![node exporter页面](http://p2n2em8ut.bkt.clouddn.com/node_exporter_home_page.png)
+
+## node exporter监控指标
+
+访问[http://localhost:9100/metrics](http://localhost:9100/metrics)，可以看到当前node exporter获取到的当前主机的所有监控数据，如下所示：
+
+![主机监控指标](http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics_page.png)
+
+每一个监控指标之前都会有一段类似于如下形式的信息：
 
 ```
-count(http_requests_total)
+# HELP node_cpu Seconds the cpus spent in each mode.
+# TYPE node_cpu counter
+node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
+
+# HELP node_load1 1m load average.
+# TYPE node_load1 gauge
+node_load1 3.0703125
 ```
 
-使用Prometheus的Expression Browser UI，我们还可以直接通过表达式计算实时产生统计图表.回到Expression Browser，[http://192.168.33.10:9090/graph](http://192.168.33.10:9090/graph)，并切换到Graph标签。
+其中HELP用于解释当前指标的含义，TYPE则说明当前指标的数据类型。在上面的例子中node_cpu的注释表明当前指标是cpu0上闲置时间(idle)占用CPU的总时间，CPU占用时间是一个只增不减的度量指标，从类型中也可以看出node_cpu的数据类型是计数器(counter)，与该指标的实际含义一致。又例如node_load1该指标反应了当前主机在最近一分钟以内的负载情况，系统的负载情况会随系统资源的使用变化而变化，因此node_load1反应的是当前状态，数据可能增加也可能减少，从注释中可以看出当前指标类型为仪表盘(gauge)，与指标反应的实际含义一致。
 
-输入以下表达式，可以统计当前Prometheus Server每秒接收的请求次数速率。
+除了这些意外，在当前页面中根据物理主机系统的不同，你还可能看到如下监控指标：
 
-```
-rate(http_requests_total[1m])
-```
+* node_boot_time: 系统启动时间
+* node_cpu: 系统CPU使用量
+* node_disk_*: 磁盘IO
+* node_filesystem_*: 文件系统用量
+* node_load1: 系统负载
+* node_memeory_*: 内存使用量
+* node_network_*: 网络带宽
+* node_time: 当前系统时间
+* go_*: node exporter中go相关指标
+* process_*: node exporter自身进程相关运行指标
 
-![数据可视化](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_http_request_graph.png)
-
-这里使用的表达式即Prometheus提供的PromQL查询语言，通过PromQL我们可以方便的按需对数据进行查询，过滤，分片，聚合等操作，同时PromQL中还提供了大量的内置函数，可以实现复杂的数据统计分析需求。
-
-## 任务和实例
-
-在Prometheus中每一个可以用于采集数据的端点被称为一个实例（Instance）。实例通过URL端点的形式将自身采集到的监控数据样本对外暴露。而Prometheus则直接从这些URL端点中获取监控数据。
-一组用于相同采集目的的实例，或者同一个采集进程的多个副本，称可以为一个任务（Job）。
-
-```
-* job: api-server
-    * instance 1: 1.2.3.4:5670
-    * instance 2: 1.2.3.4:5671
-    * instance 3: 5.6.7.8:5670
-    * instance 4: 5.6.7.8:5671
-```
-
-回到prometheus.yml配置中，可以看到scrape_configs部分定义了一个scrape_config的数组，每一个scrape_config配置项即对应了一个Job。当使用static_configs定义监控目标时，targets即对应一个任务中的多个实例。
+为了能够让Prometheus Server能够从当前node exporter获取到监控数据，这里需要修改Prometheus配置文件。编辑prometheus.yml并在scrape_configs节点下添加以下内容:
 
 ```
 scrape_configs:
   - job_name: 'prometheus'
-    scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
+  # 采集node exporter监控数据
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
 ```
 
-![target列表以及状态](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
+重新启动Prometheus Server
 
-我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务以及每个任务对应的实例信息。
+访问[http://localhost:9090](http://localhost:9090)，进入到Prometheus Server。如果输入“up”并且点击执行按钮以后，可以看到如下结果：
 
-因此当我们需要采集不同的监控指标(例如：主机、MySQL、Nginx)时，我们只需要运行相应的监控采集程序，并且让Prometheus Server知道这些Exporter实例的访问地址。这些用于向Prometheus暴露监控URL端点的程序我们可以称为一个Exporter。
+![Expression Browser](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_up_query.png)
+
+如果Prometheus能够正常从node exporter获取数据，则会看到一下结果：
+
+```
+up{instance="localhost:9090",job="prometheus"}	1
+up{instance="localhost:9100",job="node"}	1
+```
+
+其中“1”表示正常，反之“0”则为异常。
+
+## 查询与可视化
+
+当Prometheus Server可以正常获取node exporter中的监控指标之后，用户就可以通过Prometheus内置的PromQL查询主机相关数据。进入到Prometheus UI,切换到Graph标签
+
+![Graph Query](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_graph_query.png)
+
+通过PromQL则可以直接以可视化的形式显示查询到的数据。例如，查询主机负载变化情况，可以使用：
+
+```
+node_load1
+```
+
+![主机负载情况](http://p2n2em8ut.bkt.clouddn.com/node_node1_graph.png)
+
+查询主机CPU的使用率，由于node_cpu的数据类型是Counter，计算使用率需要使用rate()函数：
+
+```
+rate(node_cpu[2m])
+```
+
+![系统所有CPU中各mode各种的使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_cpu_and_mode.png)
+
+这是如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可。
+
+```
+avg without(cpu) (rate(node_cpu[2m]))
+```
+
+![系统各mode的CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_mode.png)
+
+那如果需要计算系统CPU的总体使用率，通过排除系统闲置的CPU使用率即可获得，表达式如下:
+
+```
+1 - avg without(cpu) (rate(node_cpu{mode="idle"}[2m]))
+```
+
+![系统CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_total.png)
+
+从上面这些例子中可以看出，根据样本中的标签可以很方便的时序对数据的查询，过滤以及聚合等操作。同时PromQL中还提供了大量的诸如rate()这样的函数可以实现对数据的更多个性化的处理。
