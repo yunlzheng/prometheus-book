@@ -1,12 +1,12 @@
-# Metrics类型
+# Metric类型
 
-> TODO: 更换图例，优化打印显示
+> TODO: 图例替换
 
-之前我们讲过Prometheus对于所有的数据样本，使用了metrics name和labels唯一标示一条时间序列。而这些监控的样本数据，在不同的场景下又具有不同的意义。比如http_request_total采集到的监控样本数据反应的是当前系统的所有Http总量，因此当我们观察数据变化时，会发现对于一条http_request_total所反应的时序数据是一条持续增长的样本。而又比如container_cpu_usage一条时序数据则反映出的则是一条变化的曲线。
+上一小节，介绍了Prometheus样本（Sample）保存采集到的监控数据，并且每一个样本通过一组唯一的标签进行标示。同时在前面也了解过虽然所有样本数据的底层存储方式上并没有任何差异，但是每一个样本在不同的场景下却具有不同的含义。比如node exporter采集的监控数据中node_cpu记录的是cpu累积的使用时间，是一个只增加不减少的监控指标，并且在node exporter的/metrics页面返回的结果中也通过Counter对其注释。而node_load1则反映的是系统的当前状态，并且用Gauge对其注释。
 
-因为为了更好的定义这些不同场景下监控样本数据所代表的含义，Prometheus提供了四种指标类型(Metrics Type)。用以帮助开发人员更好的定义和使用这些监控指标。
+因为为了更好的定义这些不同场景下监控样本数据所代表的含义，除了以上看到的比如Counter、Gauge以外Prometheus还定义了另外两种类型Histogram和Summary。
 
-这四种监控指标类型分别为：Counter, Gauge, Histogram, Summary。
+## 简单数据类型
 
 ### Counter：只增不减的计数器
 
@@ -55,6 +55,8 @@ topk(10, sum(io_namespace_http_requests_total) by (path))
 # PromQL
 io_namespace_http_inprogress_requests{}
 ```
+
+## 复杂数据类型
 
 ### Histogram: 自带分区统计的分布统计图
 

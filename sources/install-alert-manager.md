@@ -4,7 +4,7 @@ Alertmanager和Prometheus Server一样均采用Golang实现，并且没有第三
 
 ## 使用二进制包部署AlertManager
 
-#### 获取并安装软件包
+##### 获取并安装软件包
 
 Alertmanager最新版本的下载地址可以从Prometheus官方网站[https://prometheus.io/download/](https://prometheus.io/download/)获取。
 
@@ -12,17 +12,10 @@ Alertmanager最新版本的下载地址可以从Prometheus官方网站[https://p
 curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.14.0/alertmanager-0.14.0.linux-amd64.tar.gz
 
 tar xvf alertmanager-0.14.0.linux-amd64.tar.gz
-sudo cp alertmanager-0.14.0.linux-amd64/alertmanager /usr/local/bin/
-sudo cp alertmanager-0.14.0.linux-amd64/amtool /usr/local/bin/
-
-sudo chown prometheus:prometheus /usr/local/bin/alertmanager
-sudo chown prometheus:prometheus /usr/local/bin/amtool
-
 sudo mkdir -p /data/alertmanager
-sudo chown prometheus:prometheus /data/alertmanager
 ```
 
-#### 创建alertmanager配置文件
+##### 创建alertmanager配置文件
 
 ```
 sudo vim /etc/prometheus/alertmanager.yml
@@ -45,40 +38,14 @@ Alertmanager的配置主要包含两个部分：路由(route)以及接收器(rec
 
 在配置文件中使用route定义了顶级的路由，路由是一个基于标签匹配规则的树状结构。所有的告警信息从顶级路由开始，根据标签匹配规则进入到不同的子路由，并且根据子路由设置的接收器发送告警。目前配置文件中只设置了一个顶级路由route并且定义的接收器为default-receiver。因此，所有的告警都会发送给default-receiver。关于路由的详细内容会在后续进行详细介绍。
 
-#### 创建Alertmanager的Sevice Unit文件
+##### 启动Alertmanager
 
 ```
-sudo vim /etc/systemd/system/alertmanager.service
-```
-
-```
-[Unit]
-Description=Alertmanager
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-User=prometheus
-Group=prometheus
-Type=simple
-ExecStart=/usr/local/bin/alertmanager \
-    --config.file=/etc/prometheus/alertmanager.yml \
-    --storage.path=/data/alertmanager/
-
-[Install]
-WantedBy=multi-user.target
+cd alertmanager-0.14.0.linux-amd64
+/usr/local/bin/alertmanager --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/
 ```
 
 --config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。
-
-加载并且启动alertmanager
-
-```
-sudo systemctl daemon-reload
-sudo systemctl status alertmanager
-sudo systemctl enable alertmanager
-sudo systemctl restart alertmanager
-```
 
 #### 查看运行状态
 
@@ -101,13 +68,7 @@ alerting:
         targets: ['localhost:9093']
 ```
 
-重启Prometheus服务:
-
-```
-sudo systemctl restart prometheus
-```
-
-重启成功后，可以从[http://192.168.33.10:9090/config](http://192.168.33.10:9090/config)查看alerting配置是否生效。
+重启Prometheus服务，成功后，可以从[http://192.168.33.10:9090/config](http://192.168.33.10:9090/config)查看alerting配置是否生效。
 
 此时，再次尝试手动拉高系统CPU使用率：
 

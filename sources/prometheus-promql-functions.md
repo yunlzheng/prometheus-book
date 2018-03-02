@@ -1,10 +1,10 @@
 # 内置函数
 
-> TODO： 是否需要如此详细的列举所有内置函数
+> TODO： 补充各个函数的使用案例
 
 在上一小节中，我们已经看到了类似于irate()这样的函数，可以帮助我们计算监控指标的实时增长率。除了irate以外，Prometheus还提供了其它大量的内置函数，可以对时序数据进行更多的处理。
 
-## 数学运算
+## 数学函数
 
 ##### abs()
 
@@ -13,28 +13,6 @@
 ##### ceil()
 
 ```ceil(v instant-vector)```将向量中的所有样本值向上取整。
-
-##### changes()
-
-```changes(v range-vector)```changes将返回每一个区间向量中样本变化的次数，作为一个新的瞬时向量。
-
-##### delta()
-
-```delta(v range-vector)```计算区间向量v中每一个时间序列元素的第一个值和最后一个值之间的差值，并且以该增量作为瞬时向量的样本值。
-
-例如，使用表达式，可以查询当前CPU与两个小时之间的差异。
-
-```
-delta(cpu_temp_celsius{host="zeus"}[2h])
-```
-
-> 注意：delta只适用于仪表盘。
-
-##### deriv()
-
-```deriv(v range-vector)```使用简单线性回归计算区间向量v中的时间序列每秒的导数。
-
-> 注意：deriv只适用于仪表盘。
 
 ##### exp()
 
@@ -53,6 +31,22 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 ```sqrt(v instant-vector)```计算瞬时向量中所有样本的平方根。
 
+##### round()
+
+```round(v instant-vector, to_nearest=1 scalar)```将瞬时向量中所有样本四舍五入取整。可选参数to_nearest参数可以用于
+
+##### ln()
+
+```ln(v instant-vector)```计算v中所有元素的自然数
+
+##### log2()
+
+```log2(v instant-vector)```计算v中所有元素的二进制对数
+
+##### log10()
+
+```log10(v instant-vector)```计算v中所有元素的小数对数
+
 ## 范围限定
 
 ##### clamp_max()
@@ -62,12 +56,6 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 ##### clamp_min()
 
 ```clamp_min(v instant-vector, min scalar)``` 最小值上限。限制瞬时向量中样本值的最小范围。即如果样本值中小于最小值，则使用定义的最小值替换该样本值。
-
-##### resets()
-
-```resets(v range-vector)```计算输入每一条时间序列数据重置的次数。对于计数器类型的时间序列，只要出现样本值减少的情况就认为是一次重置。
-
-> 注意： 只适用于计数器
 
 ## 日期和时间
 
@@ -85,19 +73,19 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 ##### minute()
 
-```minute()```返回给定时间戳的当前的分钟数。返回值范围在0到59之间
+minute()返回给定时间戳的当前的分钟数。返回值范围在0到59之间
 
 ##### hour()
 
-```hour(v=vector(time()) instant-vector)```返回给定时间戳在一天当中所在的小时数。返回值范围在0到23之间
+hour(v=vector(time()) instant-vector)返回给定时间戳在一天当中所在的小时数。返回值范围在0到23之间
 
 ##### month()
 
-```month()```返回给定时间戳在一年当中所在的月份。返回值范围在1到12之间
+month()返回给定时间戳在一年当中所在的月份。返回值范围在1到12之间
 
 ##### time()
 
-```time()```返回从1960年月1日到当前时间依赖的秒数。
+time()返回从1960年月1日到当前时间依赖的秒数。
 
 ##### timestamp()
 
@@ -129,11 +117,13 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 ```vector(s scalar)```将一个标量数据转换为一个不包含任何标签的瞬时向量。
 
-## 数据聚合
+## 分位数统计
 
 ##### histogram_quantile()
 
 ```histogram_quantile(φ float, b instant-vector)```
+
+## 按照时间聚合
 
 ##### <aggregation>_over_time()
 
@@ -146,11 +136,37 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 * ```stddev_over_time(range-vector)```
 * ```stdvar_over_time(range-vector)```
 
-## 其它(TODO)
+## 只适用于区间向量
 
-##### absent()
+##### changes()
 
-```absent(v instant-vector)```判断当前序列是否不存在。
+```changes(v range-vector)```changes将返回每一个区间向量中样本变化的次数，作为一个新的瞬时向量。
+
+##### delta()
+
+```delta(v range-vector)```计算区间向量v中每一个时间序列元素的第一个值和最后一个值之间的差值，并且以该增量作为瞬时向量的样本值。
+
+例如，使用表达式，可以查询当前CPU与两个小时之间的差异。
+
+```
+delta(cpu_temp_celsius{host="zeus"}[2h])
+```
+
+> 注意：delta只适用于仪表盘。
+
+##### deriv()
+
+deriv(v range-vector)使用简单线性回归计算区间向量v中的时间序列每秒的导数。
+
+> 注意：deriv只适用于仪表盘。
+
+##### rate()
+
+```rate()```
+
+##### irate()
+
+```irate()```
 
 ##### holt_winters()
 
@@ -160,13 +176,23 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 ```idelta(v range-vector)```
 
+##### predict_linear()
+
+```predict_linear(v range-vector, t scalar)```
+
+## 只适用于计数器
+
 ##### increase()
 
 ```increase()```
 
-##### irate()
+##### resets()
 
-```irate()```
+```resets(v range-vector)```计算输入每一条时间序列数据重置的次数。对于计数器类型的时间序列，只要出现样本值减少的情况就认为是一次重置。
+
+> 注意： 只适用于计数器
+
+## 标签变更
 
 ##### label_join()
 
@@ -176,28 +202,8 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 ```label_replace(v instant-vector, dst_label string, replacement string, src_label string, regex string)```
 
-##### ln()
+## 判断缺失的值
 
-```ln(v instant-vector)```
+##### absent()
 
-##### log2()
-
-```log2()```
-
-##### log10()
-
-```log10()```
-
-##### predict_linear()
-
-```predict_linear()```
-
-##### rate()
-
-```rate()```
-
-
-
-##### round()
-
-```round(v instant-vector, to_nearest=1 scalar)```将瞬时向量中所有样本四舍五入取整。可选参数to_nearest参数可以用于
+```absent(v instant-vector)```判断当前序列是否不存在。

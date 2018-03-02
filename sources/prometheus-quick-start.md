@@ -9,8 +9,7 @@ Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里�
 可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包，目前这里采用最新的稳定版本2.1.0。
 
 ```
-curl -LO  https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.dar
-win-amd64.tar.gz
+curl -LO  https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.darwin-amd64.tar.gz
 tar -xzf prometheus-2.1.0.darwin-amd64.tar.gz
 ```
 
@@ -130,7 +129,6 @@ INFO[0000] Listening on :9100                            source="node_exporter.g
 # HELP node_cpu Seconds the cpus spent in each mode.
 # TYPE node_cpu counter
 node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
-
 # HELP node_load1 1m load average.
 # TYPE node_load1 gauge
 node_load1 3.0703125

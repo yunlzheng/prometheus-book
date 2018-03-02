@@ -1,73 +1,98 @@
-## 什么是Metrics和Labels
+# 理解Prometheus数据模型
 
-### 理解时序数据模型
+> TODO: 添加Promethues Metrics和标签命名的最佳实践和常见陷阱
 
-在之前的部分我们讲Prometheus除了是监控系统以外，本身也是一个时序（time series）数据库。从本质上将Prometheus将所有的数据，按照时间序列进行存储。每一条时间序列都通过唯一定义的指标名称即Metric名称以及一组key-value的键值对组成，这组键值对被称为Labels。
-
-对于所有采集到的样本数据由一下几部分组成：
-
-* 指标名称Mrtics
-* 用于描述样本的维度的键值对Labels
-* 样本的采集时间
-* 当前样本的值。
+在前面的小节当中，通过node exporter暴露的HTTP服务，Prometheus可以采集到主机相关监控指标的样本数据。例如：
 
 ```
-<--指标名称--><--------     标签     -----------><-- 时间戳 --><- 值 ->
-http_request_total{status="200", method="GET"}@1434417560938 => 94355
-http_request_total{status="200", method="GET"}@1434417561287 => 94334
-http_request_total{status="200", method="GET"}@1434417562344 => 94383
-
-http_request_total{status="404", method="GET"}@1434417560938 => 38473
-http_request_total{status="404", method="GET"}@1434417561287 => 38544
-http_request_total{status="404", method="GET"}@1434417562344 => 38663
-
-http_request_total{status="200", method="POST"}@1434417560938 => 4748
-http_request_total{status="200", method="POST"}@1434417561287 => 4785
-http_request_total{status="200", method="POST"}@1434417562344 => 4833
+# HELP node_cpu Seconds the cpus spent in each mode.
+# TYPE node_cpu counter
+node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
+# HELP node_load1 1m load average.
+# TYPE node_load1 gauge
+node_load1 3.0703125
 ```
 
-如果将Prometheus存储的数据理解为一个二维的平面，如下所示，我们则可以看到每一个唯一的指标名称+键值对采集到的样本数据，组成了以时间为X轴的一条间序数据。
+## 样本(Sample)
+
+Prometheus按照时间发展先后顺序将这些样本数据保存在本地的时间数据库当中。如果将Prometheus存储的数据理解为一个二维的平面，如下所示:
+
+唯一的指标(Metric)定义了一条以时间为X轴的一条间序数据
 
 ```
-序列
   ^   
-  │   . . . . . . . . . . . . . . . . .   . .   request_total{path="/status",method="GET"}
-  │     . . . . . . . . . . . . . . . . . . .   request_total{path="/",method="POST"}
-  │         . . . . . . .
-  │       . . .     . . . . . . . . . . . . .                  ... 
-  │     . . . . . . . . . . . . . . . . .   .   
-  │     . . . . . . . . . .   . . . . . . . .   errors_total{path="/status",method="POST"}
-  │           . . .   . . . . . . . . .   . .   errors_total{path="/health",method="GET"}
-  │         . . . . . . . . .       . . . . .
-  │       . . .     . . . . . . . . . . . . .                  ... 
-  │     . . . . . . . . . . . . . . . .   . . 
+  │   . . . . . . . . . . . . . . . . .   . .   node_cpu{cpu="cpu0",mode="idle"}
+  │     . . . . . . . . . . . . . . . . . . .   node_cpu{cpu="cpu0",mode="system"}
+  │     . . . . . . . . . .   . . . . . . . .   node_load1{}
+  │     . . . . . . . . . . . . . . . .   . .  
   v
     <------------------ 时间 ---------------->
 ```
 
-### 指标名称和标签
+时间序列中的每一个点成为一个Sample(样本)，每一个样本由一下三个部分组成：
 
-指标的名称可以反映被监控系统的特征（比如，http_request_total - 标示当前系统接收到的Http请求总量）。指标名称只能由ASCII字符，数字，下划线以及冒号组成。每一个指标名称都必须符合正则表达式```[a-zA-Z_:][a-zA-Z0-9_:]*```。
+* 指标(metric)：由指标名称和一组描述当前样本特征的键值对唯一定义。
+* 时间戳(timestamp)：一个精确到毫秒的时间戳。
+* 样本值(value)： 一个folat64的浮点型数据表示当前样本的值。
 
-而标签则反映出当前样本数据的多个特征维度，通过这些维度Promtheus可以对样本数据进行过滤，聚合等复杂操作。Prometheus提供了强大的自定义查询预言PromQL对这些数据进行查询。标签的名称只能由ASCII字符，数字，以及下划线组成。每一个标签名必须满足正则表达式```[a-zA-Z_][a-zA-Z0-9_]*```。其中以__作为前缀的标签，是系统保留的关键字，只能在系统内部使用。标签的值则可以包含任何Unicode编码的字符。
+```
+<--------------- metric ---------------------><-timestamp -><-value->
+http_request_total{status="200", method="GET"}@1434417560938 => 94355
+http_request_total{status="200", method="GET"}@1434417561287 => 94334
 
-### 样本
+http_request_total{status="404", method="GET"}@1434417560938 => 38473
+http_request_total{status="404", method="GET"}@1434417561287 => 38544
 
-在时序数据库中存储的每一个样本都有两个部分组成：
+http_request_total{status="200", method="POST"}@1434417560938 => 4748
+http_request_total{status="200", method="POST"}@1434417561287 => 4785
+```
 
-* 一个folat64的浮点型数据表示当前样本的值
-* 一个精确到毫秒的时间戳
+在Prometheus源码中通过以下结构体表示一个样本:
 
-### 表示方法
+```golang
+type Sample struct {
+	Metric    Metric      `json:"metric"`
+	Value     SampleValue `json:"value"`
+	Timestamp Time        `json:"timestamp"`
+}
 
-通过给定的指标名称以及一组标签，可以唯一定义一条时间序列：
+type SampleValue float64
+```
+
+## 指标(Metric)
+
+在形式上，所有的指标(Metric)都通过如下格式标示：
 
 ```
 <metric name>{<label name>=<label value>, ...}
 ```
 
+指标的名称(metric name)可以反映被监控系统的特征（比如，http_request_total - 标示当前系统接收到的Http请求总量）。指标名称只能由ASCII字符，数字，下划线以及冒号组成。每一个指标名称都必须符合正则表达式```[a-zA-Z_:][a-zA-Z0-9_:]*```。
+
+而标签则反映出当前样本数据的多个特征维度，通过这些维度Promtheus可以对样本数据进行过滤，聚合等复杂操作。Prometheus提供了强大的自定义查询预言PromQL对这些数据进行查询。标签的名称只能由ASCII字符，数字，以及下划线组成。每一个标签名必须满足正则表达式```[a-zA-Z_][a-zA-Z0-9_]*```。其中以__作为前缀的标签，是系统保留的关键字，只能在系统内部使用。标签的值则可以包含任何Unicode编码的字符。
+
 例如，如果一条时间序列的指标名称为api_http_request_total并且标签为 method="POST"，handler="/message"可以表示为如下形式：
 
 ```
 api_http_requests_total{method="POST", handler="/messages"}
+```
+
+在Prometheus源码中通过以下结构体定义了指标(Metric)的数据结构：
+
+```
+type Metric LabelSet
+
+type LabelSet map[LabelName]LabelValue
+
+type LabelName string
+
+type LabelValue string
+```
+
+从代码中可以看出在底层实现中所有的Metric均是一组键值对，一组唯一的键值对定义了一条时间序列。而指标的名称<metric name>实际上是存储在标签```__name__```当中，因此通过以下两种PromQL的形式，都可以查询到响应的时间序列：
+
+```
+api_http_requests_total{method="POST", handler="/messages"}
+# 等价于
+{__name__="api_http_requests_total", method="POST", handler="/messages"}
 ```

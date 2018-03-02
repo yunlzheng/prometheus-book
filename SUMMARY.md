@@ -6,19 +6,16 @@
 - [第1章 天降奇兵](./chapter0/README.md)
   - [Prometheus简介](./sources/why-monitor.md)
   - [初识Prometheus](./sources/prometheus-quick-start.md)
-  <!-- - [使用NodeExporter监控主机](./sources/prometheus-quick-start-node-exporter.md) -->
   - [任务和实例](./sources/prometheus-job-and-instance.md)
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
-  <!-- - [百里挑一](./sources/comparison_with_other.md) -->
   - [小结](./chapter0/SUMMARY.md)
 - [第2章 探索PromQL](./chapter2/README.md)
-  - [什么是Metrics和Lables](./sources/what-is-prometheus-metrics-and-labels.md)
+  - [理解Prometheus数据模型](./sources/what-is-prometheus-metrics-and-labels.md)
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
   - [PromQL操作符](./sources/prometheus-promql-operators.md)
   - [PromQL内置函数](./sources/prometheus-promql-functions.md)
   - [在HTTP API中使用PromQL](./sources/prometheus-promql-with-http-api.md)
-  <!-- - [新的存储层](./sources/prometheus-storage-v2.md) -->
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
   - 小结
 - [第3章 Prometheus告警处理](./chapter3/README.md)
@@ -29,7 +26,6 @@
   - [内置告警接收器Receiver](./sources/alert-manager-with-smtp.md)
   - [使用Webhook扩展Alertmanager](./sources/alert-manager-extension-with-webhook.md)
   - [屏蔽告警通知](./sources/alert-manager-inhibit.md)
-  <!-- - [临时屏蔽告警通知](./sources/alert-manager-mute.md) -->
   - [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   - [小结](./chapter3/SUMMARY.md)
 - [第4章 可视化一切](./chapter4/README.md)
