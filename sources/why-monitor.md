@@ -34,7 +34,7 @@ Prometheus受启发于Google的Brogmon监控系统（相似的Kubernetes是从Go
 
 以监控系统Nagios为例。如下图所示，Nagios的主要功能是监控服务和主机。Nagios软件需要安装在一台独立的服务器上运行，该服务器称为监控中心。每一台被监控的硬件主机或者服务都需要运行一个与监控中心服务器进行通信的Nagios软件后台程序，可以理解为Agent或者插件。
 
-![Nagios监控原理](https://www.ibm.com/developerworks/cn/linux/1309_luojun_nagios/image003.jpg)
+![Nagios监控原理](http://p2n2em8ut.bkt.clouddn.com/nagios-platform.png)
 
 Nagios启动后周期性的调用插件去检查服务器状态。Nagios提供了插件机制，比如check_disk可以用于检查磁盘空间，check_load用于检查CPU负载等。插件可以返回4种Nagios可识别的状态，0(OK)表示正常，1(WARNING)表示警告，2(CRITTCAL)表示错误，3(UNKNOWN)表示未知错误。并通过Web UI显示出来。
 
@@ -50,7 +50,7 @@ Nagios启动后周期性的调用插件去检查服务器状态。Nagios提供�
 
 Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的client库，用户可以轻松的在应用程序中添加对Prometheus监控的支持，从而让用户可以看到服务和应用内部真正的运行状态。
 
-![监控服务内部运行状态](http://p2n2em8ut.bkt.clouddn.com/monitor-internal.png)
+![监控服务内部运行状态](http://p2n2em8ut.bkt.clouddn.com/pull%20vspush.png)
 
 ## Prometheus提供了什么？
 

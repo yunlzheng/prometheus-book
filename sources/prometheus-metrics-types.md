@@ -6,6 +6,8 @@
 
 因为为了更好的定义这些不同场景下监控样本数据所代表的含义，除了以上看到的比如Counter、Gauge以外Prometheus还定义了另外两种类型Histogram和Summary。
 
+![Metric类型](http://p2n2em8ut.bkt.clouddn.com/metrics%20types.png)
+
 ## 简单数据类型
 
 ### Counter：只增不减的计数器
@@ -15,6 +17,8 @@
 对于Counter类型的指标，只包含一个inc()方法，用于计数器+1
 
 一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
+
+![Counter计时器](http://p2n2em8ut.bkt.clouddn.com/metrics_counter_type.png)
 
 通过指标io_namespace_http_requests_total我们可以：
 
