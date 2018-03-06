@@ -55,7 +55,7 @@
   - [自定义Exporter实战](./sources/custom_metrics_with_client_library.md)
     - [使用Spring Boot创建自定义Exporter](./sources/custom_metrics_with_java_sdk.md)
     - 使用Golang创建自定义Metrics
-  - 让应用程序支持Prometheus
+  - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
   - 小结
 - [第6章 Prometheus服务发现](./chapter6/README.md)
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
