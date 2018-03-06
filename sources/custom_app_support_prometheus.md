@@ -400,12 +400,3 @@ public class CustomExporter extends Collector {
 
 * 拦截器/过滤器：用于统计所有应用请求的情况
 * 自定义Collector: 可以用于统计应用业务能力相关的监控情况
-
-同时介绍了4中Metrics指标类型以及使用场景：
-
-* Counter，只增不减的计数器
-* Gauge，可增可减的仪表盘
-* Histogram，自带buckets区间用于统计分布统计图
-* Summary， 客户端定义的数据分布统计图
-
-恭喜，接下来在后面的文章中我们会尝试将应用程序部署到Kubernetes当中，并且通过Prometheus采集其数据,通过PromQL聚合数据，并且在Grafana中进行监控可视化。
