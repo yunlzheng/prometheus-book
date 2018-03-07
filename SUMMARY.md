@@ -72,13 +72,15 @@
   - 服务发现与Relabel机制
   - 小结
 - [第7章 集群与高可用](./chapter7/READMD.md)
+  - [本地存储](./sources/prometheus-local-storage.md)
+  - [远程存储](./sources/prometheus-remote-storage.md)
   - 数据管理
-        - 本地存储
-        - 创建快照
-  - 远程数据存储
-        - 远程读
-        - 远程写
+    - 创建快照
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
+  - [高可用](./sources/prometheus-and-high-availability.md)
+  - 远程数据存储
+      - 远程读
+      - 远程写
   - 垮网络监控
   - 使用Prometheus Opertor管理Prometheus
   - 使用Promgen管理Prometheus
