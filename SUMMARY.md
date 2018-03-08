@@ -74,13 +74,8 @@
 - [第7章 集群与高可用](./chapter7/READMD.md)
   - [本地存储](./sources/prometheus-local-storage.md)
   - [远程存储](./sources/prometheus-remote-storage.md)
-  - 数据管理
-    - 创建快照
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
   - [高可用](./sources/prometheus-and-high-availability.md)
-  - 远程数据存储
-      - 远程读
-      - 远程写
   - 垮网络监控
   - 使用Prometheus Opertor管理Prometheus
   - 使用Promgen管理Prometheus
@@ -95,7 +90,7 @@
   - ICMP 探针
   - IPv4和IPv6
   - 小结
-- [第10章 Kubernetes监控实战](./chapter8/READMD.md)
+- [第10章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
   - Kubernetes简介
   - 搭建Kubernetes本地测试环境
   - Prometheus Vs Heapster
