@@ -1,0 +1,3 @@
+# Alertmanager高可用
+
+在前面部分我们重点讨论了Promethues的高可用方案，在当前情况下
