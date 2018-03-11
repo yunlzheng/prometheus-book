@@ -1,0 +1,3 @@
+promethues1: prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/promethues
+nodeexporter: node_exporter
+alertmanager: alertmanager --config.file=alertmanager.yml  --storage.path=/data/alertmanager/

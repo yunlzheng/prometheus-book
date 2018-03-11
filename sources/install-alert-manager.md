@@ -9,16 +9,18 @@ Alertmanager和Prometheus Server一样均采用Golang实现，并且没有第三
 Alertmanager最新版本的下载地址可以从Prometheus官方网站[https://prometheus.io/download/](https://prometheus.io/download/)获取。
 
 ```
-curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.14.0/alertmanager-0.14.0.linux-amd64.tar.gz
+curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.15.0-rc.0/alertmanager-0.15.0-rc.0.darwin-amd64.tar.gz
 
-tar xvf alertmanager-0.14.0.linux-amd64.tar.gz
-sudo mkdir -p /data/alertmanager
+tar xvf alertmanager-0.15.0-rc.0.darwin-amd64.tar.gz
+mkdir -p /data/alertmanager
 ```
 
 ##### 创建alertmanager配置文件
 
 ```
-sudo vim /etc/prometheus/alertmanager.yml
+cp alertmanager-0.15.0-rc.0.darwin-amd64/alertmanager /usr/local/bin/
+cp alertmanager-0.15.0-rc.0.darwin-amd64/amtool /usr/local/bin/
+sudo  vim /etc/promethues/alertmanager.yml
 ```
 
 配置文件中，目前只写入基本配置即可，如下所示：
@@ -41,8 +43,7 @@ Alertmanager的配置主要包含两个部分：路由(route)以及接收器(rec
 ##### 启动Alertmanager
 
 ```
-cd alertmanager-0.14.0.linux-amd64
-/usr/local/bin/alertmanager --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/
+alertmanager --config.file=alertmanager.yml  --storage.path=/data/alertmanager/
 ```
 
 --config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。

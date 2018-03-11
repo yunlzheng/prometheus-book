@@ -11,9 +11,13 @@ Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里�
 ```
 curl -LO  https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.darwin-amd64.tar.gz
 tar -xzf prometheus-2.1.0.darwin-amd64.tar.gz
+cp prometheus-2.1.0.darwin-amd64/prometheus /usr/local/bin/
+cp prometheus-2.1.0.darwin-amd64/promtool /usr/local/bin/
+
+sudo mkdir -p /data/promethues
 ```
 
-解压后当前目录会包含默认的prometheus配置文件promethes.yml
+解压后当前目录会包含默认的prometheus配置文件promethes.yml，拷贝配置文件到/etc/prometheus/prometheus.yml:
 
 ```
 global:
@@ -49,25 +53,22 @@ scrape_configs:
 启动prometheus服务：
 
 ```
-cd prometheus-2.1.0.darwin-amd64
-./prometheus
+prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/promethues
 ```
 
 正常的情况下，你可以看到一下输出内容：
 
 ```
-level=info ts=2018-03-01T08:29:55.267373515Z caller=main.go:225 msg="Starting Prometheus" version="(version=2.1.0, branch=HE
-AD, revision=85f23d82a045d103ea7f3c89a91fba4a93e6367a)"
-level=info ts=2018-03-01T08:29:55.267470248Z caller=main.go:226 build_context="(go=go1.9.2, user=root@6e784304d3ff, date=201
-80119-12:07:34)"
-level=info ts=2018-03-01T08:29:55.267493241Z caller=main.go:227 host_details=(darwin)
-level=info ts=2018-03-01T08:29:55.267516357Z caller=main.go:228 fd_limits="(soft=10240, hard=9223372036854775807)"
-level=info ts=2018-03-01T08:29:55.270981001Z caller=main.go:499 msg="Starting TSDB ..."
-level=info ts=2018-03-01T08:29:55.271374269Z caller=web.go:383 component=web msg="Start listening for connections" address=0.0.0.0:9090
-level=info ts=2018-03-01T08:29:55.284051013Z caller=main.go:509 msg="TSDB started"
-level=info ts=2018-03-01T08:29:55.284145773Z caller=main.go:585 msg="Loading configuration file" filename=prometheus.yml
-level=info ts=2018-03-01T08:29:55.287734643Z caller=main.go:486 msg="Server is ready to receive web requests."
-level=info ts=2018-03-01T08:29:55.287978197Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager...
+level=info ts=2018-03-11T13:38:06.302110924Z caller=main.go:225 msg="Starting Prometheus" version="(version=2.1.0, branch=HEAD, revision=85f23d82a045d103ea7f3c89a91fba4a93e6367a)"
+level=info ts=2018-03-11T13:38:06.302226312Z caller=main.go:226 build_context="(go=go1.9.2, user=root@6e784304d3ff, date=20180119-12:07:34)"
+level=info ts=2018-03-11T13:38:06.302258309Z caller=main.go:227 host_details=(darwin)
+level=info ts=2018-03-11T13:38:06.302283524Z caller=main.go:228 fd_limits="(soft=10240, hard=9223372036854775807)"
+level=info ts=2018-03-11T13:38:06.306850232Z caller=main.go:499 msg="Starting TSDB ..."
+level=info ts=2018-03-11T13:38:06.30688713Z caller=web.go:383 component=web msg="Start listening for connections" address=0.0.0.0:9090
+level=info ts=2018-03-11T13:38:06.316037503Z caller=main.go:509 msg="TSDB started"
+level=info ts=2018-03-11T13:38:06.316106814Z caller=main.go:585 msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
+level=info ts=2018-03-11T13:38:06.317645234Z caller=main.go:486 msg="Server is ready to receive web requests."
+level=info ts=2018-03-11T13:38:06.317679086Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager..."
 ```
 
 启动完成后，可以通过[http://localhost:9090](http://localhost:9090)访问Prometheus的UI界面。
@@ -91,7 +92,8 @@ tar -xzf node_exporter-0.15.2.darwin-amd64.tar.gz
 
 ```
 cd node_exporter-0.15.2.darwin-amd64
-./node_exporter
+cp node_exporter-0.15.2.darwin-amd64/node_exporter /usr/local/bin/
+node_exporter
 ```
 
 启动成功后，可以看到一下输出：
