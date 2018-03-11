@@ -43,7 +43,7 @@ Alertmanager的配置主要包含两个部分：路由(route)以及接收器(rec
 ##### 启动Alertmanager
 
 ```
-alertmanager --config.file=alertmanager.yml  --storage.path=/data/alertmanager/
+alertmanager --config.file=/etc/promethues/alertmanager.yml  --storage.path=/data/alertmanager/
 ```
 
 --config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。

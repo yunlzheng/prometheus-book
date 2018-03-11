@@ -41,3 +41,65 @@
 Alertmanager基于Gossip实现的集群机制虽然不能保证所有实例上的数据时刻保持一致，但是实现了CAP理论中的AP系统，即可用性和分区容错性。同时对于Promethues Server而言保持了配置了简单性，Promthues Server之间不需要任何的状态同步。
 
 ## 配置Alertmanager集群
+
+为了能够让Alertmanager节点之间进行通讯，需要在Alertmanager启动时设置相应的参数。其中主要的参数包括：
+
+* --cluster.listen-address string: 当前实例集群服务监听地址
+* --cluster.peer value: 初始化时关联的其它实例的集群服务地址
+
+例如：
+
+定义Alertmanager实例a1，其中Alertmanager的服务运行在9093端口，集群服务地址运行在8001端口。
+
+```
+alertmanager  --web.listen-address=":9093" --cluster.listen-address="127.0.0.1:8001" --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/ 
+```
+
+定义Alertmanager实例a2，其中主服务运行在9094端口，集群服务运行在8002端口。为了将a1，a2组成集群。 a2启动时需要定义--cluster.peer参数并且指向a1实例的集群服务地址:8001。
+
+```
+alertmanager  --web.listen-address=":9094" --cluster.listen-address="127.0.0.1:8002" --cluster.peer=127.0.0.1:8001 --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager2/
+```
+
+为了能够在本地模拟集群环境，这里使用了一个轻量级的多线程管理工具goreman。使用以下命令可以在本地安装goreman命令行工具。
+
+```
+go get github.com/mattn/goreman
+```
+
+创建Procfile文件，并且定义了三个Alertmanager节点（a1，a2，a3）
+
+```
+a1: alertmanager  --web.listen-address=":9093" --cluster.listen-address="127.0.0.1:8001" --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/ --log.level=debug
+a2: alertmanager  --web.listen-address=":9094" --cluster.listen-address="127.0.0.1:8002" --cluster.peer=127.0.0.1:8001 --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager2/ --log.level=debug
+a3: alertmanager  --web.listen-address=":9095" --cluster.listen-address="127.0.0.1:8003" --cluster.peer=127.0.0.1:8001 --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager2/ --log.level=debug
+
+p1: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.path=/data/prometheus/ --web.listen-address="127.0.0.1:9090"
+p2: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.path=/data/prometheus2/ --web.listen-address="127.0.0.1:9091"
+
+node_exporter: node_exporter -web.listen-address="0.0.0.0:9100"
+```
+
+在Procfile文件所在目录，执行goreman start命令，启动所有进程:
+
+```
+goreman start
+```
+
+启动完成后访问任意Alertmanager节点[http://localhost:9093/#/status](http://localhost:9093/#/status),可以查看当前Alertmanager集群的状态。
+
+![Alertmanager集群状态](http://p2n2em8ut.bkt.clouddn.com/am-ha-status.png)
+
+> 注意：当集群中的Alertmanager节点不在一台主机时，通常需要使用--cluster.advertise-address参数指定当前节点所在网络地址。
+
+对于Promethues实例而言，需要配置集群中所有Alertmanager实例，prometheus-ha.yml配置文件内容如下:
+
+```
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - 127.0.0.1:9093
+      - 127.0.0.1:9094
+      - 127.0.0.1:9095
+```
