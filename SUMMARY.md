@@ -82,7 +82,7 @@
   - 使用Promgen管理Prometheus
   - 从1.0迁移到2.0
   - [总结](./chapter4/SUMMARY.md)
-- 第9章 使用BlockBox监控网络
+- [第9章 使用BlockBox监控网络](./chapter9/README.md)
   - 白盒和黑盒监控
   - 部署Blackbox exporter
   - HTTP探针

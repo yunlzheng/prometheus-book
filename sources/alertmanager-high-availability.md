@@ -173,24 +173,9 @@ curl -XPOST -d"$alerts1" http://localhost:9095/api/v1/alerts
 运行send-alerts.sh后，查看alertmanager日志，可以看到以下输出，3个Alertmanager实例分别接收到模拟的告警信息：
 
 ```
-10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853173705Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[8320f0a][active]
-10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853281927Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[e1d3beb][active]
-10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853315837Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[831ef0a][active]
-10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853333024Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[74eed93][active]
-10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853350057Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[7666d39][active]
 10:43:36      a1 | level=debug ts=2018-03-12T02:43:36.853370185Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[6543bc1][active]
 10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871180749Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[8320f0a][active]
-10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871488042Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[e1d3beb][active]
-10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871782588Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[831ef0a][active]
-10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871835329Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[74eed93][active]
-10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871911952Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[7666d39][active]
-10:43:36      a2 | level=debug ts=2018-03-12T02:43:36.871955021Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[6543bc1][active]
 10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.894923811Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[8320f0a][active]
-10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.894999803Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[e1d3beb][active]
-10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.895023822Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[831ef0a][active]
-10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.895043184Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[74eed93][active]
-10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.895063654Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[7666d39][active]
-10:43:36      a3 | level=debug ts=2018-03-12T02:43:36.895082512Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=DiskRunningFull[6543bc1][active]
 ```
 
 查看webhook日志只接收到一个告警通知：
@@ -204,15 +189,6 @@ curl -XPOST -d"$alerts1" http://localhost:9095/api/v1/alerts
 10:44:06 webhook |  >      "status": "firing",
 10:44:06 webhook |  >      "labels": {
 10:44:06 webhook |  >        "alertname": "DiskRunningFull",
-10:44:06 webhook |  >        "dev": "sda1",
-10:44:06 webhook |  >        "instance": "example3",
-10:44:06 webhook |  >        "severity": "critical"
-10:44:06 webhook |  >      },
-10:44:06 webhook |  >      "annotations": {},
-10:44:06 webhook |  >      "startsAt": "2018-03-12T10:43:36.853079566+08:00",
-10:44:06 webhook |  >      "endsAt": "0001-01-01T00:00:00Z",
-10:44:06 webhook |  >      "generatorURL": ""
-10:44:06 webhook |  >    },
 ```
 
 ### 多实例Prometheus与Alertmanager集群
@@ -308,15 +284,8 @@ cat /dev/zero>/dev/null
 
 ```
 11:14:41      a3 | level=debug ts=2018-03-12T03:14:41.945493505Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:41      a3 | level=debug ts=2018-03-12T03:14:41.945759947Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
 11:14:41      a1 | level=debug ts=2018-03-12T03:14:41.945534548Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:41      a1 | level=debug ts=2018-03-12T03:14:41.945590881Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
 11:14:41      a2 | level=debug ts=2018-03-12T03:14:41.945687812Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:41      a2 | level=debug ts=2018-03-12T03:14:41.945778452Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:56      a3 | level=debug ts=2018-03-12T03:14:56.944938301Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:56      a3 | level=debug ts=2018-03-12T03:14:56.944997091Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:56      a1 | level=debug ts=2018-03-12T03:14:56.945079005Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
-11:14:56      a1 | level=debug ts=2018-03-12T03:14:56.94513205Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
 ```
 
 3个Alertmanager实例分别接收到来自不同Promtheus实例的告警信息。而Webhook服务只接收到来自Alertmanager集群的一条告警通知：
@@ -330,5 +299,4 @@ cat /dev/zero>/dev/null
 11:15:11 webhook |  >      "status": "firing",
 11:15:11 webhook |  >      "labels": {
 11:15:11 webhook |  >        "alertname": "hostCpuUsageAlert",
-11:15:11 webhook |  >        "instance": "localhost:9100",
 ```
