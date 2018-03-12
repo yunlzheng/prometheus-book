@@ -1,12 +1,12 @@
 # 远程存储
 
-Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。
+Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展和迁移。
 
-为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对接任意第三方的存储服务，这种方式在Promthues中成为Remote Storage。
+为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对接将数据保存到任意第三方的存储服务中，这种方式在Promthues中成为Remote Storage。
 
 ## Remote Write
 
-用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
+用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将采集到的样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
 
 ![Remote Write](http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png)
 
@@ -16,13 +16,13 @@ Prometheus的本地存储设计可以减少其自身运维和管理的复杂度�
 
 当获取到样本数据后，Promthues在本地使用PromQL对样本数据进行二次处理。
 
-> 注意：即使使用了远程读，Prometheus中对于规则文件的处理，以及Metadata API的处理都只在本地完成。
+> 注意：启用远程读设置后，只在数据查询时有效，对于规则文件的处理，以及Metadata API的处理都只基于Prometheus本地存储完成。
 
 ![Remote Read](http://p2n2em8ut.bkt.clouddn.com/remote_read_path-2.png)
 
 ### 配置文件
 
-用户需要使用远程读写功能时，主要通过在Prometheus配置文件中添加remote_write和remote_read配置，其中url用于指定远程读/写的HTTP服务地址。如果该URL启动了认证则可以通过basic_auth进行安全认证配置。对于https的支持需要设定tls_concig。proxy_url主要用于Prometheus无法直接访问适配器服务的情况下。
+Prometheus配置文件中添加remote_write和remote_read配置，其中url用于指定远程读/写的HTTP服务地址。如果该URL启动了认证则可以通过basic_auth进行安全认证配置。对于https的支持需要设定tls_concig。proxy_url主要用于Prometheus无法直接访问适配器服务的情况下。
 
 remote_write和remote_write具体配置如下所示：
 
@@ -168,7 +168,7 @@ func main() {
 | PostgreSQL/TimescaleDB:  | read/write|
 | SignalFx                 | write|
 
-这里我们演示将如何使用Influxdb作为Prometheus的Remote Storage，从而确保当Prometheus发生宕机或者重启之后能够从Influxdb中恢复和获取历史数据。
+这里将介绍如何使用Influxdb作为Prometheus的Remote Storage，从而确保当Prometheus发生宕机或者重启之后能够从Influxdb中恢复和获取历史数据。
 
 这里使用docker-compose定义并启动Influxdb数据库服务，docker-compose.yml定义如下：
 

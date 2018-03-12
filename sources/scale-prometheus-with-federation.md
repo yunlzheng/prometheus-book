@@ -1,16 +1,18 @@
 # 联邦集群
 
-单个Prometheus Server可以轻松的处理数以百万的时间序列。当然根据规模的不同的变化，Prometheus同样可以轻松的进行扩展。本小节将会介绍利用Prometheus的联邦集群特性，对Prometheus进行扩展。
+> TODO: 当前小结基于Vagrant环境，修改为本地环境
+
+前面的部分介绍了如何通过Remote Storage分离监控样本采集和数据存储，解决Promethues的持久化问题。这一部分会重点讨论如果利用联邦集群特性对Promthues进行扩展，以适应不同监控规模的变化。
 
 ## 使用联邦集群
 
-Prometheus支持使用联邦集群的方式，对Prometheus进行扩展。对于大部分监控规模而言，我们只需要在每一个数据中心(例如：EC2可用区，Kubernetes集群)安装一个Prometheus Server实例，就可以在各个数据中心处理上千规模的集群。同时将Prometheus Server部署到不同的数据中心可以避免网络配置的复杂性。
+对于大部分监控规模而言，我们只需要在每一个数据中心(例如：EC2可用区，Kubernetes集群)安装一个Prometheus Server实例，就可以在各个数据中心处理上千规模的集群。同时将Prometheus Server部署到不同的数据中心可以避免网络配置的复杂性。
 
 ![联邦集群](http://p2n2em8ut.bkt.clouddn.com/prometheus-federation.png)
 
-如上图所示，在每个数据中心部署单独的Prometheus Server用于采集当前数据中心监控数据。并由一个中心的Prometheus Server负责聚合多个数据中心的监控数据。
+如上图所示，在每个数据中心部署单独的Prometheus Server，用于采集当前数据中心监控数据。并由一个中心的Prometheus Server负责聚合多个数据中心的监控数据。这一特性在Promthues中称为联邦集群。
 
-每一个Prometheus Server实例包含一个/federate接口，用于获取一组指定的时间序列的监控数据。因此在中心Prometheus Server中只需要配置一个采集任务用于从其他Prometheus Server中获取监控数据。
+联邦集群的核心在于每一个Promtheus Server都包含额一个用于获取当前实例中监控样本的接口/federate。对于中心Prometheus Server而言，无论是从其他的Prometheus实例还是Exporter实例中获取数据实际上并没有任何差异。
 
 ```
 scrape_configs:
@@ -29,7 +31,7 @@ scrape_configs:
         - '192.168.77.12:9090'
 ```
 
-通过params可以用于控制Prometheus Server向Target实例请求监控数据的URL当中添加请求参数。例如：
+为了有效的减少不必要的时间序列，通过params参数可以用于指定只获取某些时间序列的样本数据，例如
 
 ```
 "http://192.168.77.11:9090/federate?match[]={job%3D"prometheus"}&match[]={__name__%3D~"job%3A.*"}&match[]={__name__%3D~"node.*"}"
@@ -37,14 +39,12 @@ scrape_configs:
 
 通过URL中的match[]参数指定我们可以指定需要获取的时间序列。match[]参数必须是一个瞬时向量选择器，例如up或者{job="api-server"}。配置多个match[]参数，用于获取多组时间序列的监控数据。
 
-horbor_labels配置true可以确保当采集到的监控指标冲突时，能够自动忽略冲突的监控数据。如果为false时，prometheus会自动将冲突的标签替换为”exported_<original-label>“的形式。
+**horbor_labels**配置true可以确保当采集到的监控指标冲突时，能够自动忽略冲突的监控数据。如果为false时，prometheus会自动将冲突的标签替换为”exported_<original-label>“的形式。
 
 ## 功能分区
 
-而当你的监控大道单个Prometheus Server无法处理的情况下，我们可以在各个数据中心中部署多个Prometheus Server实例。每一个Prometheus Server实例只负责采集当前数据中心中的一部分任务(Job)，例如可以将应用监控和主机监控分离到不同的Prometheus实例当中。
+联邦集群的特性可以帮助用户根据不同的监控规模对Promthues部署架构进行调整。例如如下所示，可以在各个数据中心中部署多个Prometheus Server实例。每一个Prometheus Server实例只负责采集当前数据中心中的一部分任务(Job)，例如可以将不同的监控任务分离到不同的Prometheus实例当中，再有中心Prometheus实例进行聚合。
 
 ![功能分区](http://p2n2em8ut.bkt.clouddn.com/prometheus-sharding.png)
-
-假如监控采集任务的规模继续增大，通过功能分区的方式可以进一步细化采集任务。对于中心Prometheus Server只需要从这些实例中聚合数据即可。
 
 功能分区，即通过联邦集群的特性在任务级别对Prometheus采集任务进行划分，以支持规模的扩展。
