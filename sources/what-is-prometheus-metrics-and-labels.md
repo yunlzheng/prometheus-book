@@ -1,6 +1,6 @@
 # 理解Prometheus数据模型
 
-> TODO: 添加Promethues Metrics和标签命名的最佳实践和常见陷阱
+> TODO: 添加Prometheus Metrics和标签命名的最佳实践和常见陷阱
 
 在前面的小节当中，通过node exporter暴露的HTTP服务，Prometheus可以采集到主机相关监控指标的样本数据。例如：
 

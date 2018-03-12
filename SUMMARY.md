@@ -75,7 +75,7 @@
   - [本地存储](./sources/prometheus-local-storage.md)
   - [远程存储](./sources/prometheus-remote-storage.md)
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
-  - [Promethues高可用](./sources/prometheus-and-high-availability.md)
+  - [Prometheus高可用](./sources/prometheus-and-high-availability.md)
   - [Alertmanager高可用](./sources/alertmanager-high-availability.md)
   - 垮网络监控
   - 使用Prometheus Opertor管理Prometheus

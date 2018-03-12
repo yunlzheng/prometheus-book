@@ -14,7 +14,7 @@ tar -xzf prometheus-2.1.0.darwin-amd64.tar.gz
 cp prometheus-2.1.0.darwin-amd64/prometheus /usr/local/bin/
 cp prometheus-2.1.0.darwin-amd64/promtool /usr/local/bin/
 
-sudo mkdir -p /data/promethues
+sudo mkdir -p /data/prometheus
 ```
 
 解压后当前目录会包含默认的prometheus配置文件promethes.yml，拷贝配置文件到/etc/prometheus/prometheus.yml:
@@ -53,7 +53,7 @@ scrape_configs:
 启动prometheus服务：
 
 ```
-prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/promethues
+prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus
 ```
 
 正常的情况下，你可以看到一下输出内容：

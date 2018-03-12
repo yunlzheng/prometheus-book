@@ -20,7 +20,7 @@ mkdir -p /data/alertmanager
 ```
 cp alertmanager-0.15.0-rc.0.darwin-amd64/alertmanager /usr/local/bin/
 cp alertmanager-0.15.0-rc.0.darwin-amd64/amtool /usr/local/bin/
-sudo  vim /etc/promethues/alertmanager.yml
+sudo  vim /etc/prometheus/alertmanager.yml
 ```
 
 配置文件中，目前只写入基本配置即可，如下所示：
@@ -43,7 +43,7 @@ Alertmanager的配置主要包含两个部分：路由(route)以及接收器(rec
 ##### 启动Alertmanager
 
 ```
-alertmanager --config.file=/etc/promethues/alertmanager.yml  --storage.path=/data/alertmanager/
+alertmanager --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/
 ```
 
 --config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。
