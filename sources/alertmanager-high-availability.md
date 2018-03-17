@@ -91,6 +91,10 @@ export PATH=$GOPATH/bin:$PATH
 webhook
 ```
 
+示例结构如下所示：
+
+![Alertmanager HA部署结构](http://p2n2em8ut.bkt.clouddn.com/alertmanager-gossip-ha.png)
+
 创建alertmanager.procfile文件，并且定义了三个Alertmanager节点（a1，a2，a3）以及用于接收告警通知的webhook服务:
 
 ```
@@ -100,8 +104,6 @@ a3: alertmanager  --web.listen-address=":9095" --cluster.listen-address="127.0.0
 
 webhook: webhook
 ```
-
-> TODO: 补充拓扑结构
 
 在Procfile文件所在目录，执行goreman start命令，启动所有进程:
 
@@ -255,6 +257,10 @@ groups:
       description: "{{ $labels.instance }} MEM usage above 85% (current value: {{ $value }})"
 ```
 
+本示例部署结构如下所示：
+
+![Promthues与Alertmanager HA部署结构](http://p2n2em8ut.bkt.clouddn.com/promethues-alertmanager-ha.png)
+
 创建prometheus.procfile文件，创建两个Promthues节点。分别监听9090和9091端口
 
 ```
@@ -263,8 +269,6 @@ p2: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.pa
 
 node_exporter: node_exporter -web.listen-address="0.0.0.0:9100"
 ```
-
-> TODO: 补充拓扑结构
 
 使用goreman启动多节点Promthues。
 

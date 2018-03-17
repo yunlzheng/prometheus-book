@@ -77,10 +77,10 @@
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
   - [Prometheus高可用](./sources/prometheus-and-high-availability.md)
   - [Alertmanager高可用](./sources/alertmanager-high-availability.md)
-  - 垮网络监控
-  - 使用Prometheus Opertor管理Prometheus
-  - 使用Promgen管理Prometheus
-  - 从1.0迁移到2.0
+  <!-- - 垮网络监控 -->
+  <!-- - 使用Prometheus Opertor管理Prometheus -->
+  <!-- - 使用Promgen管理Prometheus -->
+  <!-- - 从1.0迁移到2.0 -->
   - [总结](./chapter4/SUMMARY.md)
 - [第9章 使用BlockBox监控网络](./chapter9/README.md)
   - 白盒和黑盒监控
