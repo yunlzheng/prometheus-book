@@ -56,7 +56,7 @@ scrape_configs:
 prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus
 ```
 
-正常的情况下，你可以看到一下输出内容：
+正常的情况下，你可以看到以下输出内容：
 
 ```
 level=info ts=2018-03-11T13:38:06.302110924Z caller=main.go:225 msg="Starting Prometheus" version="(version=2.1.0, branch=HEAD, revision=85f23d82a045d103ea7f3c89a91fba4a93e6367a)"
@@ -96,7 +96,7 @@ cp node_exporter-0.15.2.darwin-amd64/node_exporter /usr/local/bin/
 node_exporter
 ```
 
-启动成功后，可以看到一下输出：
+启动成功后，可以看到以下输出：
 
 ```
 INFO[0000] Starting node_exporter (version=0.15.2, branch=HEAD, revision=98bc64930d34878b84a0f87dfe6e1a6da61e532d)  source="
@@ -170,7 +170,7 @@ scrape_configs:
 
 ![Expression Browser](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_up_query.png)
 
-如果Prometheus能够正常从node exporter获取数据，则会看到一下结果：
+如果Prometheus能够正常从node exporter获取数据，则会看到以下结果：
 
 ```
 up{instance="localhost:9090",job="prometheus"}	1

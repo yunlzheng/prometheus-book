@@ -1,0 +1,6 @@
+version: '2'
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 1080:80

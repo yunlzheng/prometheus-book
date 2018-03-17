@@ -6,7 +6,7 @@ Prometheus当前稳定的HTTP API可以通过/api/v1访问。
 
 Prometheus API使用了JSON格式的响应内容。 当API调用成功后将会返回2xx的HTTP状态码。
 
-反之，当API调用失败时可能返回一下几种不同的HTTP状态码：
+反之，当API调用失败时可能返回以下几种不同的HTTP状态码：
 
 * 404 Bad Request：当参数错误或者缺失时。
 * 422 Unprocessable Entity 当表达式无法执行时。

@@ -45,17 +45,18 @@
   - 时间范围
   - SingleStat面板
   - 小结
-- [第5章 扩展Prometheus](./chapter5/README.md)
-  - 常用Exporter
-    - 采集Nginx数据
-    - 采集主机数据
-    - Mysql Server数据
-    - 采集RabbitMQ数据
-    - 采集容器数据
+- [第5章 使用Exporter](./chapter5/README.md)
+  - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
+  - [使用Prometheus监控Nginx](./sources/use-prometheus-monitor-nginx.md)
+  - [使用Promtheus监控MySQL Server运行状态](./sources/use-promethues-monitor-mysql.md)
+  - [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md)
+  - [使用Prometheus监控容器](./sources/use-prometheus-monitor-container.md)
   - [自定义Exporter实战](./sources/custom_metrics_with_client_library.md)
     - [使用Spring Boot创建自定义Exporter](./sources/custom_metrics_with_java_sdk.md)
     - 使用Golang创建自定义Metrics
   - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
+  - 使用Pushgateway
+  - 垮网络监控
   - 小结
 - [第6章 Prometheus服务发现](./chapter6/README.md)
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
@@ -77,7 +78,6 @@
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
   - [Prometheus高可用](./sources/prometheus-and-high-availability.md)
   - [Alertmanager高可用](./sources/alertmanager-high-availability.md)
-  <!-- - 垮网络监控 -->
   <!-- - 使用Prometheus Opertor管理Prometheus -->
   <!-- - 使用Promgen管理Prometheus -->
   <!-- - 从1.0迁移到2.0 -->

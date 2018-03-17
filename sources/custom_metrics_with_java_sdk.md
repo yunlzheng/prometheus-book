@@ -8,7 +8,7 @@
 
 ### 指标类型
 
-Prometheus中定义了四种指标类型： Counter、Gauge、Histogram以及Summary。先回顾一下这四种基本类型的定义以及使用场景
+Prometheus中定义了四种指标类型： Counter、Gauge、Histogram以及Summary。先回顾以下这四种基本类型的定义以及使用场景
 
 * Counter计数器，只增不减
 * Gauge用于反映当前状态，可增可减

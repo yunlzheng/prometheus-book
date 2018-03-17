@@ -142,7 +142,7 @@ sudo service prometheus restart
 
 ![告警活动状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-alert.png)
 
-此时，我们可以手动拉高系统的CPU使用率，验证Prometheus的告警流程，在虚拟机上运行一下命令：
+此时，我们可以手动拉高系统的CPU使用率，验证Prometheus的告警流程，在虚拟机上运行以下命令：
 
 ```
 cat /dev/zero>/dev/null
