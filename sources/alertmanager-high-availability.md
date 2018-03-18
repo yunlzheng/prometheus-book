@@ -4,7 +4,7 @@
 
 ![Alertmanager成为单点](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-single-am.png)
 
-为了提升Promthues的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以去报Promthues持续可用。
+为了提升Promthues的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以确保Promthues持续可用。
 
 同时基于Alertmanager的告警分组机制即使不同的Promtheus Sever分别发送相同的告警给Alertmanager，Alertmanager也可以自动将这些告警合并为一个通知向receiver发送。
 
