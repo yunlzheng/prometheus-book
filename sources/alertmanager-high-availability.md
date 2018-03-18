@@ -20,23 +20,29 @@
 
 ![Alertmanager Gossip](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-am-gossip.png)
 
-## Gossip机制
+## Gossip协议
 
-要理解Gossip机制，首先需要了解Alertmanager中的一次告警通知是如何产生的，如下所示，Alertmanager通过流水线的形式处理告警通知：
+Gossip是分布式系统中被广泛使用的协议，用于实现分布式节点之间的信息交换和状态同步。Gossip协议同步状态类似于流言或者病毒的传播，如下所示：
+
+![Gossip分布式协议](http://p2n2em8ut.bkt.clouddn.com/gossip-protoctl.png)
+
+一般来说Gossip有两种实现方式分别为Push-based和Push-based。在Push-based当集群中某一节点A完成一个工作后，随机的从其它节点B并向其发送相应的消息，节点B接收到消息后在重复完成相同的工作，直到传播到集群中的所有节点。而Pull-based的实现中节点A会随机的向节点B发起询问是否有新的状态需要同步，如果有则返回。
+
+在简单了解了Gossip协议之后，我们来看Alertmanager是如何基于Gossip协议实现集群高可用的。如下所示，当Alertmanager接收到来自Prometheus的告警消息后，会按照以下流程对告警进行处理：
 
 ![通知流水线](http://p2n2em8ut.bkt.clouddn.com/am-notifi-pipeline.png)
 
-1. 在流水线的第一个阶段Silence中，Alertmanager会判断当前通知是否匹配到任何的静默规则，如果没有则进入下一个阶段，否则则中断流水线不发送通知。
+1. 在第一个阶段Silence中，Alertmanager会判断当前通知是否匹配到任何的静默规则，如果没有则进入下一个阶段，否则则中断流水线不发送通知。
 2. 在第二个阶段Wait中，Alertmanager会根据当前Alertmanager在集群中所在的顺序(index)等待index * 5s的时间。
-3. 当前Alertmanager等待阶段结束后，Dedup阶段则会判断当前Alertmanager数据库中该改进是否已经发送，如果已经发送则中断流水线，不发送告警，否则则进入下一阶段Send对外发送告警通知。
+3. 当前Alertmanager等待阶段结束后，Dedup阶段则会判断当前Alertmanager数据库中该通知是否已经发送，如果已经发送则中断流水线，不发送告警，否则则进入下一阶段Send对外发送告警通知。
 4. 告警发送完成后该Alertmanager进入最后一个阶段Gossip，Gossip会通知其他Alertmanager实例当前告警已经发送。其他实例接收到Gossip消息后，则会在自己的数据库中保存该通知已发送的记录。
 
 因此如下所示，Gossip机制的关键在于两点：
 
 ![Gossip机制](http://p2n2em8ut.bkt.clouddn.com/am-gossip.png)
 
-* Alertmanager实例之间需要保证Silence设置完全相同。这样可以确保被设置为静默的告警都不会对外通知。
-* Alertmanager通过Gossip机制同步告警通知状态，同时流水线中定义Wait阶段确保告警依次被集群中的Alertmanager处理。
+* Silence设置同步：Alertmanager启动阶段基于Pull-based从集群其它节点同步Silence状态，当有新的Silence产生时使用Push-based方式在集群中传播Gossip信息。
+* 通知发送状态同步：告警通知发送完成后，基于Push-based同步告警发送状态。Wait阶段可以确保集群状态一致。
 
 Alertmanager基于Gossip实现的集群机制虽然不能保证所有实例上的数据时刻保持一致，但是实现了CAP理论中的AP系统，即可用性和分区容错性。同时对于Prometheus Server而言保持了配置了简单性，Promthues Server之间不需要任何的状态同步。
 
@@ -273,7 +279,7 @@ node_exporter: node_exporter -web.listen-address="0.0.0.0:9100"
 使用goreman启动多节点Promthues。
 
 ```
-goreman -f prometheus.procfile start
+goreman -f prometheus.procfile -p 8556 start
 ```
 
 Promthues启动完成后，手动拉高系统CPU使用率：
