@@ -4,3 +4,11 @@ services:
     image: nginx
     ports:
       - 1080:80
+  cadvisor:
+    image: google/cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run:/var/run:rw
+      - /dev/disk/:/dev/disk:ro

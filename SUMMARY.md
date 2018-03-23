@@ -51,9 +51,7 @@
   - [使用Promtheus监控MySQL Server运行状态](./sources/use-promethues-monitor-mysql.md)
   - [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md)
   - [使用Prometheus监控容器](./sources/use-prometheus-monitor-container.md)
-  - [自定义Exporter实战](./sources/custom_metrics_with_client_library.md)
-    - [使用Spring Boot创建自定义Exporter](./sources/custom_metrics_with_java_sdk.md)
-    - 使用Golang创建自定义Metrics
+  - [使用client_java](./sources/custom_metrics_with_java_sdk.md)
   - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
   - 使用Pushgateway
   - 垮网络监控
