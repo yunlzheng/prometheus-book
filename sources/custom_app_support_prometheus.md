@@ -104,9 +104,9 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 
 ##### 自定义Metrics指标
 
-Prometheus提供了4中不同的Metrics类型:Counter,Gauge,Histogram,Summary
+Prometheus提供了4中不同的Metrics类型：Counter,Gauge,Histogram,Summary
 
-###### Counter:只增不减的计数器
+###### Counter：只增不减的计数器
 
 计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
 
@@ -160,9 +160,9 @@ sum(rate(io_wise2c_gateway_requests_total[5m]))
 topk(10, sum(io_namespace_http_requests_total) by (path))
 ```
 
-###### Gauge: 可增可减的仪表盘
+###### Gauge： 可增可减的仪表盘
 
-对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
+对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的CPU使用率,内存使用率。
 
 对于Gauge指标的对象则包含两个主要的方法inc()以及dec(),用户添加或者减少计数。在这里我们使用Gauge记录当前正在处理的Http请求数量。
 
@@ -193,7 +193,7 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 
-通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量:
+通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量：
 
 ```
 # PromQL
@@ -242,7 +242,7 @@ Histogram会自动创建3个指标，分别为：
 io_namespace_http_requests_latency_seconds_histogram_count{path="/",method="GET",code="200",} 2.0
 ```
 
-* 所有事件产生值的大小的总和: basename_sum
+* 所有事件产生值的大小的总和： basename_sum
 
 ```
 # 实际含义： 发生的2次http请求总的响应时间为13.107670803000001 秒
@@ -274,7 +274,7 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="+Inf",} 2.0
 ```
 
-###### Summary: 客户端定义的数据分布统计图
+###### Summary： 客户端定义的数据分布统计图
 
 Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。
 

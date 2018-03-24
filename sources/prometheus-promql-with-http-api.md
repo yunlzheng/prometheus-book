@@ -40,9 +40,9 @@ GET /api/v1/query
 
 URL请求参数：
 
-* query=<string>: PromQL表达式。
-* time=<rfc3339 | unix_timestamp>: 用于指定用于计算PromQL的时间戳。可选参数，默认情况下使用当前系统时间。
-* timeout=<duration>: 超时设置。可选参数，默认情况下使用-query,timeout的全局设置。
+* query=<string>：PromQL表达式。
+* time=<rfc3339 | unix_timestamp>：用于指定用于计算PromQL的时间戳。可选参数，默认情况下使用当前系统时间。
+* timeout=<duration>：超时设置。可选参数，默认情况下使用-query,timeout的全局设置。
 
 例如使用以下表达式查询表达式up在时间点2015-07-01T20:10:51.781Z的计算结果：
 

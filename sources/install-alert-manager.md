@@ -77,7 +77,7 @@ alerting:
 cat /dev/zero>/dev/null
 ```
 
-等待Prometheus告警进行触发状态:
+等待Prometheus告警进行触发状态：
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus-alert-firing-with-manager.png)
 

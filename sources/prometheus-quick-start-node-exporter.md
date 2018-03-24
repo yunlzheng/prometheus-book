@@ -103,7 +103,7 @@ sudo service prometheus restart
 
 ![http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png)
 
-这是我们可以通过PromQL语言在，Prometheus UI上直接查询主机相关资源的使用情况。
+这时我们可以通过PromQL语言在，Prometheus UI上直接查询主机相关资源的使用情况。
 
 例如:
 
@@ -131,7 +131,7 @@ sum(node_memory_MemTotal - node_memory_MemFree - node_memory_Buffers - node_memo
 
 ![](http://p2n2em8ut.bkt.clouddn.com/host_stats_mem_used.png)
 
-按主机查询各个磁盘的IO状态:
+按主机查询各个磁盘的IO状态：
 
 ```
 sum(irate(node_disk_io_time_ms{device!~'^(md\\\\d+$|dm-)'}[5m]) / 1000) by (instance, device)

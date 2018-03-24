@@ -2,9 +2,9 @@
 
 为了能够更加直观的了解Prometheus Server，接下来我们将在本地部署一个Prometheus Server实例，并且配合Node Exporter程序实现对本地主机指标的监控。
 
-## 运行Prometheus Server
+##### 运行Prometheus Server
 
-Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里指需要下载，解压并且添加基本的配置即可正常启动Prometheus Server。
+Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里只需要下载，解压并且添加基本的配置即可正常启动Prometheus Server。
 
 可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包，目前这里采用最新的稳定版本2.1.0。
 
@@ -17,7 +17,7 @@ cp prometheus-2.1.0.darwin-amd64/promtool /usr/local/bin/
 sudo mkdir -p /data/prometheus
 ```
 
-解压后当前目录会包含默认的prometheus配置文件promethes.yml，拷贝配置文件到/etc/prometheus/prometheus.yml:
+解压后当前目录会包含默认的Prometheus配置文件promethes.yml，拷贝配置文件到/etc/prometheus/prometheus.yml:
 
 ```
 global:
@@ -75,9 +75,9 @@ level=info ts=2018-03-11T13:38:06.317679086Z caller=manager.go:59 component="scr
 
 ![Prometheus UI](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-graph.png)
 
-## 运行node exporter
+##### 运行node exporter
 
-在Prometheus的架构设计中，Prometheus Server主要负责数据的收集，存储并且对外提供数据查询支持。而实际的监控样本数据的收集这是由Exporter完成。Exporter可以是一个独立运行的进程，对外暴露一个用于获取监控数据的HTTP服务。 Prometheus Server只需要定时从这些Exporter暴露的HTTP服务获取监控数据即可。
+在Prometheus的架构设计中，Prometheus Server主要负责数据的收集，存储并且对外提供数据查询支持。而实际的监控样本数据的收集则是由Exporter完成。Exporter可以是一个独立运行的进程，对外暴露一个用于获取监控数据的HTTP服务。 Prometheus Server只需要定时从这些Exporter暴露的HTTP服务获取监控数据即可。
 
 为了能够采集到主机的运行指标。这里需要使用[node exporter](https://github.com/prometheus/node_exporter)，node exporter可以获取到所在主机大量的运行数据，典型的包括CPU、内存，磁盘、网络等等监控样本。
 
@@ -136,20 +136,20 @@ node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 node_load1 3.0703125
 ```
 
-其中HELP用于解释当前指标的含义，TYPE则说明当前指标的数据类型。在上面的例子中node_cpu的注释表明当前指标是cpu0上闲置时间(idle)占用CPU的总时间，CPU占用时间是一个只增不减的度量指标，从类型中也可以看出node_cpu的数据类型是计数器(counter)，与该指标的实际含义一致。又例如node_load1该指标反应了当前主机在最近一分钟以内的负载情况，系统的负载情况会随系统资源的使用变化而变化，因此node_load1反应的是当前状态，数据可能增加也可能减少，从注释中可以看出当前指标类型为仪表盘(gauge)，与指标反应的实际含义一致。
+其中HELP用于解释当前指标的含义，TYPE则说明当前指标的数据类型。在上面的例子中node_cpu的注释表明当前指标是cpu0上idle进程占用CPU的总时间，CPU占用时间是一个只增不减的度量指标，从类型中也可以看出node_cpu的数据类型是计数器(counter)，与该指标的实际含义一致。又例如node_load1该指标反应了当前主机在最近一分钟以内的负载情况，系统的负载情况会随系统资源的使用而变化，因此node_load1反应的是当前状态，数据可能增加也可能减少，从注释中可以看出当前指标类型为仪表盘(gauge)，与指标反应的实际含义一致。
 
-除了这些意外，在当前页面中根据物理主机系统的不同，你还可能看到如下监控指标：
+除了这些以外，在当前页面中根据物理主机系统的不同，你还可能看到如下监控指标：
 
-* node_boot_time: 系统启动时间
-* node_cpu: 系统CPU使用量
-* node_disk_*: 磁盘IO
-* node_filesystem_*: 文件系统用量
-* node_load1: 系统负载
-* node_memeory_*: 内存使用量
-* node_network_*: 网络带宽
-* node_time: 当前系统时间
-* go_*: node exporter中go相关指标
-* process_*: node exporter自身进程相关运行指标
+* node_boot_time：系统启动时间
+* node_cpu：系统CPU使用量
+* node_disk_*：磁盘IO
+* node_filesystem_*：文件系统用量
+* node_load1：系统负载
+* node_memeory_*：内存使用量
+* node_network_*：网络带宽
+* node_time：当前系统时间
+* go_*：node exporter中go相关指标
+* process_*：node exporter自身进程相关运行指标
 
 为了能够让Prometheus Server能够从当前node exporter获取到监控数据，这里需要修改Prometheus配置文件。编辑prometheus.yml并在scrape_configs节点下添加以下内容:
 
@@ -199,9 +199,9 @@ node_load1
 rate(node_cpu[2m])
 ```
 
-![系统所有CPU中各mode各种的使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_cpu_and_mode.png)
+![系统进程的CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_cpu_and_mode.png)
 
-这是如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可。
+这时如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可。
 
 ```
 avg without(cpu) (rate(node_cpu[2m]))
@@ -217,4 +217,4 @@ avg without(cpu) (rate(node_cpu[2m]))
 
 ![系统CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_total.png)
 
-从上面这些例子中可以看出，根据样本中的标签可以很方便的时序对数据的查询，过滤以及聚合等操作。同时PromQL中还提供了大量的诸如rate()这样的函数可以实现对数据的更多个性化的处理。
+从上面这些例子中可以看出，根据样本中的标签可以很方便地对数据进行查询，过滤以及聚合等操作。同时PromQL中还提供了大量的诸如rate()这样的函数可以实现对数据的更多个性化的处理。

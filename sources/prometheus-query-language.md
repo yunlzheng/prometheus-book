@@ -28,7 +28,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 http_requests_total{code="200",handler="graph",instance="other:9090",job="prometheus",method="get"} -> 3
 ```
 
-SQL:
+SQL：
 
 ```
 SELECT * FROM http_requests_total;
@@ -47,7 +47,7 @@ SELECT * FROM http_requests_total;
 http_requests_total{instance="localhost:9090"}
 ```
 
-相反的我们可以使用“!=”表示排除:
+相反的我们可以使用“!=”表示排除：
 
 ```
 http_requests_total{instance!="localhost:9090"}
@@ -59,7 +59,7 @@ http_requests_total{instance!="localhost:9090"}
 http_requests_total{code="200",handler="graph",instance="other:9090",job="prometheus",method="get"} -> 3
 ```
 
-SQL:
+SQL：
 
 ```
 SELECT * FROM http_requests_total WHERE instance="localhost:9090"
@@ -78,7 +78,7 @@ SELECT * FROM http_requests_total WHERE instance="localhost:9090"
 http_requests_total{environment=~"staging|testing|development",method!="GET"}
 ```
 
-SQL:
+SQL：
 
 ```
 SELECT * FROM http_requests_total WHERE environment LIKE '%testing%'
@@ -92,10 +92,10 @@ SELECT * FROM http_requests_total WHERE environment LIKE '%testing%'
 # 查询系统所有http请求的总量
 sum(http_request_total)
 
-# 按照mode计算主机cpu的平均使用时间
+# 按照mode计算主机CPU的平均使用时间
 avg(node_cpu) by (mode)
 
-# 按照主机查询各个主机的cpu使用率
+# 按照主机查询各个主机的CPU使用率
 sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (instance)
 ```
 
@@ -186,7 +186,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 * w - 周
 * y - 年
 
-### 标量(Scalar): 一个浮点型的数字值
+### 标量(Scalar)：一个浮点型的数字值
 
 标量只有一个数字，没有时序
 
@@ -198,7 +198,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 
 > 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时向量。
 
-### 字符串(String): 一个简单的字符串值
+### 字符串(String)：一个简单的字符串值
 
 直接使用字符串，作为PromQL表达式，则会直接返回字符串。
 

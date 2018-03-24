@@ -1,10 +1,8 @@
 # Metric类型
 
-> TODO: 图例替换
+上一小节，介绍了Prometheus样本（Sample）保存采集到的监控数据，并且每一个样本通过一组唯一指标名称(metric_name)和键值对进行标识。同时在前面也了解过虽然所有样本数据的底层存储方式上并没有任何差异，但是每一个样本在不同的场景下却具有不同的含义。比如node exporter采集的监控数据中node_cpu记录的是CPU累积的使用时间，是一个只增加不减少的监控指标，并且在node exporter的/metrics页面返回的结果中也通过“Counter”对其注释。而node_load1则反映的是系统的当前状态，并且用“Gauge”对其注释。
 
-上一小节，介绍了Prometheus样本（Sample）保存采集到的监控数据，并且每一个样本通过一组唯一的标签进行标示。同时在前面也了解过虽然所有样本数据的底层存储方式上并没有任何差异，但是每一个样本在不同的场景下却具有不同的含义。比如node exporter采集的监控数据中node_cpu记录的是cpu累积的使用时间，是一个只增加不减少的监控指标，并且在node exporter的/metrics页面返回的结果中也通过Counter对其注释。而node_load1则反映的是系统的当前状态，并且用Gauge对其注释。
-
-因为为了更好的定义这些不同场景下监控样本数据所代表的含义，除了以上看到的比如Counter、Gauge以外Prometheus还定义了另外两种类型Histogram和Summary。
+为了更好的定义这些不同场景下监控样本数据所代表的含义，除了以上看到的比如“Counter”、“Gauge”以外Prometheus还定义了另外两种类型"Histogram"和"Summary"。
 
 ![Metric类型](http://p2n2em8ut.bkt.clouddn.com/metrics%20types.png)
 
@@ -14,7 +12,7 @@
 
 计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
 
-对于Counter类型的指标，只包含一个inc()方法，用于计数器+1
+对于Counter类型的指标，只包含一个inc()方法，用于计数器+1L。
 
 一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
 
@@ -47,13 +45,11 @@ sum(rate(io_wise2c_gateway_requests_total[5m]))
 topk(10, sum(io_namespace_http_requests_total) by (path))
 ```
 
-### Gauge: 可增可减的仪表盘
+### Gauge：可增可减的仪表盘
 
-对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
+可以用于反映应用的__当前状态__，这类可增可减的指标。例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
 
-对于Gauge指标的对象则包含两个主要的方法inc()以及dec(),用户添加或者减少计数。在这里我们使用Gauge记录当前正在处理的Http请求数量。
-
-通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量:
+例如，通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量：
 
 ```
 # PromQL
@@ -62,13 +58,13 @@ io_namespace_http_inprogress_requests{}
 
 ## 复杂数据类型
 
-### Histogram: 自带分区统计的分布统计图
+### Histogram：自带分区统计的分布统计图
 
 主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。
 
 以请求响应时间requests_latency_seconds为例，假如我们需要记录http请求响应时间符合在分布范围{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}中的次数时。
 
-使用Histogram构造器可以创建Histogram监控指标。默认的buckets范围为{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}。如何需要覆盖默认的buckets，可以使用.buckets(double... buckets)覆盖。
+使用Histogram构造器可以创建Histogram监控指标。默认的buckets范围为{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}。如果需要覆盖默认的buckets，可以使用.buckets(double... buckets)覆盖。
 
 Histogram会自动创建3个指标，分别为：
 
@@ -79,14 +75,14 @@ Histogram会自动创建3个指标，分别为：
 io_namespace_http_requests_latency_seconds_histogram_count{path="/",method="GET",code="200",} 2.0
 ```
 
-* 所有事件产生值的大小的总和: basename_sum
+* 所有事件产生值的大小的总和：basename_sum
 
 ```
 # 实际含义： 发生的2次http请求总的响应时间为13.107670803000001 秒
 io_namespace_http_requests_latency_seconds_histogram_sum{path="/",method="GET",code="200",} 13.107670803000001
 ```
 
-* 事件产生的值分布在bucket中的次数： basename_bucket{le="上包含"}
+* 事件产生的值分布在bucket中的次数：basename_bucket{le="上包含"}
 
 ```
 # 在总共2次请求当中。http请求响应时间 <=0.005 秒 的请求次数为0
@@ -113,7 +109,7 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 
 ### Summary：客户端定义的分布统计图
 
-Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。
+Summary和Histogram非常类型相似，都可以统计事件发生的次数或者大小，以及其分布情况。
 
 Summary和Histogram都提供了对于事件的计数_count以及值的汇总_sum。 因此使用_count,和_sum时间序列可以计算出相同的内容，例如http每秒的平均响应时间：rate(basename_sum[5m]) / rate(basename_count[5m])。
 

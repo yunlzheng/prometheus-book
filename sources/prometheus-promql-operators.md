@@ -93,7 +93,7 @@ node_disk_bytes_read{device="sdb",instance="localhost:9100",job="node_exporter"}
 
 比较运算符运算支持：标量和标量、瞬时向量和标量、瞬时向量和瞬时向量之间的运算。
 
-目前，Prometheus支持一下，比较运算符：
+目前，Prometheus支持以下，比较运算符：
 
 * ```==``` (相等)
 * ```!=``` (不相等)
@@ -186,7 +186,7 @@ up == bool 1
 
 ### 一对一匹配
 
-一对一匹配模式会从操作符两边表达式获取的瞬时向量依次比较并找到唯一匹配(标签完全一致)的样本值。默认情况下，使用表达式:
+一对一匹配模式会从操作符两边表达式获取的瞬时向量依次比较并找到唯一匹配(标签完全一致)的样本值。默认情况下，使用表达式：
 
 ```
 vector1 <operator> vector2
@@ -318,7 +318,7 @@ count_values("count", http_requests_total)
 
 topk和bottomk则用于对样本值进行排序，返回当前样本值前n位，或者后n位的时间序列。
 
-获取HTTP请求数前5位的时序样本数据，可以使用表达式:
+获取HTTP请求数前5位的时序样本数据，可以使用表达式：
 
 ```
 topk(5, http_requests_total)
@@ -336,7 +336,7 @@ quantile(0.5, http_requests_total)
 
 最后对于复杂类型的表达式，我们需要了解运算操作的优先级。
 
-例如，查询主机的CPU使用率，我们可以使用表达式:
+例如，查询主机的CPU使用率，我们可以使用表达式：
 
 ```
 100 * (1 - avg (irate(node_cpu{mode='idle'}[5m])) by(job) )
