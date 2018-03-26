@@ -110,7 +110,7 @@ receivers:
 
 ![告警](http://p2n2em8ut.bkt.clouddn.com/mail-alert-page.png)
 
-## 与Slack集成(ING)
+## 与Slack集成
 
 ```
 # Whether or not to notify about resolved alerts.

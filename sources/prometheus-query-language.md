@@ -1,6 +1,6 @@
 # 初识PromQL
 
-Prometheus通过指标名称Metrics Name以及对应的一组键值对Labels唯一定义一条时间序列。指标名称反应了监控样本的基本标识，而Label则在这个基本特征上为采集到的数据提供了多种特征维度。用户可以基于这些特征维度过滤，聚合，统计从而产生新的计算后的一条时间序列。
+Prometheus通过指标名称（metrics name）以及对应的一组标签（labels）唯一定义一条时间序列。指标名称反应了监控样本的基本标识，而label则在这个基本特征上为采集到的数据提供了多种特征维度。用户可以基于这些特征维度过滤，聚合，统计从而产生新的计算后的一条时间序列。
 
 ## 查询基础
 
@@ -8,13 +8,13 @@ Prometheus通过指标名称Metrics Name以及对应的一组键值对Labels唯�
 
 ### 基本查询
 
-当我们直接使用监控指标的名称为查询时，可以查询该指标下的所有时间序列。如：
+当我们直接使用监控指标名称查询时，可以查询该指标下的所有时间序列。如：
 
 ```
 http_requests_total
 ```
 
-等同于
+等同于：
 
 ```
 http_requests_total{}
@@ -38,8 +38,8 @@ SELECT * FROM http_requests_total;
 
 在查询数据时，我们还可以通过标签选择器对时间序列进行精确匹配查询。
 
-* 使用“=”表示选择标签完全匹配的时间序列，
-* "!="表示排除这些匹配的时间序列。
+* 使用“label=value”表示选择标签完全匹配的时间序列。
+* ”label!=value“表示排除这些匹配的时间序列。
 
 如下所示，我们只查询所有http_requests_total时间序列中，标签instance为localhost:9090的时间序列。这里在标签选择器中我们使用“=”表示精确匹配
 
@@ -69,10 +69,10 @@ SELECT * FROM http_requests_total WHERE instance="localhost:9090"
 
 除了精确查询以外，PromQL还可以通过正则表达式的方式，实现模糊查询。
 
-* 当需要使用正则表达式进行模糊查询时，需要使用“=~”。
-* 相反的，“!~”表示排除所有的匹配的时间序列。
+* 当需要使用正则表达式进行模糊查询时，需要使用“label=~regx”。
+* 相反的，“label!~regx”表示排除所有的匹配的时间序列。
 
-例如
+例如：
 
 ```
 http_requests_total{environment=~"staging|testing|development",method!="GET"}
@@ -86,7 +86,7 @@ SELECT * FROM http_requests_total WHERE environment LIKE '%testing%'
 
 ### 使用内置函数
 
-一般来说，如果描述样本特征的标签(label)在不是唯一的情况下，通过PromQL查询数据，会返回多条满足这些特征维度的时间序列。而PromQL提供的聚合操作可以用来对这些多条时间序列进行处理，形成一条新的时间序列。
+一般来说，如果描述样本特征的标签(label)在并非唯一的情况下，通过PromQL查询数据，会返回多条满足这些特征维度的时间序列。而PromQL提供的聚合操作可以用来对这些时间序列进行处理，形成一条新的时间序列。
 
 ```
 # 查询系统所有http请求的总量
@@ -103,9 +103,9 @@ sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (inst
 
 通过上面的几个简单例子我们可以看出，通过指标名称(metric name)以及指标的维度labels，通过Prometheus提供的PromQL查询语言，我们可以根据样本特征对时序数据进行过滤。同时多条时间序列之间的数据还可以进行聚合以及数学操作，从而形成一条新的时间序列。
 
-在PromQL中如果表达式返回的是一组时序数据，并且每条时间序列只包含给定时间戳（瞬时）的单个样本数据 这些返回数据的类型在Prometheus中我们称为瞬时向量(Instant vector)。
+在PromQL中如果表达式返回的是一组时序数据，并且每条时间序列只包含给定时间戳（瞬时）的单个样本数据 这些返回数据的类型在Prometheus中我们称为瞬时向量（Instant vector）。
 
-### 瞬时向量(Instant vector)
+### 瞬时向量（Instant vector）
 
 例如，使用如下表达式，会可以过滤并查询到一组时间序列以及给定时间戳（瞬时，一般为最后一次采集数据的时戳）的单个样本数据。
 
@@ -119,7 +119,7 @@ http_request_total{code="200"}
 http_requests_total{code="200",handler="alerts",instance="localhost:9090",job="prometheus",method="get"}=(20889@1518096812.326)
 http_requests_total{code="200",handler="graph",instance="localhost:9090",job="prometheus",method="get"}=(21287@1518096812.326)
 ```
-并且这组时间序列的样本数据共享相同的时间蹉。
+并且这组时间序列的样本数据共享相同的时间戳。
 
 这一类表达式，我们称为**瞬时向量选择器**，瞬时向量选择器返回的数据类型为**瞬时向量**。
 
@@ -186,9 +186,9 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 * w - 周
 * y - 年
 
-### 标量(Scalar)：一个浮点型的数字值
+### 标量（Scalar）：一个浮点型的数字值
 
-标量只有一个数字，没有时序
+标量只有一个数字，没有时序。
 
 例如：
 
@@ -198,7 +198,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 
 > 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时向量。
 
-### 字符串(String)：一个简单的字符串值
+### 字符串（String）：一个简单的字符串值
 
 直接使用字符串，作为PromQL表达式，则会直接返回字符串。
 
@@ -210,7 +210,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 
 ### 时间位移
 
-在瞬时选择器，或者区间选择器中，都是以当前时间为基准
+在瞬时选择器，或者区间选择器中，都是以当前时间为基准：
 
 ```
 http_request_total{code="200"} # 瞬时选择器，选择当前最新的数据
@@ -225,7 +225,5 @@ http_request_total{code="200"}[5m] # 区间选择器，选择以当前时间为�
 http_request_total{code="200"} offset 5m
 http_request_total{code="200"}[1d] offset 1d
 ```
-
-## 接下来
 
 接下来我们会详细探索Prometheus提供的这一强大工具PromQL。以及它给我们带来的强大的数据统计功能。

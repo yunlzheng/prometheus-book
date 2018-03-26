@@ -91,7 +91,7 @@ time()返回从1960年月1日到当前时间依赖的秒数。
 
 ```timestamp(v instant-vector)```放回瞬时向量中所有样本的时间戳
 
-> 注意：从Prometheus2.0开始支持
+> 注意：从Prometheus2.0才开始支持这个函数
 
 ##### year()
 
