@@ -123,7 +123,7 @@ rpc_duration_seconds_count 2693
 
 ## 使用Client Libraries
 
-除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Promethues官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
+除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Prometheus官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
 
 当Prometheus来获取监控样本时，这些Client Library会通过Promthues要求的格式规范将当前系统中记录的所有指标返回给Promtheus。因此如果目前Client Library还不支持你所使用的应用程序，你可以直接将监控样本转换为Promthues要求的格式即可。
 

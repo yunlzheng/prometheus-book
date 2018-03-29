@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=database
+  mysqlexporter:
+    image: prom/mysqld-exporter
+    ports:
+      - "9104:9104"
+    environment:
+      - DATA_SOURCE_NAME=root:password@(mysql:3306)/database
+    # command:
+    #   - --collect.auto_increment.columns
+    #   - --collect.engine_innodb_status
+    #   - --collect.global_status
+    #   - --collect.global_variables
+    #   - --collect.info_schema.clientstats
+    #   - --collect.info_schema.tables
+    #   - --collect.info_schema.tables.databases
+    #   - --collect.perf_schema.indexiowaits
+    #   - --collect.perf_schema.tableiowaits
+    #   - --collect.perf_schema.tablelocks

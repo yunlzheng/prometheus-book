@@ -56,7 +56,7 @@ remote_read:
     [ proxy_url: <string> ]
 ```
 
-## 自定义Remote Stoarge Adaptor
+## 自定义Remote Storage Adaptor
 
 实现自定义Remote Storage需要用户分别创建用于支持remote_read和remote_write的HTTP服务。
 
@@ -151,7 +151,7 @@ func main() {
 }
 ```
 
-## 使用Influxdb作为Remote Stoarge
+## 使用Influxdb作为Remote Storage
 
 目前Prometheus社区也提供了部分对于第三方数据库的Remote Storage支持：
 

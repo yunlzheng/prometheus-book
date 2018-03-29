@@ -10,9 +10,9 @@
 
 ![Alertmanager特性](http://p2n2em8ut.bkt.clouddn.com/alertmanager-features.png)
 
-但不幸的是，虽然Alertmanager能够同时处理多个相同的Promthues Server所产生的告警。但是由于单个Alertmanager的存在，当前的部署结构存在明显的单点故障风险，当Alertmanager单点失效后，告警的后续所有业务全部失效。
+但不幸的是，虽然Alertmanager能够同时处理多个相同的Promtheus Server所产生的告警。但是由于单个Alertmanager的存在，当前的部署结构存在明显的单点故障风险，当Alertmanager单点失效后，告警的后续所有业务全部失效。
 
-如下所示，最直接的方式，就是尝试部署多套Alertmanager。但是由于ALertmanager之间不存在并不了解彼此的存在，因此则会出现告警通知被不同的Alertmanager重复发送多次的问题。
+如下所示，最直接的方式，就是尝试部署多套Alertmanager。但是由于Alertmanager之间不存在并不了解彼此的存在，因此则会出现告警通知被不同的Alertmanager重复发送多次的问题。
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-double-am.png)
 
@@ -267,7 +267,7 @@ groups:
 
 ![Promthues与Alertmanager HA部署结构](http://p2n2em8ut.bkt.clouddn.com/promethues-alertmanager-ha.png)
 
-创建prometheus.procfile文件，创建两个Promthues节点。分别监听9090和9091端口
+创建prometheus.procfile文件，创建两个Promthues节点，分别监听9090和9091端口:
 
 ```
 p1: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.path=/data/prometheus/ --web.listen-address="127.0.0.1:9090"
@@ -276,7 +276,7 @@ p2: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.pa
 node_exporter: node_exporter -web.listen-address="0.0.0.0:9100"
 ```
 
-使用goreman启动多节点Promthues。
+使用goreman启动多节点Promthues：
 
 ```
 goreman -f prometheus.procfile -p 8556 start
@@ -288,7 +288,7 @@ Promthues启动完成后，手动拉高系统CPU使用率：
 cat /dev/zero>/dev/null
 ```
 
-> 注意，对于多核主机，如果CPU达不到预期，运行多个命令
+> 注意，对于多核主机，如果CPU达不到预期，运行多个命令。
 
 当CPU利用率达到告警规则触发条件，两个Promtheus实例告警分别被触发。查看Alertmanager输出日志：
 

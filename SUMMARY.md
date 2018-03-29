@@ -31,13 +31,13 @@
 - [第4章 使用Exporter](./chapter5/README.md)
   - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
   - [监控容器运行状态](./sources/use-prometheus-monitor-container.md)
-  - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md)
-  - [使用Promtheus监控MySQL Server运行状态](./sources/use-promethues-monitor-mysql.md)
-  - [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md)
-  - [使用client_java](./sources/custom_metrics_with_java_sdk.md)
+  - [监控MySQL运行状态](./sources/use-promethues-monitor-mysql.md)
+  <!-- - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md) -->
+  <!-- [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md) -->
+  - [使用Client Library](./sources/custom_metrics_with_java_sdk.md)
   - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
-  - 使用Pushgateway
-  - 垮网络监控
+  <!-- - 使用Pushgateway -->
+  <!-- - 垮网络监控 -->
   - [小结](./chapter5/SUMMARY.md)
 - [第5章 可视化一切](./chapter4/README.md)
   - Grafana简介

@@ -6,8 +6,6 @@
 
 ##### 添加Prometheus Java Client依赖
 
-> 这里使用0.0.24的版本，在之前的版本中Spring Boot暴露的监控地址，无法正确的处理Prometheus Server的请求，详情：https://github.com/prometheus/client_java/issues/265
-
 ```
 # build.gradle
 ...

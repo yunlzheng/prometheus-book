@@ -119,11 +119,15 @@ sum(rate(container_network_transmit_bytes_total{image!=""}[1m])) without (interf
 
 ![容器网络传输量 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_network_transmit_bytes_total.png)
 
+查询容器文件系统读取速率（单位：字节/秒）：
+
 ```
 sum(rate(container_fs_reads_bytes_total{image!=""}[1m])) without (device)
 ```
 
 ![容器文件系统读取速率 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_fs_reads_bytes_total.png)
+
+查询容器文件系统写入速率（单位：字节/秒）：
 
 ```
 sum(rate(container_fs_writes_bytes_total{image!=""}[1m])) without (device)

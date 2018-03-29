@@ -1,4 +1,4 @@
-# 使用client_java
+# 使用Java Client Library
 
 Prometheus为了方便用户集成，提供了多种Client Library。 让用户可以创建自己的Exporter程序，或者直接在业务系统中集成对Prometheus的支持。 这一小节中，我们将学习如何使用Promthues官方提供的[client_java](https://github.com/prometheus/client_java)创建Exporter程序。
 
@@ -18,7 +18,7 @@ dependencies {
 }
 ```
 
-其中simpleclient是对Promethues集成的核心依赖，simpleclient_hotspot是对Hotspot JVM相关监控数据采集的实现。simpleclient_httpserver中提供的一个简单的能够处理Promtheus监控请求的HTTP服务器实现。simpleclient_pushgateway则提供了与PushGateway的对接支持。
+其中simpleclient是对Prometheus集成的核心依赖，simpleclient_hotspot是对Hotspot JVM相关监控数据采集的实现。simpleclient_httpserver中提供的一个简单的能够处理Promtheus监控请求的HTTP服务器实现。simpleclient_pushgateway则提供了与PushGateway的对接支持。
 
 使用simpleclient_http创建一个简单的HTTPServer。
 
@@ -187,7 +187,7 @@ public class GarbageCollectorExports extends Collector {
 
 用户通过创建自己的Collector实现，在collect()方法中实现对监控目标的采集，并且转换为MetricFamilySamples。 通过将Collector注册到CollectorRegistry.defaultRegistry中，让Http Server从defaultRegistry中获取到这些Collector实现，从而将这些Collector获取到的数据格式化为Promthues要求的规范进行响应。
 
-除了使用Promethues提供的HttpServer以外，Prometheus提供了针对Servlet，Spring Boot, Spring Web以及Dropwizard等的实现。可以让用户快速实现已有应用程序与Prometheus的集成。
+除了使用Prometheus提供的HttpServer以外，Prometheus提供了针对Servlet，Spring Boot, Spring Web以及Dropwizard等的实现。可以让用户快速实现已有应用程序与Prometheus的集成。
 
 ## 自定义Collector
 

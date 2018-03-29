@@ -2,13 +2,13 @@
 
 > TODO: 当前小结基于Vagrant环境，修改为本地环境
 
-前面的部分介绍了如何通过Remote Storage分离监控样本采集和数据存储，解决Promethues的持久化问题。这一部分会重点讨论如果利用联邦集群特性对Promthues进行扩展，以适应不同监控规模的变化。
+前面的部分介绍了如何通过Remote Storage分离监控样本采集和数据存储，解决Prometheus的持久化问题。这一部分会重点讨论如果利用联邦集群特性对Promthues进行扩展，以适应不同监控规模的变化。
 
 ## 使用联邦集群
 
 对于大部分监控规模而言，我们只需要在每一个数据中心(例如：EC2可用区，Kubernetes集群)安装一个Prometheus Server实例，就可以在各个数据中心处理上千规模的集群。同时将Prometheus Server部署到不同的数据中心可以避免网络配置的复杂性。
 
-![联邦集群](http://p2n2em8ut.bkt.clouddn.com/prometheus-federation.png)
+![联邦集群](http://p2n2em8ut.bkt.clouddn.com/prometheus_feradtion_1.png)
 
 如上图所示，在每个数据中心部署单独的Prometheus Server，用于采集当前数据中心监控数据。并由一个中心的Prometheus Server负责聚合多个数据中心的监控数据。这一特性在Promthues中称为联邦集群。
 
@@ -45,6 +45,6 @@ scrape_configs:
 
 联邦集群的特性可以帮助用户根据不同的监控规模对Promthues部署架构进行调整。例如如下所示，可以在各个数据中心中部署多个Prometheus Server实例。每一个Prometheus Server实例只负责采集当前数据中心中的一部分任务(Job)，例如可以将不同的监控任务分离到不同的Prometheus实例当中，再有中心Prometheus实例进行聚合。
 
-![功能分区](http://p2n2em8ut.bkt.clouddn.com/prometheus-sharding.png)
+![功能分区](http://p2n2em8ut.bkt.clouddn.com/prometheus_feradtion_2.png)
 
 功能分区，即通过联邦集群的特性在任务级别对Prometheus采集任务进行划分，以支持规模的扩展。
