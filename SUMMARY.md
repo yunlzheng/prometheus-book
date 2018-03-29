@@ -17,7 +17,7 @@
   - [PromQL内置函数](./sources/prometheus-promql-functions.md)
   - [在HTTP API中使用PromQL](./sources/prometheus-promql-with-http-api.md)
   - [最佳实践](./sources/prometheus-promql-best-praticase.md)
-  - 小结
+  - [小结](./chapter2/SUMMARY.md)
 - [第3章 Prometheus告警处理](./chapter3/README.md)
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
   - [自定义Prometheus告警规则](./sources/prometheus-alert-rule.md)
@@ -28,7 +28,18 @@
   - [屏蔽告警通知](./sources/alert-manager-inhibit.md)
   - [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   - [小结](./chapter3/SUMMARY.md)
-- [第4章 可视化一切](./chapter4/README.md)
+- [第4章 使用Exporter](./chapter5/README.md)
+  - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
+  - [监控容器运行状态](./sources/use-prometheus-monitor-container.md)
+  - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md)
+  - [使用Promtheus监控MySQL Server运行状态](./sources/use-promethues-monitor-mysql.md)
+  - [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md)
+  - [使用client_java](./sources/custom_metrics_with_java_sdk.md)
+  - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
+  - 使用Pushgateway
+  - 垮网络监控
+  - [小结](./chapter5/SUMMARY.md)
+- [第5章 可视化一切](./chapter4/README.md)
   - Grafana简介
   - 安装Grafana
         - 使用二进制包安装Grafana
@@ -44,18 +55,7 @@
   - 共享Dashboard
   - 时间范围
   - SingleStat面板
-  - 小结
-- [第5章 使用Exporter](./chapter5/README.md)
-  - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
-  - [监控容器运行状态](./sources/use-prometheus-monitor-container.md)
-  - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md)
-  - [使用Promtheus监控MySQL Server运行状态](./sources/use-promethues-monitor-mysql.md)
-  - [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md)
-  - [使用client_java](./sources/custom_metrics_with_java_sdk.md)
-  - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
-  - 使用Pushgateway
-  - 垮网络监控
-  - 小结
+  - [小结](./chapter5/SUMMARY.md)
 - [第6章 Prometheus服务发现](./chapter6/README.md)
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - 基于文件的服务发现机制
@@ -69,7 +69,7 @@
         - 配置Prometheus使用Consul动态发现
   - 基于DNS的服务发现机制
   - 服务发现与Relabel机制
-  - 小结
+  - [小结](./chapter6/SUMMARY.md)
 - [第7章 集群与高可用](./chapter7/READMD.md)
   - [本地存储](./sources/prometheus-local-storage.md)
   - [远程存储](./sources/prometheus-remote-storage.md)
@@ -80,7 +80,7 @@
   <!-- - 使用Promgen管理Prometheus -->
   <!-- - 从1.0迁移到2.0 -->
   - [总结](./chapter4/SUMMARY.md)
-- [第9章 使用BlockBox监控网络](./chapter9/README.md)
+- [第8章 使用BlockBox监控网络](./chapter9/README.md)
   - 白盒和黑盒监控
   - 部署Blackbox exporter
   - HTTP探针
@@ -89,7 +89,7 @@
   - ICMP 探针
   - IPv4和IPv6
   - 小结
-- [第10章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
+- [第9章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
   - Kubernetes简介
   - 搭建Kubernetes本地测试环境
   - Prometheus Vs Heapster

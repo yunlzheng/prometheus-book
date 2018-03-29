@@ -1,23 +1,26 @@
 # Exporter是什么
 
-简单来说Promtheus中Exporter是指用于获取特定监控样本应用程序，这些应用程序使用HTTP服务的形式向Promthues暴露可以获取到当前监控样本数据的资源地址(一般约定使用/metrics)。如下所示：
+简单来说Exporter是指用于获取特定监控样本应用程序，这些应用程序使用HTTP服务的形式向Promthues暴露可以获取到当前监控样本数据的资源地址(一般约定使用/metrics)。如下所示：
 
 ![Exporter](http://p2n2em8ut.bkt.clouddn.com/prometheus-exporter.png)
 
-## Client Libraries
+下面表格列举一些常用的Exporter：
 
-为了让社区和用户可以快速实现对Prometheus的支持，Promethues官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。
-
-
-目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
-
-当Prometheus来获取监控样本时，这些Client Library会通过Promthues要求的格式规范将当前系统中记录的所有指标返回给Promtheus。
-
-如果目前Client Library还不支持你所使用的应用程序，你可以直接将监控样本转换为Promthues要求的格式即可。
+| 范围       |  常用Exporter |
+|------     |-------------|
+|   数据库   | MySQL Exporter, Redis Exporter, MongoDB Exporter, MSSQL Exporter等|
+|   硬件    | Apcupsd Exporter，IoT Edison Exporter， IPMI Exporter, Node Exporter等   |
+|   消息队列| Beanstalkd Exporter, Kafka Exporter, NSQ Exporter, RabbitMQ Exporter等 |
+|   存储| Ceph Exporter, Gluster Exporter, HDFS Exporter, ScaleIO Exporter等|
+|   HTTP服务 | Apache Exporter, HAProxy Exporter, Nginx Exporter等|
+|   API服务| AWS ECS Exporter， Docker Cloud Exporter, Docker Hub Exporter, GitHub Exporter等 |
+|   日志   | Fluentd Exporter, Grok Exporter等 |
+|   监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等   |
+|   其它| Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等|
 
 ## Exporter格式规范
 
-在前面章节中已经了解过范根node exporter的/metrics地址会返回以下格式响应内容：
+这些Exporter会按照Prometheus的标准格式规范输出监控样本数据。以node exporter为例，当访问/metrics地址会返回以下格式响应内容：
 
 ```
 # HELP node_cpu Seconds the cpus spent in each mode.
@@ -48,7 +51,7 @@ Date: Sat, 17 Mar 2018 08:47:06 GMT
 
 Prometheus会按照行对响应的文本内容进行解析，并且响应的最后一行必须以换行符结束，在解析时Prometheus会按照空格或者是制表符对行内容进行分割。如果当前行是以#开头，那么Prometheus会认为当前行内容为注释内容。一般来说注释内容分为HELP或者TYPE。
 
-如果当前行以 # HELP开始，Promtheus将会按照以下规则对内容进行解析：
+如果当前行以# HELP开始，Promtheus将会按照以下规则对内容进行解析：
 
 ```
 # HELP <metrics_name> <doc_string>
@@ -62,7 +65,7 @@ Prometheus会按照行对响应的文本内容进行解析，并且响应的最�
 
 HELP后的第一个部分为指标名称即http_requests_total，余下剩余的所有部分都被认为是对该指标的注释文档。
 
-如果当前行以 # TYPE开始，Prometheus会按照以下规则对内容进行接信息:
+如果当前行以# TYPE开始，Prometheus会按照以下规则对内容进行接信息:
 
 ```
 # TYPE <metrics_name> <metrics_type>
@@ -84,7 +87,7 @@ metric_name [
 ] value [ timestamp ]
 ```
 
-其中metric_name和label_name必需遵循PromQL的格式规范要求。value是一个float格式的数据，timestamp的类型为int64（从1970-01-01 00:00:00依赖的毫秒数）。具有相同metric_name的样本必需按照一个组的形式排列，并且每一行必需是唯一的指标名称和标签键值对。
+其中metric_name和label_name必需遵循PromQL的格式规范要求。value是一个float格式的数据，timestamp的类型为int64（从1970-01-01 00:00:00依赖的毫秒数）。具有相同metric_name的样本必需按照一个组的形式排列，并且每一行必需是唯一的指标名称和标签键值对组合。
 
 需要特别注意的是对于histogram和summary类型的样本。需要按照以下约定返回样本数据：
 
@@ -118,27 +121,17 @@ rpc_duration_seconds_sum 1.7560473e+07
 rpc_duration_seconds_count 2693
 ```
 
-## 使用Client Library的场景
+## 使用Client Libraries
+
+除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Promethues官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
+
+当Prometheus来获取监控样本时，这些Client Library会通过Promthues要求的格式规范将当前系统中记录的所有指标返回给Promtheus。因此如果目前Client Library还不支持你所使用的应用程序，你可以直接将监控样本转换为Promthues要求的格式即可。
 
 对于用户而言，一般可以在以下三种场景中使用Prometheus的Client Library：
 
 ![Prometheus Client Library应用场景](http://p2n2em8ut.bkt.clouddn.com/client-library-usage.png)
 
 第一种，创建Exporter程序。当用户需要采集特定的监控指标时，可以使用Client Library创建一个单独的Exporter程序。目前Prometheus官方以及第三方已经实现了大量的Exporter可以满足用户巨大多数的监控需求。
-
-下面表格列举一些常用的Exporter：
-
-| 范围       |  常用Exporter |
-|------     |-------------|
-|   数据库   | MySQL Exporter, Redis Exporter, MongoDB Exporter, MSSQL Exporter等|
-|   硬件    | Apcupsd Exporter，IoT Edison Exporter， IPMI Exporter, Node Exporter等   |
-|   消息队列| Beanstalkd Exporter, Kafka Exporter, NSQ Exporter, RabbitMQ Exporter等 |
-|   存储| Ceph Exporter, Gluster Exporter, HDFS Exporter, ScaleIO Exporter等|
-|   HTTP服务 | Apache Exporter, HAProxy Exporter, Nginx Exporter等|
-|   API服务| AWS ECS Exporter， Docker Cloud Exporter, Docker Hub Exporter, GitHub Exporter等 |
-|   日志   | Fluentd Exporter, Grok Exporter等 |
-|   监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等   |
-|   其它| Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等| 
 
 > 读者可以从[https://prometheus.io/docs/instrumenting/exporters/](https://prometheus.io/docs/instrumenting/exporters/)获取最新的Exporter列表。
 

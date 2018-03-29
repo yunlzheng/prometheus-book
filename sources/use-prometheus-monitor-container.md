@@ -53,58 +53,80 @@ container_cpu_load_average_10s{container_label_maintainer="NGINX Docker Maintain
 
 |指标名称|类型| 含义 |
 |------|----|---- |
-| cadvisor_version_info   | gauge | A metric with a constant '1' value labeled by kernel version, OS version, docker version, cadvisor version & cadvisor revision |
-| container_cpu_load_average_10s | gauge | Value of container cpu load average over the last 10 seconds|
-| container_cpu_system_seconds_total |  counter| Cumulative system cpu time consumed in seconds.|
-| container_cpu_usage_seconds_total | counter | Cumulative cpu time consumed per cpu in seconds.|
-|container_cpu_user_seconds_total| counter | Cumulative user cpu time consumed in seconds.|
-|container_fs_inodes_free | gauge | Number of available Inodes |
-| container_fs_inodes_total | gauge | Number of Inodes |
-|container_fs_io_current | gauge | Number of I/Os currently in progress|
-|container_fs_io_time_seconds_total | counter | Cumulative count of seconds spent doing I/Os |
-| container_fs_io_time_weighted_seconds_total | counter | Cumulative weighted I/O time in seconds |
-| container_fs_limit_bytes | gauge | Number of bytes that can be consumed by the container on this filesystem. |
-| container_fs_read_seconds_total | counter | Cumulative count of seconds spent reading|
-| container_fs_reads_bytes_total | counter | Cumulative count of bytes read |
-| container_fs_reads_merged_total | counter | Cumulative count of reads merged |
-| container_fs_reads_total | counter | Cumulative count of reads completed |
-| container_fs_sector_writes_total | counter | Cumulative count of sector writes completed|
-| container_fs_usage_bytes | gauge | Number of bytes that are consumed by the container on this filesystem. |
-| container_fs_write_seconds_total | counter | Cumulative count of seconds spent writing|
-| container_fs_writes_bytes_total | counter | Cumulative count of bytes written |
-| container_fs_writes_merged_total |counter |container_fs_writes_merged_total |
-|container_fs_writes_total | counter | Cumulative count of writes completed |
-| container_memory_cache |gauge| Number of bytes of page cache memory.|
-|container_memory_failcnt |counter| Number of memory usage hits limits|
-|container_memory_failures_total |counter| Cumulative count of memory allocation failures.|
-|container_memory_max_usage_bytes |gauge Maximum memory usage recorded in bytes|
-|container_memory_rss| gauge| Size of RSS in bytes.|
-|container_memory_swap |gauge| Container swap usage in bytes.|
-|container_memory_usage_bytes| gauge| Current memory usage in bytes, including all memory regardless of when it was accessed|
-|container_memory_working_set_bytes| gauge| Current working set in bytes.|
-|container_network_receive_bytes_total |counter| Cumulative count of bytes received|
-| container_network_receive_errors_total| counter| Cumulative count of errors encountered while receiving|
-| container_network_receive_packets_total| counter |Cumulative count of packets received|
-| container_network_tcp_usage_total |gauge| tcp connection usage statistic for container|
-| container_network_transmit_bytes_total |counter| Cumulative count of bytes transmitted|
-| container_network_transmit_errors_total |counter| Cumulative count of errors encountered while transmitting|
-| container_network_transmit_packets_dropped_total |counter| Cumulative count of packets dropped while transmitting|
-| container_network_transmit_packets_total |counter| Cumulative count of packets transmitted|
-| container_network_udp_usage_total |gauge| udp connection usage statistic for container|
-| container_scrape_error |gauge| 1 if there was an error while getting container metrics, 0 otherwise|
-| container_spec_cpu_period |gauge| CPU period of the container.|
-| container_spec_cpu_shares |gauge| CPU share of the container.|
-| container_spec_memory_limit_bytes |gauge| Memory limit for the container.|
-| container_spec_memory_reservation_limit_bytes |gauge| Memory reservation limit for the container.|
-| container_spec_memory_swap_limit_bytes |gauge| Memory swap limit for the container.|
-| container_start_time_seconds |gauge| Start time of the container since unix epoch in seconds.|
-| container_tasks_state |gauge| Number of tasks in given state|
-| machine_cpu_cores| gauge| Number of CPU cores on the machine.|
-| machine_memory_bytes |gauge| Amount of memory installed on the machine.|
-| process_cpu_seconds_total |counter| Total user and system CPU time spent in seconds.|
-|process_max_fds |gauge| Maximum number of open file descriptors.|
-|process_resident_memory_bytes |gauge| Resident memory size in bytes.|
-| process_start_time_seconds |gauge| Start time of the process since unix epoch in seconds.|
-|process_virtual_memory_bytes |gauge |Virtual memory size in bytes.|
+| container_cpu_load_average_10s | gauge | 过去10秒容器CPU的平均负载|
+| container_cpu_usage_seconds_total | counter | 容器在每个CPU内核上的累积占用时间 (单位：秒)|
+| container_cpu_system_seconds_total |  counter| System CPU累积占用时间（单位：秒）|
+| container_cpu_user_seconds_total| counter | User CPU累积占用时间（单位：秒） |
+| container_fs_usage_bytes | gauge | 容器中文件系统的使用量(单位：字节)  |
+| container_fs_limit_bytes | gauge | 容器可以使用的文件系统总量(单位：字节) |
+| container_fs_reads_bytes_total | counter | 容器累积读取数据的总量(单位：字节) |
+| container_fs_writes_bytes_total | counter | 容器累积写入数据的总量(单位：字节) |
+| container_memory_max_usage_bytes |gauge | 容器的最大内存使用量（单位：字节）|
+| container_memory_usage_bytes| gauge| 容器当前的内存使用量（单位：字节 |
+| container_spec_memory_limit_bytes |gauge| 容器的内存使用量限制 |
+| machine_memory_bytes |gauge| 当前主机的内存总量|
+| container_network_receive_bytes_total |counter| 容器网络累积接收数据总量（单位：字节）|
+| container_network_transmit_bytes_total |counter| 容器网络累积传输数据总量（单位：字节）|
 
 ## 与Prometheus集成
+
+修改/etc/prometheus/prometheus.yml，并添加监控数据采集任务：
+
+```
+- job_name: cadvisor
+  static_configs:
+  - targets:
+    - localhost:8080
+```
+
+启动Prometheus服务:
+
+```
+prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus
+```
+
+启动完成后，可以在Prometheus UI中查看到当前所有的Target状态：
+
+![Target](http://p2n2em8ut.bkt.clouddn.com/prometheus_targetes_with_cadvisor.png)
+
+当能够正常采集到cAdvisor的指标数据后，可以通过以下表达式计算容器的CPU使用率：
+
+```
+sum(irate(container_cpu_usage_seconds_total{image!=""}[1m])) without (cpu)
+```
+
+![容器CPU使用率](http://p2n2em8ut.bkt.clouddn.com/promql_container_cpu_usage.png)
+
+查询容器内存使用量（单位：字节）:
+
+```
+container_memory_usage_bytes{image!=""}
+```
+
+查询容器网络接收量速率（单位：字节/秒）：
+
+```
+sum(rate(container_network_receive_bytes_total{image!=""}[1m])) without (interface)
+```
+
+![容器网络接收量 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_network_receive_bytes_total.png)
+
+查询容器网络传输量速率（单位：字节/秒）：
+
+```
+sum(rate(container_network_transmit_bytes_total{image!=""}[1m])) without (interface)
+```
+
+![容器网络传输量 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_network_transmit_bytes_total.png)
+
+```
+sum(rate(container_fs_reads_bytes_total{image!=""}[1m])) without (device)
+```
+
+![容器文件系统读取速率 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_fs_reads_bytes_total.png)
+
+```
+sum(rate(container_fs_writes_bytes_total{image!=""}[1m])) without (device)
+```
+
+![容器文件系统写入速率 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_fs_writes_bytes_total.png)
