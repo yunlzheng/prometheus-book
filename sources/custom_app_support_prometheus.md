@@ -1,8 +1,6 @@
-# 让应用程序支持Prometheus
+# 在Spring Boot中集成Prometheus
 
 这部分将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus Java Client基于RED方法原则创建自定义监控指标，Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
-
-## 扩展Spring应用程序，支持Prometheus采集
 
 ##### 添加Prometheus Java Client依赖
 

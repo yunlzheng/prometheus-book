@@ -1,6 +1,6 @@
-# 使用Java Client Library
+# 使用Client Library
 
-Prometheus为了方便用户集成，提供了多种Client Library。 让用户可以创建自己的Exporter程序，或者直接在业务系统中集成对Prometheus的支持。 这一小节中，我们将学习如何使用Promthues官方提供的[client_java](https://github.com/prometheus/client_java)创建Exporter程序。
+为了方便用户集成，Prometheus提供了多种Client Library。通过这些Client Library用户可以创建自定义的Exporter程序，也可以直接在业务系统中集成对Prometheus的支持。 这一小节中，我们将学习如何使用Promthues官方提供的[client_java](https://github.com/prometheus/client_java)创建Exporter程序。
 
 ## 快速入门
 
@@ -181,7 +181,7 @@ public class GarbageCollectorExports extends Collector {
 }
 ```
 
-下图简单描述了一下通过Prometheus提供的HTTP Server对获取监控样本请求的处理过程。
+下图描述了一下通过Prometheus Java Client中HTTP Server对获取监控样本请求的处理过程。
 
 ![处理流程](http://p2n2em8ut.bkt.clouddn.com/prometheus_client_java_2.png)
 
@@ -191,9 +191,11 @@ public class GarbageCollectorExports extends Collector {
 
 ## 自定义Collector
 
-在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。 自定义Collector适用通过Exporter实现对外部系统（或者服务）监控指标采集的需求。自定义Collector作为监控代理。
+在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。 通过Collector可以实现对外部系统(或者服务)的监控数据采集。因此自定义Collector非常适合与当我们无法直接对系统(或者服务)修改时实现监控数据采集的场景：
 
 ![使用自定义Collector监控第三方监控指标](http://p2n2em8ut.bkt.clouddn.com/custom_collector.png)
+
+以下代码，演示了如果这Exporter中创建自定义Collector:
 
 ```
 class YourCustomCollector extends Collector {
@@ -210,6 +212,8 @@ class YourCustomCollector extends Collector {
   }
 }
 
+通过register()方法，将Collector注册到CollectorRegistry中：
+
 // Registration
 static final YourCustomCollector requests = new YourCustomCollector().register()
 ```
@@ -220,7 +224,7 @@ static final YourCustomCollector requests = new YourCustomCollector().register()
 
 除了使用Collector的方式以外，用户还可以直接在应用程序或者工具库中实现对Prometheus的支持。从而实现对应用程序内部运行状态的监控。
 
-Counter，只增不减的计数器。Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。
+Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。
 
 例如，需要统计对某些特定方法调用次数的统计时，可以通过一下方式实现：
 

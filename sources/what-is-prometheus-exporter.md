@@ -4,7 +4,7 @@
 
 ![Exporter](http://p2n2em8ut.bkt.clouddn.com/prometheus-exporter.png)
 
-下面表格列举一些常用的Exporter：
+下面表格列举一些社区中常用的Exporter：
 
 | 范围       |  常用Exporter |
 |------     |-------------|
@@ -18,9 +18,27 @@
 |   监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等   |
 |   其它| Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等|
 
+## 使用Client Libraries扩展
+
+除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Prometheus官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
+
+对于用户而言，一般可以在以下三种场景中使用Prometheus的Client Library：
+
+![Prometheus Client Library应用场景](http://p2n2em8ut.bkt.clouddn.com/client-library-usage.png)
+
+第一种，创建Exporter程序。当用户需要采集特定的监控指标时，可以使用Client Library创建一个单独的Exporter程序。目前Prometheus官方以及第三方已经实现了大量的Exporter可以满足用户巨大多数的监控需求。
+
+> 读者可以从[https://prometheus.io/docs/instrumenting/exporters/](https://prometheus.io/docs/instrumenting/exporters/)获取最新的Exporter列表。
+
+第二种，直接在应用程序当中集成。独立运行的Exporter程序以外， 用户还可以直接在软件当中集成Client Library，以支持向Promthues暴露监控指标，从而不需要运行独立的Exporter程序。目前在开源社区中已经有很多软件件直接集成了对Prometheus的支持，，例如：Ceph, Collectd, ETCD, Kubernetes, Linkerd，Telegraf等。
+
+第三种，封装到公共库中。用于直接在用户自己的公共库中集成Prometheus Client Library。从而可以使得使用了这些公共库的应用程序透明的集成对Prometheus的支持。目前开源社区中也有这样的例子，例如Clojure中的prometheus-clj，Java下的Hystrix metrics publisher都是这样的模式。
+
 ## Exporter格式规范
 
-这些Exporter会按照Prometheus的标准格式规范输出监控样本数据。以node exporter为例，当访问/metrics地址会返回以下格式响应内容：
+无论是社区已有的Exporter程序，或者基于Client Library自己实现的Exporter。 当Promtheus抓取样本数据数，它们都会按照Promthues要求的格式规范将当前系统中记录的所有样本返回给Promtheus。如果目前Client Library还不支持你所使用的应用程序，你可以直接将监控样本转换为Promthues要求的格式即可。
+
+以node exporter为例，当访问/metrics地址会返回以下格式响应内容：
 
 ```
 # HELP node_cpu Seconds the cpus spent in each mode.
@@ -121,22 +139,4 @@ rpc_duration_seconds_sum 1.7560473e+07
 rpc_duration_seconds_count 2693
 ```
 
-## 使用Client Libraries
-
-除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Prometheus官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序。目前Promthues社区官方提供了以下编程语言的Client Library支持：Go，Java/Scala，Python， Ruby。同时还有第三方实现的Client Library：Bash, C++, Common Lisp, Erlang, Haskeel, Lua, Node.js， PHP, Rust等等。
-
-当Prometheus来获取监控样本时，这些Client Library会通过Promthues要求的格式规范将当前系统中记录的所有指标返回给Promtheus。因此如果目前Client Library还不支持你所使用的应用程序，你可以直接将监控样本转换为Promthues要求的格式即可。
-
-对于用户而言，一般可以在以下三种场景中使用Prometheus的Client Library：
-
-![Prometheus Client Library应用场景](http://p2n2em8ut.bkt.clouddn.com/client-library-usage.png)
-
-第一种，创建Exporter程序。当用户需要采集特定的监控指标时，可以使用Client Library创建一个单独的Exporter程序。目前Prometheus官方以及第三方已经实现了大量的Exporter可以满足用户巨大多数的监控需求。
-
-> 读者可以从[https://prometheus.io/docs/instrumenting/exporters/](https://prometheus.io/docs/instrumenting/exporters/)获取最新的Exporter列表。
-
-第二种，直接在应用程序当中集成。独立运行的Exporter程序以外， 用户还可以直接在软件当中集成Client Library，以支持向Promthues暴露监控指标，从而不需要运行独立的Exporter程序。目前在开源社区中已经有很多软件件直接集成了对Prometheus的支持，，例如：Ceph, Collectd, ETCD, Kubernetes, Linkerd，Telegraf等。
-
-第三种，封装到公共库中。用于直接在用户自己的公共库中集成Prometheus Client Library。从而可以使得使用了这些公共库的应用程序透明的集成对Prometheus的支持。目前开源社区中也有这样的例子，例如Clojure中的prometheus-clj，Java下的Hystrix metrics publisher都是这样的模式。
-
-接下来，将带来读者了解常见Exporter的用法。
+接下来，我们将带来读者了解常见Exporter的用法，以及如何使用Client Library实现自定义Exporter。

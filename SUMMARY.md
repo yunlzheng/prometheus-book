@@ -35,7 +35,7 @@
   <!-- - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md) -->
   <!-- [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md) -->
   - [使用Client Library](./sources/custom_metrics_with_java_sdk.md)
-  - [让应用程序支持Prometheus](./sources/custom_app_support_prometheus.md)
+  - [在Spring Boot中集成Prometheus](./sources/custom_app_support_prometheus.md)
   <!-- - 使用Pushgateway -->
   <!-- - 垮网络监控 -->
   - [小结](./chapter5/SUMMARY.md)
