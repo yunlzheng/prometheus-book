@@ -102,4 +102,5 @@
   - 基于Prometheus实现应用的弹性伸缩
   - 使用Prometheus Opertor管理Prometheus
   - 总结
+- [第10章 使用Prometheus监控Rancher集群](./chapter10/README.md)
 - [参考资料](./REFERENCES.md)
