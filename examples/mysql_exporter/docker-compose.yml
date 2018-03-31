@@ -13,14 +13,5 @@ services:
       - "9104:9104"
     environment:
       - DATA_SOURCE_NAME=root:password@(mysql:3306)/database
-    # command:
-    #   - --collect.auto_increment.columns
-    #   - --collect.engine_innodb_status
-    #   - --collect.global_status
-    #   - --collect.global_variables
-    #   - --collect.info_schema.clientstats
-    #   - --collect.info_schema.tables
-    #   - --collect.info_schema.tables.databases
-    #   - --collect.perf_schema.indexiowaits
-    #   - --collect.perf_schema.tableiowaits
-    #   - --collect.perf_schema.tablelocks
+    command:
+      - --collect.info_schema.query_response_time
