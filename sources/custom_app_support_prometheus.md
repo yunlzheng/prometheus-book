@@ -1,26 +1,20 @@
 # 在Spring Boot中集成Prometheus
 
-这部分将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus Java Client基于RED方法原则创建自定义监控指标，Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
+这部分将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus Java Client并且基于RED方法原则创建自定义监控指标，Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景。
 
-##### 添加Prometheus Java Client依赖
+添加Prometheus Java Client相关的依赖后
 
-```
-# build.gradle
-...
+``` groovy
 dependencies {
-    ...
     compile 'io.prometheus:simpleclient:0.0.24'
     compile "io.prometheus:simpleclient_spring_boot:0.0.24"
     compile "io.prometheus:simpleclient_hotspot:0.0.24"
 }
-...
 ```
 
-##### 启用Prometheus Metrics Endpoint
+通过注解@EnablePrometheusEndpoint启用Prometheus Endpoint，这里同时使用了simpleclient_hotspot中提供的DefaultExporter。该Exporter会在metrics endpoint中统计当前应用JVM的相关信息：
 
-添加注解@EnablePrometheusEndpoint启用Prometheus Endpoint,这里同时使用了simpleclient_hotspot中提供的DefaultExporter该Exporter会在metrics endpoint中放回当前应用JVM的相关信息
-
-```
+``` java
 @SpringBootApplication
 @EnablePrometheusEndpoint
 public class SpringApplication implements CommandLineRunner {
@@ -36,9 +30,9 @@ public class SpringApplication implements CommandLineRunner {
 }
 ```
 
-默认情况下Prometheus暴露的metrics endpoint为 /prometheus，可以通过endpoint配置进行修改
+默认情况下Prometheus暴露的metrics endpoint为 /prometheus，可以通过endpoint配置进行修改:
 
-```
+``` yaml
 endpoints:
   prometheus:
     id: metrics
@@ -48,9 +42,9 @@ endpoints:
     enabled: true
 ```
 
-启动应用程序访问 http://localhost:8080/metrics 可以看到以下输出：
+启动应用程序访问[http://localhost:8080/metrics](http://localhost:8080/metrics)可以看到以下输出内容：
 
-```
+``` text
 # HELP jvm_gc_collection_seconds Time spent in a given JVM garbage collector in seconds.
 # TYPE jvm_gc_collection_seconds summary
 jvm_gc_collection_seconds_count{gc="PS Scavenge",} 11.0
@@ -69,9 +63,9 @@ jvm_classes_loaded 8376.0
 
 除了获取应用JVM相关的状态以外，我们还可能需要添加一些自定义的监控Metrics实现对系统性能，以及业务状态进行采集，以提供日后优化的相关支撑数据。首先我们使用拦截器处理对应用的所有请求。
 
-继承WebMvcConfigurerAdapter类，复写addInterceptors方法，对所有请求/**添加拦截器
+继承WebMvcConfigurerAdapter类并复写addInterceptors方法，对所有请求/**添加拦截器
 
-```
+``` java
 @SpringBootApplication
 @EnablePrometheusEndpoint
 public class SpringApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
@@ -82,9 +76,9 @@ public class SpringApplication extends WebMvcConfigurerAdapter implements Comman
 }
 ```
 
-PrometheusMetricsInterceptor集成HandlerInterceptorAdapter，通过复写父方法，实现对请求处理前/处理完成的处理。
+PrometheusMetricsInterceptor继承自HandlerInterceptorAdapter，通过复写父方法preHandle和afterCompletion可以拦截一个HTTP请求生命周期的不同阶段：
 
-```
+``` java
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -98,19 +92,19 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 
-##### 自定义Metrics指标
+##### 自定义监控指标
 
-Prometheus提供了4中不同的Metrics类型：Counter,Gauge,Histogram,Summary
+一旦PrometheusMetricsInterceptor能够成功拦截和处理请求之后，我们就可以使用client java自定义多种监控指标。
 
 ###### Counter：只增不减的计数器
 
-计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
-
-对于Counter类型的指标，只包含一个inc()方法，用于计数器+1
+计数器可以用于记录只会增加不会减少的指标类型，比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。 
 
 一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
 
-```
+使用Counter.build()创建Counter类型的监控指标，并且通过name()方法定义监控指标的名称，通过labelNames()定义该指标包含的标签。最后通过register()将该指标注册到Collector的defaultRegistry中中。
+
+``` java
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 
     static final Counter requestCounter = Counter.build()
@@ -129,11 +123,13 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 
-使用Counter.build()创建Counter metrics，name()方法，用于指定该指标的名称 labelNames()方法，用于声明该metrics拥有的维度label。在preHandle方法中，我们获取当前请求的，RequesPath，Method以及状态码。并且调用inc()方法，在每次请求发生时计数+1。
+在afterCompletion方法中，可以获取到当前请求的请求路径、请求方法以及状态码。 这里通过labels指定了当前样本各个标签对应的值，最后通过.inc()计数器+1：
 
-Counter.build()...register(),会像Collector中注册该指标，并且当访问/metrics地址时，返回该指标的状态。
+```
+requestCounter.labels(requestURI, method, String.valueOf(status)).inc();
+```
 
-通过指标io_namespace_http_requests_total我们可以：
+通过指标io_namespace_http_requests_total我们可以实现：
 
 * 查询应用的请求总量
 
@@ -158,23 +154,21 @@ topk(10, sum(io_namespace_http_requests_total) by (path))
 
 ###### Gauge： 可增可减的仪表盘
 
-对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的CPU使用率,内存使用率。
-
-对于Gauge指标的对象则包含两个主要的方法inc()以及dec(),用户添加或者减少计数。在这里我们使用Gauge记录当前正在处理的Http请求数量。
+对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的CPU使用率,内存使用率。这里我们使用Gauge记录当前应用正在处理的Http请求数量。
 
 ```
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 
     ...省略的代码
     static final Gauge inprogressRequests = Gauge.build()
-            .name("io_namespace_http_inprogress_requests").labelNames("path", "method", "code")
+            .name("io_namespace_http_inprogress_requests").labelNames("path", "method")
             .help("Inprogress requests.").register();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         ...省略的代码
         // 计数器+1
-        inprogressRequests.labels(requestURI, method, String.valueOf(status)).inc();
+        inprogressRequests.labels(requestURI, method).inc();
         return super.preHandle(request, response, handler);
     }
 
@@ -182,7 +176,7 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         ...省略的代码
         // 计数器-1
-        inprogressRequests.labels(requestURI, method, String.valueOf(status)).dec();
+        inprogressRequests.labels(requestURI, method).dec();
 
         super.afterCompletion(request, response, handler, ex);
     }
@@ -198,9 +192,7 @@ io_namespace_http_inprogress_requests{}
 
 ###### Histogram：自带buckets区间用于统计分布统计图
 
-主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。
-
-以请求响应时间requests_latency_seconds为例，假如我们需要记录http请求响应时间符合在分布范围{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}中的次数时。
+主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。以请求响应时间requests_latency_seconds为例。
 
 ```
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
@@ -272,11 +264,7 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 
 ###### Summary： 客户端定义的数据分布统计图
 
-Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。
-
-Summary和Histogram都提供了对于事件的计数_count以及值的汇总_sum。 因此使用_count,和_sum时间序列可以计算出相同的内容，例如http每秒的平均响应时间：rate(basename_sum[5m]) / rate(basename_count[5m])。
-
-同时Summary和Histogram都可以计算和统计样本的分布情况，比如中位数，9分位数等等。其中 0.0<= 分位数Quantiles <= 1.0。
+Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。Summary和Histogram都提供了对于事件的计数_count以及值的汇总_sum。 因此使用_count,和_sum时间序列可以计算出相同的内容，例如http每秒的平均响应时间：rate(basename_sum[5m]) / rate(basename_count[5m])。同时Summary和Histogram都可以计算和统计样本的分布情况，比如中位数，9分位数等等。其中 0.0<= 分位数Quantiles <= 1.0。
 
 不同在于Histogram可以通过histogram_quantile函数在服务器端计算分位数。 而Sumamry的分位数则是直接在客户端进行定义。因此对于分位数的计算。 Summary在通过PromQL进行查询时有更好的性能表现，而Histogram则会消耗更多的资源。相对的对于客户端而言Histogram消耗的资源更少。
 
@@ -331,11 +319,12 @@ io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="2
 # 含义：这12次http请求响应时间的9分位数是8.003261666s
 io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="200",quantile="0.9",} 8.003261666
 ```
+
 ##### 使用Collector暴露业务指标
 
-除了在拦截器中使用Prometheus提供的Counter,Summary,Gauage等构造监控指标以外，我们还可以通过自定义的Collector实现对相关业务指标的暴露
+除了在拦截器中使用Prometheus提供的Counter,Summary,Gauage等构造监控指标以外，我们还可以通过自定义的Collector实现对相关业务指标的暴露。例如，我们可以通过自定义Collector直接从应用程序的数据库中统计监控指标.
 
-```
+``` Java
 @SpringBootApplication
 @EnablePrometheusEndpoint
 public class SpringApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
@@ -357,7 +346,7 @@ CustomExporter集成自io.prometheus.client.Collector，在调用Collector的reg
 
 由于这里CustomExporter存在于Spring的IOC容器当中，这里可以直接访问业务代码，返回需要的业务相关的指标。
 
-```
+``` java
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import org.springframework.stereotype.Component;
@@ -386,13 +375,3 @@ public class CustomExporter extends Collector {
 ```
 
 当然这里也可以使用CounterMetricFamily，SummaryMetricFamily声明其它的指标类型。
-
-## 接下来
-
-好了。 目前为止，启动应用程序，并且访问 [http://localhost:8080/metrics](http://localhost:8080/metrics)。我们可以看到如下结果。
-![](http://p2n2em8ut.bkt.clouddn.com/spring_boot_etrics.png)
-
-这部分分别介绍了两种方式，在Spring应用中实现对于自定义Metrics指标的定义：
-
-* 拦截器/过滤器：用于统计所有应用请求的情况
-* 自定义Collector: 可以用于统计应用业务能力相关的监控情况

@@ -1,4 +1,4 @@
-# 使用Client Library
+# 扩展Prometheus
 
 为了方便用户集成，Prometheus提供了多种Client Library。通过这些Client Library用户可以创建自定义的Exporter程序，也可以直接在业务系统中集成对Prometheus的支持。 这一小节中，我们将学习如何使用Promthues官方提供的[client_java](https://github.com/prometheus/client_java)创建Exporter程序。
 
@@ -61,7 +61,7 @@ jvm_buffer_pool_used_bytes{pool="mapped",} 0.0
 
 恭喜你，已经成功完成了你的第一个Exporter程序。这里返回的是当前应用中JVM相关的监控指标，包括JVM中GC，Memory Pool，JMX, Classloading，以及线程数等监控统计信息。
 
-## client_java实现过程
+## client_java的实现过程
 
 查看DefaultExports.initialize()中的实现代码，可以看到类似于如下代码：
 
@@ -85,13 +85,9 @@ public class DefaultExports {
 }
 ```
 
-这里所有的Exporters都继承自Collector，并且实现collect()方法，用于返回该Collector中获取到的所有监控指标和样本数据。
+这里所有的Exporters都继承自Collector，并且实现collect()方法，用于返回该Collector中获取到的所有监控指标和样本数据。而register()方法，会将该Collector自己注册到CollectorRegistry.defaultRegistry中
 
-```
-public List<MetricFamilySamples> collect();
-```
-
-Collector.register()方法，会将该Collector自己注册到CollectorRegistry.defaultRegistry中。Prometheus提供的HTTPServer中，则创建了一个简单的HTTPMetricHandler：
+Prometheus提供的HTTPServer中，则创建了一个简单的HTTPMetricHandler来处理Prometheus抓取监控样本数据的请求：
 
 ```
  server = HttpServer.create();
@@ -185,13 +181,11 @@ public class GarbageCollectorExports extends Collector {
 
 ![处理流程](http://p2n2em8ut.bkt.clouddn.com/prometheus_client_java_2.png)
 
-用户通过创建自己的Collector实现，在collect()方法中实现对监控目标的采集，并且转换为MetricFamilySamples。 通过将Collector注册到CollectorRegistry.defaultRegistry中，让Http Server从defaultRegistry中获取到这些Collector实现，从而将这些Collector获取到的数据格式化为Promthues要求的规范进行响应。
-
 除了使用Prometheus提供的HttpServer以外，Prometheus提供了针对Servlet，Spring Boot, Spring Web以及Dropwizard等的实现。可以让用户快速实现已有应用程序与Prometheus的集成。
 
 ## 自定义Collector
 
-在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。 通过Collector可以实现对外部系统(或者服务)的监控数据采集。因此自定义Collector非常适合与当我们无法直接对系统(或者服务)修改时实现监控数据采集的场景：
+在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。通过添加自定义的Collector用户可以轻松实现对外部系统（或者服务）的监控数据收集。
 
 ![使用自定义Collector监控第三方监控指标](http://p2n2em8ut.bkt.clouddn.com/custom_collector.png)
 
@@ -212,7 +206,7 @@ class YourCustomCollector extends Collector {
   }
 }
 
-通过register()方法，将Collector注册到CollectorRegistry中：
+实现Collector后通过register()方法，将其注册到CollectorRegistry中：
 
 // Registration
 static final YourCustomCollector requests = new YourCustomCollector().register()
@@ -222,11 +216,9 @@ static final YourCustomCollector requests = new YourCustomCollector().register()
 
 ## 直接在代码中集成
 
-除了使用Collector的方式以外，用户还可以直接在应用程序或者工具库中实现对Prometheus的支持。从而实现对应用程序内部运行状态的监控。
+除了通过实现Collector接口以外，Prometheus的Java Client还内置了多种类型构造器，如Counter、Gauge、Histogram、Summary等。 通过这些构造器，用户可以直接在业务代码中实现监控样本收集，从而可以监控程序的内部运行情况。
 
-Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。
-
-例如，需要统计对某些特定方法调用次数的统计时，可以通过一下方式实现：
+Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。 例如，当需要需要统计对某些特定方法调用次数的统计时，可以通过以下方式实现：
 
 ```
 import io.prometheus.client.Counter;
@@ -241,9 +233,7 @@ class YourClass {
 }
 ```
 
-Gauge,可增可减的仪表盘。 因此当在代码中构造了一个Gauge类型的指标时，可以通过.inc()和.dec()对样本数据进行+1或者-1。
-
-例如，可以通过Gauge统计函数中某个方法正在处理中的调用次数。
+Gauge,可增可减的仪表盘。可以通过.inc()和.dec()对样本数据进行+1或者-1。例如，可以通过Gauge统计函数中某个方法正在处理中的调用次数：
 
 ```
 class YourClass {
@@ -305,3 +295,5 @@ class YourClass {
   }
 }
 ```
+
+通过以上的例子，我们简单了解了通过实现Collector或者使用Counter、Guage这样的构造器均可实现自定义监控指标，并且将相应的指标样本返回给Prometheus。 接下来，将以一个具体的例子详细讲解如何在应用中实现对Prometheus的集成。
