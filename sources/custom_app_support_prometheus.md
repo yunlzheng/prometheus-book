@@ -1,8 +1,8 @@
 # 在Spring Boot中集成Prometheus
 
-这部分将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus Java Client并且基于RED方法原则创建自定义监控指标，Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景。
+这部分将以Spring Boot/Spring Cloud为例，介绍基于Promtheus Client Library扩展Prometheus的一些实际的应用场景。
 
-添加Prometheus Java Client相关的依赖后
+添加Prometheus Java Client相关的依赖：
 
 ``` groovy
 dependencies {
@@ -96,11 +96,7 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 
 一旦PrometheusMetricsInterceptor能够成功拦截和处理请求之后，我们就可以使用client java自定义多种监控指标。
 
-###### Counter：只增不减的计数器
-
-计数器可以用于记录只会增加不会减少的指标类型，比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。 
-
-一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
+计数器可以用于记录只会增加不会减少的指标类型，比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。 一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
 
 使用Counter.build()创建Counter类型的监控指标，并且通过name()方法定义监控指标的名称，通过labelNames()定义该指标包含的标签。最后通过register()将该指标注册到Collector的defaultRegistry中中。
 
@@ -152,9 +148,7 @@ sum(rate(io_wise2c_gateway_requests_total[5m]))
 topk(10, sum(io_namespace_http_requests_total) by (path))
 ```
 
-###### Gauge： 可增可减的仪表盘
-
-对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的CPU使用率,内存使用率。这里我们使用Gauge记录当前应用正在处理的Http请求数量。
+使用Gauge可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的CPU使用率,内存使用率。这里我们使用Gauge记录当前应用正在处理的Http请求数量。
 
 ```
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
@@ -190,9 +184,7 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 io_namespace_http_inprogress_requests{}
 ```
 
-###### Histogram：自带buckets区间用于统计分布统计图
-
-主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。以请求响应时间requests_latency_seconds为例。
+Histogram主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。以请求响应时间requests_latency_seconds为例。
 
 ```
 public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
@@ -262,8 +254,6 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="+Inf",} 2.0
 ```
 
-###### Summary： 客户端定义的数据分布统计图
-
 Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。Summary和Histogram都提供了对于事件的计数_count以及值的汇总_sum。 因此使用_count,和_sum时间序列可以计算出相同的内容，例如http每秒的平均响应时间：rate(basename_sum[5m]) / rate(basename_count[5m])。同时Summary和Histogram都可以计算和统计样本的分布情况，比如中位数，9分位数等等。其中 0.0<= 分位数Quantiles <= 1.0。
 
 不同在于Histogram可以通过histogram_quantile函数在服务器端计算分位数。 而Sumamry的分位数则是直接在客户端进行定义。因此对于分位数的计算。 Summary在通过PromQL进行查询时有更好的性能表现，而Histogram则会消耗更多的资源。相对的对于客户端而言Histogram消耗的资源更少。
@@ -320,7 +310,7 @@ io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="2
 io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="200",quantile="0.9",} 8.003261666
 ```
 
-##### 使用Collector暴露业务指标
+##### 使用Collector暴露其它指标
 
 除了在拦截器中使用Prometheus提供的Counter,Summary,Gauage等构造监控指标以外，我们还可以通过自定义的Collector实现对相关业务指标的暴露。例如，我们可以通过自定义Collector直接从应用程序的数据库中统计监控指标.
 

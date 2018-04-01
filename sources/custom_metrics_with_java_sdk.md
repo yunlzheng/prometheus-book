@@ -65,7 +65,7 @@ jvm_buffer_pool_used_bytes{pool="mapped",} 0.0
 
 查看DefaultExports.initialize()中的实现代码，可以看到类似于如下代码：
 
-```
+``` java
 public class DefaultExports {
   private static boolean initialized = false;
 
@@ -85,11 +85,11 @@ public class DefaultExports {
 }
 ```
 
-这里所有的Exporters都继承自Collector，并且实现collect()方法，用于返回该Collector中获取到的所有监控指标和样本数据。而register()方法，会将该Collector自己注册到CollectorRegistry.defaultRegistry中
+这里所有的Exporters都继承自Collector，并且实现collect()方法，用于返回该Collector中获取到的所有监控指标和样本数据。而register()方法，会将该Collector自己注册到CollectorRegistry.defaultRegistry中。
 
-Prometheus提供的HTTPServer中，则创建了一个简单的HTTPMetricHandler来处理Prometheus抓取监控样本数据的请求：
+HTTPServer中则创建了一个HTTPMetricHandler用于来处理Prometheus抓取监控样本数据的请求：
 
-```
+``` java
  server = HttpServer.create();
         server.bind(addr, 3);
         HttpHandler mHandler = new HTTPMetricHandler(registry);
@@ -100,9 +100,9 @@ Prometheus提供的HTTPServer中，则创建了一个简单的HTTPMetricHandler�
         start(daemon);
 ```
 
-HTTPMetricHandler作用负责响应Prometheus Server向该Exporter发起的请求。通过从CollectorRegistry.defaultRegistry中所有的Collector实例的collect()方法中获取样本数据，并对样本数据进行格式化，从而将监控样本返回给Prometheus Server
+HTTPMetricHandler作用负责响应Prometheus Server向该Exporter发起的请求。通过从CollectorRegistry.defaultRegistry中所有的Collector实例的collect()方法中获取样本数据，并对样本数据进行格式化，从而将监控样本返回给Prometheus Server:
 
-```
+``` java
  public void handle(HttpExchange t) throws IOException {
             String query = t.getRequestURI().getRawQuery();
 

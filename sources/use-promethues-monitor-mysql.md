@@ -170,16 +170,14 @@ mysql> SHOW GLOBAL STATUS LIKE "Threads_connected";
 
 当所有可用连接都被占用时，如果一个客户端尝试连接至MySQL，会出现“Too many connections(连接数过多)”错误，同时Connection_errors_max_connections的值也会增加。为了防止出现此类情况，你应该监控可用连接的数量，并确保其值保持在max_connections限制以内。同时如果Aborted_connects的数量不断增加时，说明客户端尝试连接到MySQL都失败了。这是应该通过Connection_errors_max_connections以及Connection_errors_internal分析连接失败的问题原因。
 
-下表列举了与MySQL连接相关的监控指标：
+下面列举了与MySQL连接相关的监控指标：
 
-| MySQL指标 | Prometheus指标  | 描述 | 类型  |
-|-----    |--------|---------------| --- |
-| max_connections | mysql_global_variables_max_connections | 允许的最大连接数 | 连接情况 |
-| Threads_connected | mysql_global_status_threads_connected | 当前开放的连接 | 连接情况 |
-| Threads_running | mysql_global_status_threads_running | 当前开放的连接 | 连接情况 |
-| Aborted_connects | mysql_global_status_aborted_connects | 当前开放的连接 | 连接情况 |
-| Connection_errors_max_connections | mysql_global_status_connection_errors_total{error="max_connections"} | 由于超出最大连接数导致的错误 | 连接情况 |
-| Connection_errors_internal | mysql_global_status_connection_errors_total{error="internal"} | 由于系统内部导致的错误 | 连接情况 |
+* mysql_global_variables_max_connections： 允许的最大连接数；
+* mysql_global_status_threads_connected： 当前开放的连接；
+* mysql_global_status_threads_running：当前开放的连接；
+* mysql_global_status_aborted_connects：当前开放的连接；
+* mysql_global_status_connection_errors_total{error="max_connections"}：由于超出最大连接数导致的错误；
+* mysql_global_status_connection_errors_total{error="internal"}：由于系统内部导致的错误；
 
 通过PromQL查询当前剩余的可用连接数：
 
