@@ -40,8 +40,8 @@
   <!-- - 垮网络监控 -->
   - [小结](./chapter5/SUMMARY.md)
 - [第5章 可视化一切](./chapter4/README.md)
-  - Grafana简介
-  - 安装Grafana
+  - [Grafana简介](./sources/grafana-intro.md)
+  - [安装Grafana]
         - 使用二进制包安装Grafana
         - 使用容器安装Grafana
   - 使用Prometheus数据源

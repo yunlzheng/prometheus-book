@@ -179,9 +179,11 @@ up{instance="localhost:9100",job="node"}	1
 
 其中“1”表示正常，反之“0”则为异常。
 
-## 查询与可视化
+## 数据与可视化
 
-当Prometheus Server可以正常获取node exporter中的监控指标之后，用户就可以通过Prometheus内置的PromQL查询主机相关数据。进入到Prometheus UI,切换到Graph标签
+### 使用Promtheus UI
+
+通过Prometheus UI用户可以利用PromQL实时查询监控数据，并且支持一些基本的数据可视化能力。进入到Prometheus UI,切换到Graph标签
 
 ![Graph Query](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_graph_query.png)
 
@@ -201,7 +203,7 @@ rate(node_cpu[2m])
 
 ![系统进程的CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_cpu_and_mode.png)
 
-这时如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可。
+这时如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可：
 
 ```
 avg without(cpu) (rate(node_cpu[2m]))
@@ -209,7 +211,7 @@ avg without(cpu) (rate(node_cpu[2m]))
 
 ![系统各mode的CPU使用率](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usage_by_mode.png)
 
-那如果需要计算系统CPU的总体使用率，通过排除系统闲置的CPU使用率即可获得，表达式如下:
+那如果需要计算系统CPU的总体使用率，通过排除系统闲置的CPU使用率即可获得:
 
 ```
 1 - avg without(cpu) (rate(node_cpu{mode="idle"}[2m]))
@@ -221,13 +223,13 @@ avg without(cpu) (rate(node_cpu[2m]))
 
 ## 使用Grafana创建可视化Dashboard
 
-除了使用Prometheus自带的Web UI以外，用户还可以选择第三方可视化工具，如Grafana创建可视化Dashboard。使用以下命令可以通过Docker快速在本地部署一个Grafana实例：
+Prometheus UI提供了快速验证PromQL以及临时可视化支持的能力，而在大多数场景下引入监控系统通常还需要构建可以长期使用的监控数据可视化面板（Dashboard）。这是用户可以考虑使用第三方的可视化工具如Grafana，Grafana是一个开源的可视化平台，并且提供了对Prometheus的完整支持。
 
 ```
 docker run -d -p 3000:3000 grafana/grafana
 ```
 
-访问[http://localhost:3000/login](http://localhost:3000/login)可以进入到Grafana的登录界面，默认情况下可以使用admin/admin账户登录到Grafana中。在Grafana首页会显示默认的使用向导，包括：安装、添加数据源、创建Dashboard、邀请成员、以及安装应用和插件等主要流程：
+访问[http://localhost:3000](http://localhost:3000)就可以进入到Grafana的界面中，默认情况下使用账户admin/admin进行登录。在Grafana首页中显示默认的使用向导，包括：安装、添加数据源、创建Dashboard、邀请成员、以及安装应用和插件等主要流程:
 
 ![Grafana向导](http://p2n2em8ut.bkt.clouddn.com/get_start_with_grafana2.png)
 
@@ -235,12 +237,14 @@ docker run -d -p 3000:3000 grafana/grafana
 
 ![添加Prometheus作为数据源](http://p2n2em8ut.bkt.clouddn.com/add_default_prometheus_datasource.png)
 
-在完成数据源的添加之后就可以在Grafana中利用PromQL查询并可视化Prometheus中的数据。如下所以，通过Grafana添加Dashboard并且为该Dashboard添加一个类型为“Graph”的面板。 通过编辑该可视化面板的选择，例如在“Metrics”选项下通过PromQL查询需要可视化的数据：
+在完成数据源的添加之后就可以在Grafana中创建我们可视化Dashboard了。Grafana提供了对PromQL的完整支持，如下所示，通过Grafana添加Dashboard并且为该Dashboard添加一个类型为“Graph”的面板。 并在该面板的“Metrics”选项下通过PromQL查询需要可视化的数据：
 
 ![第一个可视化面板](http://p2n2em8ut.bkt.clouddn.com/first_grafana_dashboard.png)
 
-点击界面中的保存选项，就可以查看我们的第一个可视化Dashboard了。 当然作为开源软件Grafana社区提供了大量的由用户共享的可视化Dashboard，通过[https://grafana.com/dashboards](https://grafana.com/dashboards)网站，可以找到大量可直接使用的Dashboard。 如下所示:
+点击界面中的保存选项，就创建了我们的第一个可视化Dashboard了。 当然作为开源软件，Grafana社区鼓励用户分享Dashboard通过[https://grafana.com/dashboards](https://grafana.com/dashboards)网站，可以找到大量可直接使用的Dashboard：
 
 ![用户共享的Dashboard](http://p2n2em8ut.bkt.clouddn.com/grafana_dashboards.png)
 
-Grafana中所有的Dashboard通过JSON进行共享，下载并且导入这些JSON文件，就可以直接使用这些已经定义好的Dashboard。
+Grafana中所有的Dashboard通过JSON进行共享，下载并且导入这些JSON文件，就可以直接使用这些已经定义好的Dashboard：
+
+![Host Stats Dashboard](http://p2n2em8ut.bkt.clouddn.com/node_exporter_dashboard.png)
