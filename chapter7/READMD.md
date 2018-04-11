@@ -1,4 +1,4 @@
-# 第7章 集群与高可用
+# 第6章 集群与高可用
 
 Prometheus内置了一个基于本地存储的时间序列数据库，在Promtheus设计上使用本地存储可以降低Prometheus部署和管理的复杂度，避免了HA的复杂性。 在默认情况下，用户只需要部署多套Promtheus，采集相同的Targets即可实现基本的HA。同时由于Promethus高效的数据处理能力，单个Prometheus Server基本上能够应对大部分用户监控规模的需求。
 

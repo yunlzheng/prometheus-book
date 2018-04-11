@@ -56,21 +56,7 @@
   - 时间范围
   - SingleStat面板
   - [小结](./chapter5/SUMMARY.md)
-- [第6章 Prometheus服务发现](./chapter6/README.md)
-  <!-- - [为什么需要服务发现](./sources/why-need-service-discovery.md) -->
-  - 基于文件的服务发现机制
-        - 创建文件
-        - 配置Prometheus使用基于文件的动态发现
-        - 定义刷新时间
-  - 基于Consul的服务发现机制
-        - Consul介绍
-        - Consul的安装和使用
-        - 注册Exporter到Consul
-        - 配置Prometheus使用Consul动态发现
-  - 基于DNS的服务发现机制
-  - 服务发现与Relabel机制
-  - [小结](./chapter6/SUMMARY.md)
-- [第7章 集群与高可用](./chapter7/READMD.md)
+- [第6章 集群与高可用](./chapter7/READMD.md)
   - [本地存储](./sources/prometheus-local-storage.md)
   - [远程存储](./sources/prometheus-remote-storage.md)
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
@@ -80,6 +66,15 @@
   <!-- - 使用Promgen管理Prometheus -->
   <!-- - 从1.0迁移到2.0 -->
   - [总结](./chapter4/SUMMARY.md)
+- [第7章 Prometheus服务发现](./chapter6/README.md)
+  - [为什么需要服务发现](./sources/why-need-service-discovery.md)
+  - [基于文件的服务发现机制](./sources/service-discovery-with-file.md)
+  - [基于Consul的服务发现机制](./sources/service-discovery-with-consul.md)
+  - [基于DNS的服务发现机制](./sources/service-discovery-with-dns.md)
+  - [基于EC2的服务发现机制](./sources/service-discovery-with-ec2.md)
+  - [基于Kubernetes的服务发现机制](./sources/service-discovery-with-k8s.md)
+  - [服务发现与Relabel机制](./sources/service-discovery-with-relabel.md)
+  - [小结](./chapter6/SUMMARY.md)
 - [第8章 使用BlockBox监控网络](./chapter9/README.md)
   - 白盒和黑盒监控
   - 部署Blackbox exporter
