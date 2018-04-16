@@ -72,8 +72,8 @@
   - [基于Consul的服务发现](./sources/service-discovery-with-consul.md)
   <!-- - [基于DNS的服务发现机制](./sources/service-discovery-with-dns.md) -->
   <!-- - [基于EC2的服务发现机制](./sources/service-discovery-with-ec2.md) -->
-  - [基于Kubernetes的服务发现机制](./sources/service-discovery-with-k8s.md)
-  - [服务发现与Relabel机制](./sources/service-discovery-with-relabel.md)
+  - [Kubernetes下的服务发现](./sources/service-discovery-with-k8s.md)
+  - [服务发现与Relabel](./sources/service-discovery-with-relabel.md)
   - [小结](./chapter6/SUMMARY.md)
 - [第8章 使用BlockBox监控网络](./chapter9/README.md)
   - 白盒和黑盒监控
