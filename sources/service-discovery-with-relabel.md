@@ -57,3 +57,10 @@ node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"}
 
 其中job标签的值对应采集任务的job_name，而instance则是从Metadata的```__address```标签中获取。这种在保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。
 
+### 重写标签
+
+### 计算标签Hash
+
+### 保留或者丢弃Target实例
+
+### 保留或者丢弃标签
