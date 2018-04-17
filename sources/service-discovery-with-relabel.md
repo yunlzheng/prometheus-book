@@ -55,7 +55,7 @@ node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"}
 
 其中job标签的值对应采集任务的job_name，而instance则是从Metadata的```__address```标签中获取。这种在保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。
 
-## 自定义Relabeling
+## 使用Relabeling重写标签
 
 用户可以在每一个采集任务的配置中添加多个relabel_config配置，一个最简单的relabel配置如下：
 
@@ -113,6 +113,19 @@ node_cpu{cpu="cpu0",dc="dc1",instance="172.21.0.6:9100",job="consul_sd",mode="gu
 其中action定义了当前relabel_config对Metadata标签的处理方式，默认的action行为为replace。 replace行为会根据regex的配置匹配source_labels标签的值（多个source_label的值会按照separator进行拼接），并且将匹配到的值写入到target_label当中，如果有多个匹配组，则可以使用${1}, ${2}确定写入的内容。如果没匹配到任何内容则不对target_label进行重新。
 
 repalce操作允许用户根据Target的Metadata标签重写或者写入新的标签键值对，在多环境的场景下，可以帮助用户添加与环境相关的特征维度，从而可以更好的对数据进行聚合。
+
+除了使用replace的方式覆写标签以外，还可以使用labelmap的方式。当action为labelmap时，Prometheus会使用正则表达式regex去匹配Target中所有的标签名称，并且匹配到的标签的值写入到replacement中。例如，在监控Kubernetes下所有的主机节点时，为将这些节点上定义的标签写入到样本中时，可以使用如下relabel_config配置：
+
+```
+- job_name: 'kubernetes-nodes'
+  kubernetes_sd_configs:
+  - role: node
+  relabel_configs:
+  - action: labelmap
+    regex: __meta_kubernetes_node_label_(.+)
+```
+
+这里省略了默认的replacement: $1，通过该配置可以将Kubernetes节点中定义的标签写入到样本的标签键值对中。
 
 ## 使用Relabeling过滤Target实例
 
