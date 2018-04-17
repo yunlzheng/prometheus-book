@@ -127,6 +127,8 @@ repalce操作允许用户根据Target的Metadata标签重写或者写入新的�
 
 这里省略了默认的replacement: $1，通过该配置可以将Kubernetes节点中定义的标签写入到样本的标签键值对中。
 
+> TODO labeldrop/labelkeep
+
 ## 使用Relabeling过滤Target实例
 
 在上一部分中，我们在relabel_config中使用了replace的行为，其可以帮助用户为时间序列添加一个自定义的特征维度。而本节开头还提到过第二个问题，使用中心化的服务发现注册中心时，所有环境的Exporter实例都会注册到该服务发现注册中心中。而不同职能（开发、测试、运维）的人员可能只关心其中一部分的监控数据，他们可能各自部署的自己的Prometheus Server用于监控自己关心的指标数据，如果让这些Prometheus Server采集所有环境中的所有Exporter数据显然会存在大量的资源浪费。如何让这些不同的Prometheus Server采集各自关心的内容？答案还是Relabeling，relabel_config的action除了默认的replace以外，还支持keep/drop行为。例如，如果我们只希望采集数据中心dc1中的Node Exporter实例的样本数据，那么可以使用如下配置：
