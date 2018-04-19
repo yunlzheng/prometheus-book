@@ -4,7 +4,7 @@ Consul是由HashiCorp开发的一个支持多数据中心的分布式服务发�
 
 ## Consul初体验
 
-用过可以通过Consul官网![https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
+用过可以通过Consul官网[https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
 
 在本地可以使用开发者模式在本地快速启动一个单节点的Consul环境：
 
