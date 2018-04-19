@@ -29,15 +29,13 @@
 * ```__metrics_path__```：采集目标服务访问地址的访问路径
 * ```__param_<name>```：采集任务目标服务的中包含的请求参数
 
-默认情况下，Target中包含的标签都会写入到从该实例获取到的监控样本中。例如在“基于文件的服务发现”小结中，如果通过labels自定义的标签会直接写入到样本数据中：
+默认情况下，Target中包含的所有不以__为前缀的标签都会写入到从该实例获取到的监控样本中。例如在“基于文件的服务发现”小结中，如果通过labels自定义的标签会直接写入到样本数据中：
 
 ```
 node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 ```
 
-而以__作为前缀的标签则仅作用与Target实例中，不会被写入到采集到的样本中。不过这里有一些例外，例如在默认情况下，Prometheus会将当前实例的```__address```值，写入到样本的instance标签中。这种在采集和保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。
-
-同时Prometheus允许用户通过在采集任务中设置relabel_configs来添加自定义的Relabel过程。Relabeling机制可以让我们为样本动态的添加一些额外的维度。
+不过这里有一些例外，例如在默认情况下，Prometheus会将当前实例标签```__address__```的值写入到样本的instance标签中。这种在采集和保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。同时Prometheus允许用户通过在采集任务中设置relabel_configs来添加自定义的Relabel过程。Relabeling机制可以让我们为样本动态的添加一些额外的维度。
 
 例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
 
