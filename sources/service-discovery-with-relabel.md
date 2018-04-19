@@ -29,7 +29,17 @@
 * ```__metrics_path__```：采集目标服务访问地址的访问路径
 * ```__param_<name>```：采集任务目标服务的中包含的请求参数
 
-通过服务发现动态发现的Target实例还会包含一些额外的标签信息一般以__meta开头，例如通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
+默认情况下，Target中包含的标签都会写入到从该实例获取到的监控样本中。例如在“基于文件的服务发现”小结中，如果通过labels自定义的标签会直接写入到样本数据中：
+
+```
+node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
+```
+
+而以__作为前缀的标签则仅作用与Target实例中，不会被写入到采集到的样本中。不过这里有一些例外，例如在默认情况下，Prometheus会将当前实例的```__address```值，写入到样本的instance标签中。这种在采集和保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。
+
+同时Prometheus允许用户通过在采集任务中设置relabel_configs来添加自定义的Relabel过程。Relabeling机制可以让我们为样本动态的添加一些额外的维度。
+
+例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
 
 * __meta_consul_address: consul地址
 * __meta_consul_dc: consul中服务所在的数据中心
@@ -41,23 +51,21 @@
 * __meta_consul_service: 服务名称
 * __meta_consul_tags: 服务包含的标签信息
 
-在默认情况下，Prometheus在保存监控样本之前会根据当前Target实例的Metadata标签信息动态重新样本的标签值。例如，从Node Exporter中获取的原始样本为：
+在默认情况下，从Node Exporter实例采集上来的样本数据如下所示：
 
 ```
-node_cpu{cpu="cpu0",mode="idle"} 93970.8203125
+node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"} 93970.8203125
 ```
 
-而实际保存到Promtheus中的样本为：
+我们希望能有一个额外的标签dc可以表示该样本的来源的数据中心：
 
 ```
-node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"}
+node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle", dc="dc1"} 93970.8203125
 ```
-
-其中job标签的值对应采集任务的job_name，而instance则是从Metadata的```__address```标签中获取。这种在保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。
 
 ## 使用Relabeling重写标签
 
-用户可以在每一个采集任务的配置中添加多个relabel_config配置，一个最简单的relabel配置如下：
+在每一个采集任务的配置中可以添加多个relabel_config配置，一个最简单的relabel配置如下：
 
 ```
 scrape_configs:
@@ -114,7 +122,9 @@ node_cpu{cpu="cpu0",dc="dc1",instance="172.21.0.6:9100",job="consul_sd",mode="gu
 
 repalce操作允许用户根据Target的Metadata标签重写或者写入新的标签键值对，在多环境的场景下，可以帮助用户添加与环境相关的特征维度，从而可以更好的对数据进行聚合。
 
-除了使用replace的方式覆写标签以外，还可以使用labelmap的方式。当action为labelmap时，Prometheus会使用正则表达式regex去匹配Target中所有的标签名称，并且匹配到的标签的值写入到replacement中。例如，在监控Kubernetes下所有的主机节点时，为将这些节点上定义的标签写入到样本中时，可以使用如下relabel_config配置：
+除了使用replace以外，还可以定义action的配置为labelmap。与replace不同的时，labelmap会根据regex的定义去匹配Target实例所有标签的名称，并且以匹配到的内容为新的标签名称，其值作为新标签的值。
+
+例如，在监控Kubernetes下所有的主机节点时，为将这些节点上定义的标签写入到样本中时，可以使用如下relabel_config配置：
 
 ```
 - job_name: 'kubernetes-nodes'
@@ -125,13 +135,19 @@ repalce操作允许用户根据Target的Metadata标签重写或者写入新的�
     regex: __meta_kubernetes_node_label_(.+)
 ```
 
-这里省略了默认的replacement: $1，通过该配置可以将Kubernetes节点中定义的标签写入到样本的标签键值对中。
+而使用labelkeep或者labeldrop则可以对Target标签进行过滤，仅保留符合过滤条件的标签，例如：
 
-> TODO labeldrop/labelkeep
+```
+relabel_configs:
+  - regex: label_should_drop_(.+)
+    action: labeldrop
+```
 
-## 使用Relabeling过滤Target实例
+该配置会使用regex匹配当前Target实例的所有标签，并将符合regex规则的标签从Target实例中移除。labelkeep正好相反，会移除那些不匹配regex定义的所有标签。
 
-在上一部分中，我们在relabel_config中使用了replace的行为，其可以帮助用户为时间序列添加一个自定义的特征维度。而本节开头还提到过第二个问题，使用中心化的服务发现注册中心时，所有环境的Exporter实例都会注册到该服务发现注册中心中。而不同职能（开发、测试、运维）的人员可能只关心其中一部分的监控数据，他们可能各自部署的自己的Prometheus Server用于监控自己关心的指标数据，如果让这些Prometheus Server采集所有环境中的所有Exporter数据显然会存在大量的资源浪费。如何让这些不同的Prometheus Server采集各自关心的内容？答案还是Relabeling，relabel_config的action除了默认的replace以外，还支持keep/drop行为。例如，如果我们只希望采集数据中心dc1中的Node Exporter实例的样本数据，那么可以使用如下配置：
+## 使用keep/drop过滤Target实例
+
+在上一部分中我们介绍了Prometheus的Relabeling机制，并且使用了replace/labelmap/labelkeep/labeldrop对标签进行管理。而本节开头还提到过第二个问题，使用中心化的服务发现注册中心时，所有环境的Exporter实例都会注册到该服务发现注册中心中。而不同职能（开发、测试、运维）的人员可能只关心其中一部分的监控数据，他们可能各自部署的自己的Prometheus Server用于监控自己关心的指标数据，如果让这些Prometheus Server采集所有环境中的所有Exporter数据显然会存在大量的资源浪费。如何让这些不同的Prometheus Server采集各自关心的内容？答案还是Relabeling，relabel_config的action除了默认的replace以外，还支持keep/drop行为。例如，如果我们只希望采集数据中心dc1中的Node Exporter实例的样本数据，那么可以使用如下配置：
 
 ```
 scrape_configs:
@@ -147,3 +163,41 @@ scrape_configs:
 ```
 
 当action设置为keep时，Prometheus会丢弃source_labels的值中没有匹配到regex正则表达式内容的Target实例，而当action设置为drop时，则会丢弃那些source_labels的值匹配到regex正则表达式内容的Target实例。可以简单理解为keep用于选择，而drop用于排除。
+
+## 使用hashmod计算source_labels的Hash值
+
+当relabel_config设置为hashmod时，Promtheus会根据modulus的值作为系数，计算source_labels值的hash值。例如：
+
+```
+scrape_configs
+- job_name: 'file_ds'
+  relabel_configs:
+    - source_labels: [__address__]
+      modulus:       4
+      target_label:  tmp_hash
+      action:        hashmod
+  file_sd_configs:
+  - files:
+    - targets.json
+```
+
+根据当前Target实例```__address__```的值以4作为系数，这样每个Target实例都会包含一个新的标签tmp_hash，并且该值的范围在1~4之间，查看Target实例的标签信息，可以看到如下的结果，每一个Target实例都包含了一个新的tmp_hash值：
+
+![计算Hash值](http://p2n2em8ut.bkt.clouddn.com/relabel_hash_mode.png)
+
+在第6章的“Prometheus高可用”小节中，正是利用了Hashmod的能力在Target实例级别实现对采集任务的功能分区的:
+
+```
+scrape_configs:
+  - job_name: some_job
+    relabel_configs:
+    - source_labels: [__address__]
+      modulus:       4
+      target_label:  __tmp_hash
+      action:        hashmod
+    - source_labels: [__tmp_hash]
+      regex:         ^1$
+      action:        keep
+```
+
+这里需要注意的是，如果relabel的操作只是为了产生一个临时变量，以作为下一个relabel操作的输入，那么我们可以使用```__tmp```作为标签名的前缀，通过该前缀定义的标签就不会写入到Target或者采集到的样本的标签中。

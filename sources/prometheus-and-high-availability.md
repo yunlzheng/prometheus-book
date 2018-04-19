@@ -52,14 +52,13 @@ global:
     slave: 1  # This is the 2nd slave. This prevents clashes between slaves.
 scrape_configs:
   - job_name: some_job
-    # Add usual service discovery here, such as static_configs
     relabel_configs:
     - source_labels: [__address__]
-      modulus:       4    # 4 slaves
+      modulus:       4
       target_label:  __tmp_hash
       action:        hashmod
     - source_labels: [__tmp_hash]
-      regex:         ^1$  # This is the 2nd slave
+      regex:         ^1$
       action:        keep
 ```
 
