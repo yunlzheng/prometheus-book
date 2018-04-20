@@ -20,15 +20,15 @@
 
 ## 扩展Prometheus
 
-除了这些已有的Exporter程序以外，为了让社区和用户可以快速实现对Prometheus的支持，Prometheus官方以及第三方提供了大量可选的Client Library。基于这些Client Library用户可以实现自己的Exporter程序，或者直接在应用程序中进行集成，从而可以避免部署和管理多个应用程序实例。目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
+除了这些社区直接提供的Exporter程序，Prometheus还提供了丰富的SDK。使用这些SDK用户可以快速实现自己的Exporter程序。目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
 
-对于用户而言，一般可以在以下场景中使用Prometheus提供的这些Client Library：
+对于用户而言，一般可以在3种场景下使用Prometheus提供的这些SDK：
 
-第一种，创建Exporter程序。当用户需要采集特定的监控指标时，可以使用Client Library创建一个单独的Exporter程序。目前Prometheus官方以及第三方已经实现了大量的Exporter可以满足用户大多数的监控需求。
+* 直接创建Exporter程序。当用户需要采集特定的监控指标时，可以使用SDK创建一个单独运行的Exporter程序。
 
-第二种，直接在应用程序当中集成。 除了独立运行的Exporter程序以外， 用户还可以直接在软件当中集成Client Library，以支持向Promthues暴露监控指标，从而不需要运行独立的Exporter程序。目前在开源社区中已经有很多软件件直接集成了对Prometheus的支持，例如：Ceph, Collectd, ETCD, Kubernetes, Linkerd，Telegraf等。这种方式可以更好的监控应用(或者服务)的内部运行状态。
+* 直接在应用程序当中集成。 直接将对Prometheus的支持内置到应用程序当中，这种方式可以更好的监控应用(或者服务)的内部运行状态。目前开源社区中已经有很多软件件直接集成了对Prometheus的支持，例如：Ceph, Collectd, ETCD, Kubernetes, Linkerd，Telegraf等。
 
-第三种，封装到公共库中。用于直接在用户自己的公共库中集成Prometheus Client Library。从而可以使得使用了这些公共库的应用程序透明地集成对Prometheus的支持。目前开源社区中也有这样的例子，例如Clojure中的prometheus-clj，Java下的Hystrix metrics publisher都是这样的模式。
+* 封装到公共库中。 用户可以把Promtheus SDK集成到公共库中，从而可以使得使用了这些公共库的应用程序透明地集成对Prometheus的支持。 目前开源社区中也有这样的例子，例如Clojure中的prometheus-clj，Java下的Hystrix metrics publisher都是这样的模式。
 
 ![Prometheus Client Library应用场景](http://p2n2em8ut.bkt.clouddn.com/client-library-usage.png)
 
