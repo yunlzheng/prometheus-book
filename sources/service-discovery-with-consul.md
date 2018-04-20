@@ -101,7 +101,7 @@ $ consul agent -dev -config-dir=/etc/consul.d
 
 一旦服务注册成功之后，用户就可以通过DNS或HTTP API的方式查询服务信息。在Consul当中默认情况下，所有的服务都可以使用NAME.service.consul域名的方式进行访问。
 
-例如，这是可以使用node_exporter.service.consul域名查询node_exporter服务的信息：
+例如，可以使用node_exporter.service.consul域名查询node_exporter服务的信息：
 
 ```
 $ dig @127.0.0.1 -p 8600 node_exporter.service.consul

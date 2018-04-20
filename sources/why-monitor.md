@@ -71,7 +71,7 @@ http_request_status{code='200',content_path='/api/path2', environment='produment
 
 这些表示维度的标签可能来源于你的监控对象，比如code=404或者content_path=/api/path。也可能来源于的你的环境定义，比如environment=produment。基于这些维度我们可以方便地对监控数据进行聚合，过滤，裁剪。
 
-##### 强大的查询语言PromQl
+##### 强大的查询语言PromQL
 
 Prometheus内置了一个强大的自定义查询语言PromQL,通过PromQL可以对采集到的进行查询，聚合。同时PromQL还被应用于数据可视化(结合其他工具如Grafana)以及告警当中。
 
@@ -118,4 +118,4 @@ Prometheus Server中自带了一个Prometheus UI，通过这个UI可以方便地
 
 因此你甚至可以在不使用Prometheus的情况下，采用Prometheus的client library来让你的应用程序支持监控数据采集。
 
-接下来。在本书当中，将带领读者感受Prometheus是如何对监控系统的重新定义。
+接下来，在本书当中，将带领读者感受Prometheus是如何对监控系统的重新定义。

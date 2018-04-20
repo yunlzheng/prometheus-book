@@ -7,4 +7,4 @@
 * Promtheus的数据模型
 * Promthues中监控指标的类型
 * 深入PromQL
-* 监控的最佳实践
+* 4个黄金指标和USE方法

@@ -41,7 +41,7 @@ public class Server {
 
 ```
 
-运行mian，并且访问[http://localhost:1234/metrics](http://localhost:1234/metrics)，可以在网页中看到以下内容。
+运行main函数，并且访问[http://localhost:1234/metrics](http://localhost:1234/metrics)，可以在网页中看到以下内容。
 
 ```
 # HELP jvm_info JVM version info
@@ -100,7 +100,7 @@ HTTPServer中则创建了一个HTTPMetricHandler用于来处理Prometheus抓取�
         start(daemon);
 ```
 
-HTTPMetricHandler作用负责响应Prometheus Server向该Exporter发起的请求。通过从CollectorRegistry.defaultRegistry中所有的Collector实例的collect()方法中获取样本数据，并对样本数据进行格式化，从而将监控样本返回给Prometheus Server:
+HTTPMetricHandler主要负责响应Prometheus Server向该Exporter发起的请求。通过从CollectorRegistry.defaultRegistry中所有的Collector实例的collect()方法中获取样本数据，并对样本数据进行格式化，从而将监控样本返回给Prometheus Server:
 
 ``` java
  public void handle(HttpExchange t) throws IOException {
@@ -134,7 +134,7 @@ HTTPMetricHandler作用负责响应Prometheus Server向该Exporter发起的请�
         }
 ```
 
-这里以GarbageCollectorExports为例，collect()方法，会从java.lang.management中获取到GC回收相关的运行数据，并且转换为SummaryMetricFamily：
+这里以GarbageCollectorExports为例，collect()方法会从java.lang.management中获取到GC回收相关的运行数据，并且转换为SummaryMetricFamily：
 
 ```
 package io.prometheus.client.hotspot;
@@ -185,11 +185,11 @@ public class GarbageCollectorExports extends Collector {
 
 ## 自定义Collector
 
-在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。通过添加自定义的Collector用户可以轻松实现对外部系统（或者服务）的监控数据收集。
+在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。通过添加自定义的Collector，用户可以轻松实现对外部系统（或者服务）的监控数据收集。
 
 ![使用自定义Collector监控第三方监控指标](http://p2n2em8ut.bkt.clouddn.com/custom_collector.png)
 
-以下代码，演示了如果这Exporter中创建自定义Collector:
+以下代码，演示了如何写在Exporter中创建自定义Collector:
 
 ```
 class YourCustomCollector extends Collector {
@@ -205,9 +205,11 @@ class YourCustomCollector extends Collector {
     return mfs;
   }
 }
+```
 
 实现Collector后通过register()方法，将其注册到CollectorRegistry中：
 
+```
 // Registration
 static final YourCustomCollector requests = new YourCustomCollector().register()
 ```
@@ -218,7 +220,7 @@ static final YourCustomCollector requests = new YourCustomCollector().register()
 
 除了通过实现Collector接口以外，Prometheus的Java Client还内置了多种类型构造器，如Counter、Gauge、Histogram、Summary等。 通过这些构造器，用户可以直接在业务代码中实现监控样本收集，从而可以监控程序的内部运行情况。
 
-Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。 例如，当需要需要统计对某些特定方法调用次数的统计时，可以通过以下方式实现：
+Counter是对client_java中对Collector的一个针对计数器类型指标的封装。对于Counter而言只有一个.inc()方法用于计数+1。 例如，当需要统计对某些特定方法调用次数的统计时，可以通过以下方式实现：
 
 ```
 import io.prometheus.client.Counter;
@@ -233,7 +235,7 @@ class YourClass {
 }
 ```
 
-Gauge,可增可减的仪表盘。可以通过.inc()和.dec()对样本数据进行+1或者-1。例如，可以通过Gauge统计函数中某个方法正在处理中的调用次数：
+Gauge是一个可增可减的仪表盘，可以通过.inc()和.dec()对样本数据进行+1或者-1。例如，可以通过Gauge统计函数中某个方法正在处理中的调用次数：
 
 ```
 class YourClass {
@@ -248,7 +250,7 @@ class YourClass {
 }
 ```
 
-Histogram，自带buckets区间用于统计分布统计。主要用于在指定分布范围内(Buckets)记录大小或者事件发生的次数。通过构造Histogram可以记录某个方法的处理时间在Buckets上的分布情况。默认的Buckets范围为{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}。如何需要覆盖默认的buckets，可以使用.buckets(double… buckets)覆盖。以下代码会自动统计请求的响应时间以及请求的数据量在Buckets下的分布情况。
+Histogram是一个自带buckets区间的用于统计分布的对象，主要用于在指定分布范围内(Buckets)记录大小或者事件发生的次数。通过构造Histogram可以记录某个方法的处理时间在Buckets上的分布情况。默认的Buckets范围为{.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10}。如果需要覆盖默认的buckets，可以使用.buckets(double… buckets)覆盖。以下代码会自动统计请求的响应时间以及请求的数据量在Buckets下的分布情况。
 
 ```
 class YourClass {
@@ -271,7 +273,7 @@ class YourClass {
 }
 ```
 
-在前面的部分讲过Summary与Histogram非常类似，都可以完成对事件发生次数或者大小分布情况的统计。区别在于Summary是实现就在客户端完成了分位数的统计和计算,通过quantile()方法可以指定需要计算的分位数。以下代码会自动计算当前请求延迟和请求量大小的中位数以及9分位数。
+在前面的部分介绍过Summary与Histogram非常类似，都可以完成对事件发生次数或者大小分布情况的统计。区别在于Summary直接在客户端完成了分位数的统计和计算,通过quantile()方法可以指定需要计算的分位数。以下代码会自动计算当前请求延迟和请求量大小的中位数以及9分位数。
 
 ```
 class YourClass {

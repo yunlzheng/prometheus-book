@@ -1,6 +1,6 @@
 # 监控MySQL运行状态
 
-MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行时保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。
+MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行是保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。
 
 ## 部署MySQLD Exporter
 
@@ -168,7 +168,7 @@ mysql> SHOW GLOBAL STATUS LIKE "Threads_connected";
 1 row in set (0.00 sec)
 ```
 
-当所有可用连接都被占用时，如果一个客户端尝试连接至MySQL，会出现“Too many connections(连接数过多)”错误，同时Connection_errors_max_connections的值也会增加。为了防止出现此类情况，你应该监控可用连接的数量，并确保其值保持在max_connections限制以内。同时如果Aborted_connects的数量不断增加时，说明客户端尝试连接到MySQL都失败了。这是应该通过Connection_errors_max_connections以及Connection_errors_internal分析连接失败的问题原因。
+当所有可用连接都被占用时，如果一个客户端尝试连接至MySQL，会出现“Too many connections(连接数过多)”错误，同时Connection_errors_max_connections的值也会增加。为了防止出现此类情况，你应该监控可用连接的数量，并确保其值保持在max_connections限制以内。同时如果Aborted_connects的数量不断增加时，说明客户端尝试连接到MySQL都失败了。此时可以通过Connection_errors_max_connections以及Connection_errors_internal分析连接失败的问题原因。
 
 下面列举了与MySQL连接相关的监控指标：
 
@@ -191,11 +191,11 @@ mysql_global_variables_max_connections - mysql_global_status_threads_connected
 mysql_global_status_aborted_connects
 ```
 
-## 缓冲池使用情况
+## 监控缓冲池使用情况
 
-MySQL默认的存储引擎InnoDB使用了一篇称为缓冲池的内存区域，用于缓存数据表以及索引的数据。 当缓冲池的资源使用超出限制后，可能会导致数据库性能的下降，同时很多查询命令回直接在磁盘中执行，导致磁盘I/O不断攀升。 因此关注MySQL缓冲池的资源使用情况，并且在合理的时间扩大缓冲池的大小可以优化数据库的性能。
+MySQL默认的存储引擎InnoDB使用了一片称为缓冲池的内存区域，用于缓存数据表以及索引的数据。 当缓冲池的资源使用超出限制后，可能会导致数据库性能的下降，同时很多查询命令会直接在磁盘中执行，导致磁盘I/O不断攀升。 因此，应该关注MySQL缓冲池的资源使用情况，并且在合理的时间扩大缓冲池的大小可以优化数据库的性能。
 
-Innodb_buffer_pool_pages_total反应了当前缓冲池中的内存页的总页数。可以通过以下指令查看：
+Innodb_buffer_pool_pages_total反映了当前缓冲池中的内存页的总页数。可以通过以下指令查看：
 
 ``` text
 mysql> SHOW GLOBAL STATUS LIKE "Innodb_buffer_pool_pages_total";

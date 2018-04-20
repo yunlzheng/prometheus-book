@@ -16,7 +16,7 @@
   - [PromQL操作符](./sources/prometheus-promql-operators.md)
   - [PromQL内置函数](./sources/prometheus-promql-functions.md)
   - [在HTTP API中使用PromQL](./sources/prometheus-promql-with-http-api.md)
-  - [最佳实践](./sources/prometheus-promql-best-praticase.md)
+  - [最佳实践：4个黄金指标和USE方法](./sources/prometheus-promql-best-praticase.md)
   - [小结](./chapter2/SUMMARY.md)
 - [第3章 Prometheus告警处理](./chapter3/README.md)
   - [Prometheus告警简介](./sources/prometheus-alert-manager-overview.md)
@@ -81,7 +81,7 @@
   - [TCP探针](./sources/blackbox-tcp-probe.md)
   - [DNS探针](./sources/blackbox-dns-probe.md)
   - [ICMP探针](./sources/blackbox-icmp-probe.md)
-  - [IPv4和IPv6探针](./sources/blackbox-ipvx-probe.md)
+  - [IPv4和IPv6](./sources/blackbox-ipvx-probe.md)
   - 小结
 - [第9章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
   - Kubernetes简介

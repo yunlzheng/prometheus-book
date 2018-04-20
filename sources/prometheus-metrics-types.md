@@ -12,7 +12,7 @@
 
 计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
 
-对于Counter类型的指标，只包含一个inc()方法，用于计数器+1L。
+对于Counter类型的指标，只包含一个inc()方法，用于计数器+1。
 
 一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
 
