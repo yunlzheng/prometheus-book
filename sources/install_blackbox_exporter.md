@@ -127,4 +127,6 @@ scrape_configs:
 * 第2步，获取__param_target的值，并覆写到instance标签中；
 * 第3步，覆写Target实例的```__address__```标签值为BlockBox Exporter实例的访问地址。
 
-通过以上3个relabel步骤，即可大大简化Prometheus任务配置的复杂度
+通过以上3个relabel步骤，即可大大简化Prometheus任务配置的复杂度:
+
+![Blackbox Target实例](http://p2n2em8ut.bkt.clouddn.com/relabel_blackbox_targets.png)
