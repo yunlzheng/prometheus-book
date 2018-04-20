@@ -76,13 +76,12 @@
   - [服务发现与Relabel](./sources/service-discovery-with-relabel.md)
   - [小结](./chapter6/SUMMARY.md)
 - [第8章 使用BlackBox监控网络](./chapter9/README.md)
-  - [白盒和黑盒监控](./sources/install_blackbox_exporter.md)
-  - 部署Blackbox exporter
-  - HTTP探针
-  - TCP 探针
-  - DNS 探针
-  - ICMP 探针
-  - IPv4和IPv6
+  - [黑盒监控和Blackbox Exporter](./sources/install_blackbox_exporter.md)
+  - [HTTP探针](./sources/blackbox-http-probe.md)
+  - [TCP探针](./sources/blackbox-tcp-probe.md)
+  - [DNS探针](./sources/blackbox-dns-probe.md)
+  - [ICMP探针](./sources/blackbox-icmp-probe.md)
+  - [IPv4和IPv6探针](./sources/blackbox-ipvx-probe.md)
   - 小结
 - [第9章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
   - Kubernetes简介

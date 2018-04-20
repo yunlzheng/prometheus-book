@@ -1,14 +1,36 @@
-# 白盒和黑盒监控
+# 黑盒监控
+
+在前面的章节中我们主要介绍了Prometheus下如何进行白盒监控，我们监控主机的资源用量、容器的运行状态、数据库中间件的运行数据。 这些都是支持业务和服务的基础设施，通过白盒能够了解其内部的实际运行状态，通过对监控指标的观察能够预判可能出现的问题，从而对潜在的不确定因素进行优化。而从完整的监控逻辑的角度，除了大量的应用白盒监控以外，还应该添加适当的黑盒监控。黑盒监控即以用户的身份测试服务的外部可见性，常见的黑盒监控包括HTTP探针、TCP探针等用于检测站点或者服务的可访问性，以及访问效率等。
+
+黑盒监控相较于白盒监控最大的不同在于黑盒监控是以故障为导向当故障发生时，黑盒监控能快速发现故障，而白盒监控则侧重于主动发现或者预测潜在的问题。一个完善的监控目标是要能够从白盒的角度发现潜在问题，能够在黑盒的角度快速发现已经发生的问题。
+
+![黑盒监控和白盒监控](http://p2n2em8ut.bkt.clouddn.com/blackbox-whitebox-tower.png)
 
 ## 使用Blackbox Exporter
 
-Blackbox Exporter允许用户通过：HTTP、HTTPS、DNS、TCP以及ICMP的方式对网络进行探测。用户可以直接使用go get命令获取Blackbox Exporter源码并生成本地可执行文件：
+Blackbox Exporter是Prometheus社区提供的官方黑盒监控解决方案，其允许用户通过：HTTP、HTTPS、DNS、TCP以及ICMP的方式对网络进行探测。用户可以直接使用go get命令获取Blackbox Exporter源码并生成本地可执行文件：
 
 ```
 go get prometheus/blackbox_exporter
 ```
 
-运行Blackbox Exporter时，需要用户提供探针的配置信息，这些配置信息可能是一些自定义的HTTP头信息，也可能是探测时需要的一些TSL配置，也可能是探针本身的验证行为。在Blackbox Exporter每一个探针配置称为一个module，并且以YAML配置文件的形式提供给Blackbox Exporter。 如下所示，是一个简化的探针配置文件blockbox.yml:
+运行Blackbox Exporter时，需要用户提供探针的配置信息，这些配置信息可能是一些自定义的HTTP头信息，也可能是探测时需要的一些TSL配置，也可能是探针本身的验证行为。在Blackbox Exporter每一个探针配置称为一个module，并且以YAML配置文件的形式提供给Blackbox Exporter。 每一个module主要包含以下配置内容，包括探针类型（prober）、验证访问超时时间（timeout）、以及当前探针的具体配置项：
+
+```
+  # 探针类型：http、 tcp、 dns、 icmp.
+  prober: <prober_string>
+
+  # 超时时间
+  [ timeout: <duration> ]
+
+  # 探针的详细配置，最多只能配置其中的一个
+  [ http: <http_probe> ]
+  [ tcp: <tcp_probe> ]
+  [ dns: <dns_probe> ]
+  [ icmp: <icmp_probe> ]
+```
+
+下面是一个简化的探针配置文件blockbox.yml，包含两个HTTP探针配置项：
 
 ```
 modules:
@@ -22,13 +44,13 @@ modules:
       method: POST
 ```
 
-通过运行一下命令启动Blockbox Exporter实例：
+通过运行以下命令，并指定使用的探针配置文件启动Blockbox Exporter实例：
 
 ```
 blackbox_exporter --config.file=/etc/prometheus/blackbox.yml
 ```
 
-启动成功后，就可以通过访问![http://127.0.0.1:9115/probe?module=http_2xx&target=baidu.com](http://127.0.0.1:9115/probe?module=http_2xx&target=baidu.com)对baidu.com进行探测。这里通过在URL中提供module参数指定了当前使用的探针，target参数指定探测目标，探针的探测结果通过Metrics的形式返回：
+启动成功后，就可以通过访问[http://127.0.0.1:9115/probe?module=http_2xx&target=baidu.com](http://127.0.0.1:9115/probe?module=http_2xx&target=baidu.com)对baidu.com进行探测。这里通过在URL中提供module参数指定了当前使用的探针，target参数指定探测目标，探针的探测结果通过Metrics的形式返回：
 
 ```
 # HELP probe_dns_lookup_time_seconds Returns the time taken for probe dns lookup in seconds
@@ -69,6 +91,8 @@ probe_ip_protocol 4
 # TYPE probe_success gauge
 probe_success 1
 ```
+
+从返回的样本中，用户可以获取站点的DNS解析耗时、站点响应时间、HTTP响应状态码等等和站点访问质量相关的监控指标，从而帮助管理员主动的发现故障和问题。
 
 ## 与Prometheus集成
 
@@ -130,3 +154,5 @@ scrape_configs:
 通过以上3个relabel步骤，即可大大简化Prometheus任务配置的复杂度:
 
 ![Blackbox Target实例](http://p2n2em8ut.bkt.clouddn.com/relabel_blackbox_targets.png)
+
+接下来，我们将详细介绍Blackbox中各种探针的使用方式。
