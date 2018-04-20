@@ -1,8 +1,6 @@
 # Prometheus简介
 
-> TODO: 替换草图
-
-Prometheus受启发于Google的Brogmon监控系统（相似的Kubernetes是从Google的Brog系统演变而来），从2012年开始由前Google工程师在Soundcloud以开源软件的形式进行研发，并且于2015年早期对外发布早期版本。2016年5月正式成为继Kubernetes之后的第二个正式加入CNCF基金会的项目，同年6月正式发布1.0版本。2017年底发布了基于全新存储层的2.0版本，能更好地与容器平台、云平台配合。
+Prometheus受启发于Google的Brogmon监控系统（相似的Kubernetes是从Google的Brog系统演变而来），从2012年开始由前Google工程师在Soundcloud以开源软件的形式进行研发，并且于2015年早期对外发布早期版本。2016年5月继Kubernetes之后成为第二个正式加入CNCF基金会的项目，同年6月正式发布1.0版本。2017年底发布了基于全新存储层的2.0版本，能更好地与容器平台、云平台配合。
 
 ![Prometheus简史](http://p2n2em8ut.bkt.clouddn.com/prometheus-release-roadmaps.png)
 
@@ -36,28 +34,28 @@ Prometheus作为新一代的云原生监控系统，目前已经有超过650+位
 
 ![Nagios监控原理](http://p2n2em8ut.bkt.clouddn.com/nagios-platform.png)
 
-首先对于大部分上一代监控系统而言，大部分的监控能力都是围绕系统的一些边缘性的问题，比如系统服务和资源的状态以及应用程序的可用性。Nagios启动后周期性的调用插件去检查服务器状态。Nagios提供了插件机制，比如check_disk可以用于检查磁盘空间，check_load用于检查CPU负载等。插件可以返回4种Nagios可识别的状态，0(OK)表示正常，1(WARNING)表示警告，2(CRITTCAL)表示错误，3(UNKNOWN)表示未知错误。并通过Web UI显示出来。
+首先对于大部分上一代监控系统而言，大部分的监控能力都是围绕系统的一些边缘性的问题，比如系统服务和资源的状态以及应用程序的可用性。Nagios启动后周期性的调用插件去检查服务器状态。Nagios提供了插件机制，比如check_disk可以用于检查磁盘空间，check_load用于检查CPU负载等。插件可以返回4种Nagios可识别的状态，0(OK)表示正常，1(WARNING)表示警告，2(CRITTCAL)表示错误，3(UNKNOWN)表示未知错误，并通过Web UI显示出来。
 
 ![Nagios主机监控页面](https://www.ibm.com/developerworks/cn/linux/1309_luojun_nagios/image049.jpg)
 
-以Nagios举例来说，通常会面临以下问题
+Nagios举例来说，使用者通常会面临以下问题：
 
 * 运维管理难度大：Nagios这一类监控系统本身运维管理难度就比较大，需要有专业的人员进行安装，配置和管理，而且过程并不简单；
 * 可扩展性低： 监控系统自身难以扩展，以适应监控规模的变化；
-* 问题定位难度大：而当问题产生之后（比如主机负载异常增加）对于用户而言，他们看到的依然是一个黑盒，他们无法了解主机上服务真正的运行情况，因此当故障发生后，这些告警信息并不能有效的支持用户对于故障根源问题的分析和定位；
-* 与业务脱离的监控：监控系统获取到的监控指标与业务本身也是一种分离的关系。好比客户可能关注的是服务的可用性，以及服务的SLA等级，而监控系统却只能根据系统负载去产生告警，业务和监控系统之间无法有效协作；
+* 问题定位难度大：当问题产生之后（比如主机负载异常增加）对于用户而言，他们看到的依然是一个黑盒，他们无法了解主机上服务真正的运行情况，因此当故障发生后，这些告警信息并不能有效的支持用户对于故障根源问题的分析和定位；
+* 与业务脱离的监控：监控系统获取到的监控指标与业务本身也是一种分离的关系。好比客户可能关注的是服务的可用性、服务的SLA等级，而监控系统却只能根据系统负载去产生告警。
 
-## Prometheus提供了什么？
+## Prometheus的优势？
 
 ##### 监控服务的内部运行状态
 
-Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的client库，用户可以轻松的在应用程序中添加对Prometheus监控的支持，从而让用户可以看到服务和应用内部真正的运行状态。
+Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的Client库，用户可以轻松的在应用程序中添加对Prometheus的支持，从而让用户可以获取服务和应用内部真正的运行状态。
 
 ![监控服务内部运行状态](http://p2n2em8ut.bkt.clouddn.com/pull%20vspush.png)
 
 ##### 强大的数据模型
 
-Prometheus是一个完全开源的监控系统，所有采集的监控数据均以指标(metric)的形式保存在内置的时间序列数据库当中(TSDB)。所有的样本除了基本的指标名称以外，还包含一系列用于描述该样本特征的标签(键值对)。
+Prometheus是一个完全开源的监控系统，所有采集的监控数据均以指标(metric)的形式保存在内置的时间序列数据库当中(TSDB)。所有的样本除了基本的指标名称以外，还包含一组用于描述该样本特征的标签。
 
 如下所示：
 
@@ -67,36 +65,36 @@ http_request_status{code='200',content_path='/api/path', environment='produment'
 http_request_status{code='200',content_path='/api/path2', environment='produment'} => [value1@timestamp1,value2@timestamp2...]
 ```
 
-当采集HTTP请求状态样本数据时，每一条时间序列表示由指标名称以及一组标签唯一标示。每条时间序列按照时间序列记录了一系列的样本值。
+每一条时间序列由指标名称(Metrics Name)以及一组标签(Labels)唯一标识。每条时间序列按照时间的先后顺序存储一系列的样本值。
 
-这些表示维度的标签可能来源于你的监控对象，比如code=404或者content_path=/api/path。也可能来源于的你的环境定义，比如environment=produment。基于这些维度我们可以方便地对监控数据进行聚合，过滤，裁剪。
+表示维度的标签可能来源于你的监控对象的状态，比如code=404或者content_path=/api/path。也可能来源于的你的环境定义，比如environment=produment。基于这些Labels我们可以方便地对监控数据进行聚合，过滤，裁剪。
 
 ##### 强大的查询语言PromQL
 
-Prometheus内置了一个强大的自定义查询语言PromQL,通过PromQL可以对采集到的进行查询，聚合。同时PromQL还被应用于数据可视化(结合其他工具如Grafana)以及告警当中。
+Prometheus内置了一个强大的数据查询语言PromQL。 通过PromQL可以实现对监控数据的查询、聚合。同时PromQL也被应用于数据可视化(如Grafana)以及告警当中。
 
-例如，通过PromQL可以轻松回答类似于以下问题：
+通过PromQL可以轻松回答类似于以下问题：
 
-* 在过去一段时间95%的应用延迟的分布范围？
-* 在4小时候后，磁盘空间占用大致会是什么情况？
-* CPU占用率前5位的服务有哪些？
+* 在过去一段时间中95%应用延迟时间的分布范围？
+* 预测在4小时候后，磁盘空间占用大致会是什么情况？
+* CPU占用率前5位的服务有哪些？(过滤)
 
 ##### 易于管理
 
-Prometheus核心部分只有一个单独的二进制文件，不存在任何的第三方依赖(数据库，缓存等等)。唯一需要的就是本地磁盘，因此不会潜在级联故障的风险。
+Prometheus核心部分只有一个单独的二进制文件，不存在任何的第三方依赖(数据库，缓存等等)。唯一需要的就是本地磁盘，因此不会有潜在级联故障的风险。
 
-Prometheus基于Pull模型的架构方式，可以在任何地方（本地电脑，开发环境，测试环境）搭建我们的监控系统。对于一些复杂的情况，我们可以基于服务发现(Service Discovery)用于动态发现监控目标。
+Prometheus基于Pull模型的架构方式，可以在任何地方（本地电脑，开发环境，测试环境）搭建我们的监控系统。对于一些复杂的情况，还可以使用Prometheus服务发现(Service Discovery)的能力动态管理监控目标。
 
 ##### 高效
 
-对于Prometheus而言大量的监控任务，意味着有大量样本数据的产生。而Prometheus可以高效地处理这些数据，对于单实例的Prometheus Server，可以处理：
+对于监控系统而言，大量的监控任务必然导致有大量的数据产生。而Prometheus可以高效地处理这些数据，对于单一Prometheus Server实例而言它可以处理：
 
 * 数以百万的监控指标
 * 每秒处理数十万的数据点。
 
 ##### 可扩展
 
-Prometheus是如此简单，因此你可以在每个数据中心，每个团队运行独立的Prometheus Sevrer。Prometheus对于联邦集群的支持，可以让Prometheus从其他Prometheus Server拉取监控指标样本。因此当对于单实例Prometheus Server来说监控的任务量过大时，我们可以使用功能分区(sharding)+联邦集群(federation)来进行扩展。
+Prometheus是如此简单，因此你可以在每个数据中心、每个团队运行独立的Prometheus Sevrer。Prometheus对于联邦集群的支持，可以让多个Prometheus实例产生一个逻辑集群，当单实例Prometheus Server处理的任务量过大时，通过使用功能分区(sharding)+联邦集群(federation)可以对其进行扩展。
 
 ##### 易于集成
 
