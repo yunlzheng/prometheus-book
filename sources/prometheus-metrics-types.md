@@ -1,64 +1,60 @@
 # Metric类型
 
-上一小节，介绍了Prometheus样本（Sample）保存采集到的监控数据，并且每一个样本通过一组唯一指标名称(metric_name)和键值对进行标识。同时在前面也了解过虽然所有样本数据的底层存储方式上并没有任何差异，但是每一个样本在不同的场景下却具有不同的含义。比如node exporter采集的监控数据中node_cpu记录的是CPU累积的使用时间，是一个只增加不减少的监控指标，并且在node exporter的/metrics页面返回的结果中也通过“Counter”对其注释。而node_load1则反映的是系统的当前状态，并且用“Gauge”对其注释。
+在上一小节中我们带领读者了解了Prometheus的底层数据模型，在Prometheus的存储实现上所有的监控样本都是以time-series的形式保存在Prometheus内存的TSDB（时序数据库）中，而time-series所对应的监控指标(metric)也是通过labelset进行唯一命名的。
 
-为了更好的定义这些不同场景下监控样本数据所代表的含义，除了以上看到的比如“Counter”、“Gauge”以外Prometheus还定义了另外两种类型"Histogram"和"Summary"。
+从存储上来讲所有的监控指标metric都是相同的，但是在不同的场景下这些metric又有一些细微的差异。 例如，在Node Exporter返回的样本中指标node_load1反应的是当前系统的负载状态，随着时间的变化这个指标返回的样本数据是在不断变化的。而指标node_cpu所获取到的样本数据却不同，它是一个持续增大的值，因为其反应的是CPU的累积使用时间，从理论上讲只要系统不关机，这个值是会无限变大的。
 
-![Metric类型](http://p2n2em8ut.bkt.clouddn.com/metrics%20types.png)
+为了能够帮助用户理解和区分这些不同监控指标之间的差异，Prometheus定义了4中不同的指标类型(metric type)：Counter（计数器）、Gauge（仪表盘）、Histogram（直方图）、Summary（摘要）。
 
-## 简单数据类型
-
-### Counter：只增不减的计数器
-
-计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
-
-对于Counter类型的指标，只包含一个inc()方法，用于计数器+1。
-
-一般而言，Counter类型的metrics指标在命名中我们使用_total结束。
-
-![Counter计时器](http://p2n2em8ut.bkt.clouddn.com/metrics_counter_type.png)
-
-通过指标io_namespace_http_requests_total我们可以：
-
-* 查询应用的请求总量
+在Exporter返回的样本数据中，其注释中也包含了该样本的类型。例如：
 
 ```
-# PromQL
-sum(io_namespace_http_requests_total)
+# HELP node_cpu Seconds the cpus spent in each mode.
+# TYPE node_cpu counter
+node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/httP_request_total.png)
+## Counter：只增不减的计数器
 
-* 查询每秒Http请求量
+Counter类型的指标其工作方式和计数器一样，只增不减（除非系统发生重置）。常见的监控指标，如http_requests_total，node_cpu都是Counter类型的监控指标。 一般在定义Counter类型指标的名称时推荐使用_total作为后缀。
 
-```
-# PromQL
-sum(rate(io_wise2c_gateway_requests_total[5m]))
-```
+Counter是一个简单但有强大的工具，例如我们可以在应用程序中记录某些事件发生的次数，通过以时序的形式存储这些数据，我们可以轻松的了解该事件产生速率的变化。PromQL内置的聚合操作和函数可以用户对这些数据进行进一步的分析：
 
-![](http://p2n2em8ut.bkt.clouddn.com/http_request_rate.png)
-
-* 查询当前应用请求量Top N的URI
+例如，通过rate()函数获取HTTP请求量的增长率：
 
 ```
-# PromQL
-topk(10, sum(io_namespace_http_requests_total) by (path))
+rate(http_requests_total[5m])
 ```
 
-### Gauge：可增可减的仪表盘
-
-可以用于反映应用的__当前状态__，这类可增可减的指标。例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
-
-例如，通过指标io_namespace_http_inprogress_requests我们可以直接查询应用当前正在处理中的Http请求数量：
+查询当前系统中，访问量前10的HTTP地址：
 
 ```
-# PromQL
-io_namespace_http_inprogress_requests{}
+topk(10, http_requests_total)
 ```
 
-## 复杂数据类型
+## Gauge：可增可减的仪表盘
 
-### Histogram：自带分区统计的分布统计图
+与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内容大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
+
+通过Gauge指标，用户可以直接查看系统的当前状态：
+
+```
+node_memory_MemFree
+```
+
+对于Gauge类型的监控指标，通过PromQL内置函数delta()可以获取样本在一段时间返回内的变化情况。例如，计算CPU温度在两个小时内的差异：
+
+```
+delta(cpu_temp_celsius{host="zeus"}[2h])
+```
+
+还可以使用deriv()计算样本的线性回归模型，甚至是直接使用predict_linear()对数据的变化趋势进行预测。例如，预测系统磁盘空间在4个小时之后的剩余情况：
+
+```
+predict_linear(node_filesystem_free{job="node"}[1h], 4 * 3600)
+```
+
+## Histogram：自带分区统计的分布统计图
 
 主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。
 
@@ -107,7 +103,7 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="+Inf",} 2.0
 ```
 
-### Summary：客户端定义的分布统计图
+## Summary：客户端定义的分布统计图
 
 Summary和Histogram非常类型相似，都可以统计事件发生的次数或者大小，以及其分布情况。
 

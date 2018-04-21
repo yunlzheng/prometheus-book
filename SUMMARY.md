@@ -10,7 +10,7 @@
   - [Prometheus核心组件](./sources/prometheus-architecture-and-components.md)
   - [小结](./chapter0/SUMMARY.md)
 - [第2章 探索PromQL](./chapter2/README.md)
-  - [理解Prometheus数据模型](./sources/what-is-prometheus-metrics-and-labels.md)
+  - [理解时间序列](./sources/what-is-prometheus-metrics-and-labels.md)
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
   - [PromQL操作符](./sources/prometheus-promql-operators.md)
