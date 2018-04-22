@@ -32,12 +32,8 @@
   - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
   - [监控容器运行状态](./sources/use-prometheus-monitor-container.md)
   - [监控MySQL运行状态](./sources/use-promethues-monitor-mysql.md)
-  <!-- - [监控Nginx运行状态](./sources/use-prometheus-monitor-nginx.md) -->
-  <!-- [使用PrometheusRabbitMQ运行状态](./sources/use-prometheus-monitor-rabbitmq.md) -->
   - [扩展Prometheus](./sources/custom_metrics_with_java_sdk.md)
   - [在Spring Boot中集成Prometheus](./sources/custom_app_support_prometheus.md)
-  <!-- - 使用Pushgateway -->
-  <!-- - 垮网络监控 -->
   - [小结](./chapter5/SUMMARY.md)
 - [第5章 可视化一切](./chapter4/README.md)
   - [Grafana简介](./sources/grafana-intro.md)
@@ -70,8 +66,6 @@
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - [基于文件的服务发现](./sources/service-discovery-with-file.md)
   - [基于Consul的服务发现](./sources/service-discovery-with-consul.md)
-  <!-- - [基于DNS的服务发现机制](./sources/service-discovery-with-dns.md) -->
-  <!-- - [基于EC2的服务发现机制](./sources/service-discovery-with-ec2.md) -->
   - [Kubernetes下的服务发现](./sources/service-discovery-with-k8s.md)
   - [服务发现与Relabel](./sources/service-discovery-with-relabel.md)
   - [小结](./chapter6/SUMMARY.md)
@@ -89,7 +83,6 @@
   - Prometheus Vs Heapster
   - 在Kubernetes下部署Prometheus
   - 采集Kubelet状态
-  <!-- - [采集集群状态](./sources/expose-cluster-level-metrics-with-kube-state-metrics.md) -->
   - 采集应用资源用量
   - 采集集群节点状态指标
   - 使用Grafana创建可视化仪表盘
