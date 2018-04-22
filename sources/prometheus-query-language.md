@@ -1,12 +1,12 @@
 # 初识PromQL
 
-Prometheus通过指标名称（metrics name）以及对应的一组标签（labels）唯一定义一条时间序列。指标名称反映了监控样本的基本标识，而label则在这个基本特征上为采集到的数据提供了多种特征维度。用户可以基于这些特征维度过滤，聚合，统计从而产生新的计算后的一条时间序列。
+Prometheus通过指标名称（metrics name）以及对应的一组标签（labelset）唯一定义一条时间序列。指标名称反映了监控样本的基本标识，而label则在这个基本特征上为采集到的数据提供了多种特征维度。用户可以基于这些特征维度过滤，聚合，统计从而产生新的计算后的一条时间序列。
 
-## 查询基础
+PromQL是Prometheus内置的数据查询语言，其提供对时间序列数据丰富的查询，聚合以及逻辑运算能力的支持。并且被广泛应用在Prometheus的日常应用当中，包括对数据查询、可视化、告警处理当中。可以这么说，PromQL是Promtheus所有应用场景的基础，理解和掌握PromQL是Prometheus入门的第一课。
+
+## 基础查询
 
 当Prometheus通过Exporter采集到相应的监控指标样本数据后，我们就可以通过PromQL对监控样本数据进行查询。
-
-### 基本查询
 
 当我们直接使用监控指标名称查询时，可以查询该指标下的所有时间序列。如：
 
@@ -20,143 +20,56 @@ http_requests_total
 http_requests_total{}
 ```
 
-该表达式会返回所有指标名称为http_requests_total的时间序列。
-
-```
-http_requests_total{code="200",handler="alerts",instance="localhost:9090",job="prometheus",method="get"} -> 1
-http_requests_total{code="200",handler="graph",instance="localhost:9090",job="prometheus",method="get"} -> 3
-http_requests_total{code="200",handler="graph",instance="other:9090",job="prometheus",method="get"} -> 3
-```
-
-SQL：
-
-```
-SELECT * FROM http_requests_total;
-```
-
-### 精确查询
-
-在查询数据时，我们还可以通过标签选择器对时间序列进行精确匹配查询。
-
-* 使用“label=value”表示选择标签完全匹配的时间序列。
-* ”label!=value“表示排除这些匹配的时间序列。
-
-如下所示，我们只查询所有http_requests_total时间序列中，标签instance为localhost:9090的时间序列。这里在标签选择器中我们使用“=”表示精确匹配
-
-```
-http_requests_total{instance="localhost:9090"}
-```
-
-相反的我们可以使用“!=”表示排除：
-
-```
-http_requests_total{instance!="localhost:9090"}
-```
-
-返回结果：
-
-```
-http_requests_total{code="200",handler="graph",instance="other:9090",job="prometheus",method="get"} -> 3
-```
-
-SQL：
-
-```
-SELECT * FROM http_requests_total WHERE instance="localhost:9090"
-```
-
-### 模糊查询
-
-除了精确查询以外，PromQL还可以通过正则表达式的方式，实现模糊查询。
-
-* 当需要使用正则表达式进行模糊查询时，需要使用“label=~regx”。
-* 相反的，“label!~regx”表示排除所有的匹配的时间序列。
-
-例如：
-
-```
-http_requests_total{environment=~"staging|testing|development",method!="GET"}
-```
-
-SQL：
-
-```
-SELECT * FROM http_requests_total WHERE environment LIKE '%testing%'
-```
-
-### 使用内置函数
-
-一般来说，如果描述样本特征的标签(label)在并非唯一的情况下，通过PromQL查询数据，会返回多条满足这些特征维度的时间序列。而PromQL提供的聚合操作可以用来对这些时间序列进行处理，形成一条新的时间序列。
-
-```
-# 查询系统所有http请求的总量
-sum(http_request_total)
-
-# 按照mode计算主机CPU的平均使用时间
-avg(node_cpu) by (mode)
-
-# 按照主机查询各个主机的CPU使用率
-sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (instance)
-```
-
-## PromQL的返回值
-
-通过上面的几个简单例子我们可以看出，通过指标名称(metric name)以及指标的维度labels，通过Prometheus提供的PromQL查询语言，我们可以根据样本特征对时序数据进行过滤。同时多条时间序列之间的数据还可以进行聚合以及数学操作，从而形成一条新的时间序列。
-
-在PromQL中如果表达式返回的是一组时序数据，并且每条时间序列只包含给定时间戳（瞬时）的单个样本数据 这些返回数据的类型在Prometheus中我们称为瞬时向量（Instant vector）。
-
-### 瞬时向量（Instant vector）
-
-例如，使用如下表达式，会可以过滤并查询到一组时间序列以及给定时间戳（瞬时，一般为最后一次采集数据的时戳）的单个样本数据。
-
-```
-http_request_total{code="200"}
-```
-
-会返回一组时间序列
+该表达式会返回指标名称为http_requests_total的所有时间序列：
 
 ```
 http_requests_total{code="200",handler="alerts",instance="localhost:9090",job="prometheus",method="get"}=(20889@1518096812.326)
 http_requests_total{code="200",handler="graph",instance="localhost:9090",job="prometheus",method="get"}=(21287@1518096812.326)
 ```
-并且这组时间序列的样本数据共享相同的时间戳。
 
-这一类表达式，我们称为**瞬时向量选择器**，瞬时向量选择器返回的数据类型为**瞬时向量**。
+## 使用标签过滤时间序列
 
-瞬时向量选择器，至少包含一个指标名称(例如http_request_total)，或者一个不会匹配到空字符串的标签过滤器(例如{code="200"})。
+PromQL还支持用户根据时间序列的标签匹配模式来对时间序列进行过滤，目前主要支持两种匹配模式：完全匹配和正则匹配。
 
-因此以下两种方式，均为合法的表达式：
+PromQL支持使用```=```和```!=```两种完全匹配模式：
 
-```
-http_request_total # 合法
-http_request_total{} # 合法
-{method="get"} # 合法
-```
+* 通过使用```label=value```可以选择那些标签满足表达式定义的时间序列；
+* 反之使用```label!=value```则可以根据标签匹配排除时间序列；
 
-而如下表达式，则不合法：
+例如，如果我们只需要查询所有http_requests_total时间序列中满足标签instance为localhost:9090的时间序列，则可以使用如下表达式：
 
 ```
-{job=~".*"} # 不合法
+http_requests_total{instance="localhost:9090"}
 ```
 
-同时，除了使用metrics{label=value}的形式，使用metrics指定监控指标以外，我们还可以使用内置的```__name__```指定监控指标名称：
+反之使用```instance!="localhost:9090"```则可以排除这些时间序列：
 
 ```
-{__name__=~"http_request_total"} # 合法
-{__name__=~"node_disk_bytes_read|node_disk_bytes_written"} # 合法
+http_requests_total{instance!="localhost:9090"}
 ```
 
-### 区间向量(Range vector)
+除了使用完全匹配的方式对时间序列进行过滤以外，PromQL还可以支持使用正则表达式作为匹配条件，多个表达式之间使用```|```进行分离：
 
-除了瞬时向量以外，PromQL表达式还可以查询区间向量，区间向量和瞬时向量非常相似，区别在于区间向量返回是从当前时刻开始选择的一个范围的样本数据。返回区间向量类型的表达式，我们称为**区间向量选择器**。
+* 使用```label=~regx```表示选择那些标签符合正则表达式定义的时间序列；
+* 反之使用```label!~regx```进行排除；
 
-例如：
+例如，如果想查询多个环节下的时间序列序列可以使用如下表达式：
 
 ```
-http_request_total{code="200"}[5m]
+http_requests_total{environment=~"staging|testing|development",method!="GET"}
 ```
 
-该表达式，表示查询时间序列名称为http_request_total并且满足code="200"的时序数据中，最近5分钟内的样本数据。如下：
+## 范围查询
+
+直接通过类似于PromQL表达式http_requests_total查询时间序列时，返回值中只会包含该时间序列中的最新的一个样本值，这样的返回结果我们称之为__瞬时向量__。而相应的这样的表达式称之为__瞬时向量表达式__。
+
+而如果我们想过去一段时间范围内的样本数据时，我们则需要使用__区间向量表达式__。区间向量表达式和瞬时向量表达式之间的差异在于在区间向量表达式中我们需要定义时间选择的范围，时间范围通过时间范围选择器```[]```进行定义。例如，通过以下表达式可以选择最近5分钟内的所有样本数据：
+
+```
+http_request_total{}[5m]
+```
+
+该表达式将会返回查询到的时间序列中最近5分钟的所有样本数据：
 
 ```
 http_requests_total{code="200",handler="alerts",instance="localhost:9090",job="prometheus",method="get"}=[
@@ -177,7 +90,9 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 ]
 ```
 
-除了使用m表示分钟以外，PromQL还可以使用其他的时间单位：
+通过区间向量表达式查询到的结果我们称为__区间向量__。
+
+除了使用m表示分钟以外，PromQL的时间范围选择器支持其它时间单位：
 
 * s - 秒
 * m - 分钟
@@ -185,6 +100,43 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 * d - 天
 * w - 周
 * y - 年
+
+## 时间位移操作
+
+在瞬时向量表达式或者区间向量表达式中，都是以当前时间为基准：
+
+```
+http_request_total{} # 瞬时向量表达式，选择当前最新的数据
+http_request_total{}[5m] # 区间向量表达式，选择以当前时间为基准，5分钟内的数据
+```
+
+而如果我们想查询，5分钟前的瞬时样本数据，或昨天一天的区间内的样本数据呢? 这个时候我们就可以使用位移操作，位移操作的关键字为**offset**。
+
+可以使用offset时间位移操作：
+
+```
+http_request_total{} offset 5m
+http_request_total{}[1d] offset 1d
+```
+
+## 使用聚合操作
+
+一般来说，如果描述样本特征的标签(label)在并非唯一的情况下，通过PromQL查询数据，会返回多条满足这些特征维度的时间序列。而PromQL提供的聚合操作可以用来对这些时间序列进行处理，形成一条新的时间序列：
+
+```
+# 查询系统所有http请求的总量
+sum(http_request_total)
+
+# 按照mode计算主机CPU的平均使用时间
+avg(node_cpu) by (mode)
+
+# 按照主机查询各个主机的CPU使用率
+sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (instance)
+```
+
+## 标量和字符串
+
+除了使用瞬时向量表达式和区间向量表达式以外，PromQL还直接支持用户使用标量(Scalar)和字符串(String)。
 
 ### 标量（Scalar）：一个浮点型的数字值
 
@@ -196,7 +148,7 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 10
 ```
 
-> 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时向量。
+> 需要注意的是，当使用表达式count(http_requests_total)，返回的数据类型，依然是瞬时向量。用户可以通过内置函数scalar()将单个瞬时向量转换为标量。
 
 ### 字符串（String）：一个简单的字符串值
 
@@ -208,22 +160,27 @@ http_requests_total{code="200",handler="graph",instance="localhost:9090",job="pr
 `these are not unescaped: \n ' " \t`
 ```
 
-### 时间位移
+## 合法的PromQL表达式
 
-在瞬时选择器，或者区间选择器中，都是以当前时间为基准：
+所有的PromQL表达式都必须至少包含一个指标名称(例如http_request_total)，或者一个不会匹配到空字符串的标签过滤器(例如{code="200"})。
 
-```
-http_request_total{code="200"} # 瞬时选择器，选择当前最新的数据
-http_request_total{code="200"}[5m] # 区间选择器，选择以当前时间为基准，5分钟内的数据
-```
-
-那如果我们想查询，5分钟前的瞬时样本数据，或昨天一天的区间内的样本数据呢? 这个时候我们就可以使用位移操作，位移操作的关键字为**offset**。
-
-因此我们可以使用时间位移操作：
+因此以下两种方式，均为合法的表达式：
 
 ```
-http_request_total{code="200"} offset 5m
-http_request_total{code="200"}[1d] offset 1d
+http_request_total # 合法
+http_request_total{} # 合法
+{method="get"} # 合法
 ```
 
-接下来我们会详细探索Prometheus提供的这一强大工具PromQL，以及它给我们带来的强大的数据统计功能。
+而如下表达式，则不合法：
+
+```
+{job=~".*"} # 不合法
+```
+
+同时，除了使用```<metric name>{label=value}```的形式以外，我们还可以使用内置的```__name__```标签来指定监控指标名称：
+
+```
+{__name__=~"http_request_total"} # 合法
+{__name__=~"node_disk_bytes_read|node_disk_bytes_written"} # 合法
+```
