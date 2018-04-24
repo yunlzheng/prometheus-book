@@ -4,7 +4,7 @@ Prometheus通过指标名称（metrics name）以及对应的一组标签（labe
 
 PromQL是Prometheus内置的数据查询语言，其提供对时间序列数据丰富的查询，聚合以及逻辑运算能力的支持。并且被广泛应用在Prometheus的日常应用当中，包括对数据查询、可视化、告警处理当中。可以这么说，PromQL是Promtheus所有应用场景的基础，理解和掌握PromQL是Prometheus入门的第一课。
 
-## 基础查询
+## 查询时间序列
 
 当Prometheus通过Exporter采集到相应的监控指标样本数据后，我们就可以通过PromQL对监控样本数据进行查询。
 
@@ -26,8 +26,6 @@ http_requests_total{}
 http_requests_total{code="200",handler="alerts",instance="localhost:9090",job="prometheus",method="get"}=(20889@1518096812.326)
 http_requests_total{code="200",handler="graph",instance="localhost:9090",job="prometheus",method="get"}=(21287@1518096812.326)
 ```
-
-## 使用标签过滤时间序列
 
 PromQL还支持用户根据时间序列的标签匹配模式来对时间序列进行过滤，目前主要支持两种匹配模式：完全匹配和正则匹配。
 
