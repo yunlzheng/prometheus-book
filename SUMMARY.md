@@ -14,6 +14,7 @@
   - [Metrics类型](./sources/prometheus-metrics-types.md)
   - [初识PromQL](./sources/prometheus-query-language.md)
   - [PromQL操作符](./sources/prometheus-promql-operators-v2.md)
+  - [聚合操作](./sources/prometheus-aggr-ops.md)
   - [PromQL内置函数](./sources/prometheus-promql-functions.md)
   - [在HTTP API中使用PromQL](./sources/prometheus-promql-with-http-api.md)
   - [最佳实践：4个黄金指标和USE方法](./sources/prometheus-promql-best-praticase.md)
