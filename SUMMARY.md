@@ -59,9 +59,6 @@
   - [联邦集群](./sources/scale-prometheus-with-federation.md)
   - [Prometheus高可用](./sources/prometheus-and-high-availability.md)
   - [Alertmanager高可用](./sources/alertmanager-high-availability.md)
-  <!-- - 使用Prometheus Opertor管理Prometheus -->
-  <!-- - 使用Promgen管理Prometheus -->
-  <!-- - 从1.0迁移到2.0 -->
   - [总结](./chapter4/SUMMARY.md)
 - [第7章 Prometheus服务发现](./chapter6/README.md)
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)

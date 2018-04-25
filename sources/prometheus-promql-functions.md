@@ -77,9 +77,49 @@ histogram_quantile(0.5, http_request_duration_seconds_bucket)
 
 需要注意的是通过histogram_quantile计算的分位数，并非为精确值，而是通过http_request_duration_seconds_bucket和http_request_duration_seconds_sum近似计算的结果。
 
-<!-- ## 使用absent判断时间序列是否存在 -->
+## 动态标签替换
 
-<!-- ## 动态标签替换 -->
+一般来说来说，使用PromQL查询到时间序列后，可视化工具会根据时间序列的标签来渲染图表。例如通过up指标可以获取到当前所有运行的Exporter实例以及其状态：
+
+```
+up
+```
+
+提供通过up查询到的时间序列会包含instance以及job标签：
+
+```
+up{instance="localhost:8080",job="cadvisor"}	1
+up{instance="localhost:9090",job="prometheus"}	1
+up{instance="localhost:9100",job="node"}	1
+```
+
+这是可视化工具渲染图标时可能根据，instance和job的值进行渲染，为了能够让客户端的图标更具有可读性，可以通过label_replace标签为时间序列添加额外的标签。label_replace的具体参数如下：
+
+```
+label_replace(v instant-vector, dst_label string, replacement string, src_label string, regex string)
+```
+
+该函数会依次对v中的每一条时间序列进行处理，通过regex匹配src_label的值，并将匹配部分relacement写入到dst_label标签中。如下所示：
+
+```
+label_replace(up, "host", "$1", "instance",  "(.*):.*")
+```
+
+函数处理后，时间序列将包含一个host标签，host标签的值为Exporter实例的IP地址：
+
+```
+up{host="localhost",instance="localhost:8080",job="cadvisor"}	1
+up{host="localhost",instance="localhost:9090",job="prometheus"}	1
+up{host="localhost",instance="localhost:9100",job="node"} 1
+```
+
+除了label_replace以外，Prometheus还提供了label_join函数，该函数可以将时间序列中v多个标签src_label的值，通过separator作为连接符写入到一个新的标签dst_label中:
+
+```
+label_join(v instant-vector, dst_label string, separator string, src_label_1 string, src_label_2 string, ...)
+```
+
+label_replace和label_join函数提供了对时间序列标签的自定义能力，从而能够更好的于客户端或者可视化工具配合。
 
 ## 其它内置函数
 
