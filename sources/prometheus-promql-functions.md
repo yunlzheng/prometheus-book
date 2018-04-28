@@ -82,12 +82,6 @@ histogram_quantile(0.5, http_request_duration_seconds_bucket)
 一般来说来说，使用PromQL查询到时间序列后，可视化工具会根据时间序列的标签来渲染图表。例如通过up指标可以获取到当前所有运行的Exporter实例以及其状态：
 
 ```
-up
-```
-
-提供通过up查询到的时间序列会包含instance以及job标签：
-
-```
 up{instance="localhost:8080",job="cadvisor"}	1
 up{instance="localhost:9090",job="prometheus"}	1
 up{instance="localhost:9100",job="node"}	1
