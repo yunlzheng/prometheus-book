@@ -69,14 +69,15 @@
   - [小结](./chapter6/SUMMARY.md)
 - [第8章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
   - [初识Kubernetes](./sources/kubernetes-with-minikube.md)
-  - [在Kubernetes下部署Prometheus](./sources/deploy-prometheus-in-kubernetes.md)
-  - 采集节点信息状态
-  - 采集应用资源用量
-  - 采集集群节点状态指标
-  - 使用Grafana创建可视化仪表盘
+  - [部署Prometheus](./sources/deploy-prometheus-in-kubernetes.md)
+  - [Kubernetes下的服务发现](./sources/service-discovery-with-kubernetes.md)
+  - [监控Kubernetes中的容器](./sources/use-prometheus-monitor-containers-in-k8s.md)
+  - [监控Kubernetes集群中的节点](./sources/use-promethues-monitor-node-in-k8s.md)
+  - [监控Kubernetes集群状态](./sources/use-prometheus-monitor-k8s-cluster-state.md)
+  - [使用Grafana创建可视化仪表盘](./sources/use-grafana-in-k8s.md)
+  - Prometheus Vs Heapster
   - 基于Prometheus实现应用的弹性伸缩
   - 使用Prometheus Opertor管理Prometheus
-  - Prometheus Vs Heapster
   - 总结
 - [第9章 使用Prometheus监控Rancher集群](./chapter10/README.md)
 - [参考资料](./REFERENCES.md)

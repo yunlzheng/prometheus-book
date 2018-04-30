@@ -20,7 +20,7 @@ Kubenetes是一款由Google开发的开源的容器编排工具（[GitHub源码]
 
 ## 搭建本地Kubernetes集群
 
-为了能够更直观的了解和使用Kubernetes，我们将在本地通过工具Minikube(https://github.com/kubernetes/minikube)搭建一个本地的Kubernetes测试环境。Minikube会在本地通过虚拟机运行一个单节点的Kubernetes集群，可以方便用户或者开发人员在本地进行与Kubernetes相关的开发和测试工作。
+为了能够更直观的了解和使用Kubernetes，我们将在本地通过工具Minikube(![https://github.com/kubernetes/minikube](https://github.com/kubernetes/minikube))搭建一个本地的Kubernetes测试环境。Minikube会在本地通过虚拟机运行一个单节点的Kubernetes集群，可以方便用户或者开发人员在本地进行与Kubernetes相关的开发和测试工作。
 
 安装MiniKube的方式很简单，对于Mac用户可以直接使用Brew进行安装:
 
