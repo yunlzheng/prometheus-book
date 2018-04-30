@@ -33,6 +33,7 @@
   - [Exporter是什么](./sources/what-is-prometheus-exporter.md)
   - [监控容器运行状态](./sources/use-prometheus-monitor-container.md)
   - [监控MySQL运行状态](./sources/use-promethues-monitor-mysql.md)
+  - [使用Blackbox监控](./sources/install_blackbox_exporter.md)
   - [扩展Prometheus](./sources/custom_metrics_with_java_sdk.md)
   - [在Spring Boot中集成Prometheus](./sources/custom_app_support_prometheus.md)
   - [小结](./chapter5/SUMMARY.md)
@@ -64,28 +65,18 @@
   - [为什么需要服务发现](./sources/why-need-service-discovery.md)
   - [基于文件的服务发现](./sources/service-discovery-with-file.md)
   - [基于Consul的服务发现](./sources/service-discovery-with-consul.md)
-  - [Kubernetes下的服务发现](./sources/service-discovery-with-k8s.md)
   - [服务发现与Relabel](./sources/service-discovery-with-relabel.md)
   - [小结](./chapter6/SUMMARY.md)
-- [第8章 使用BlackBox监控网络](./chapter9/README.md)
-  - [黑盒监控和Blackbox Exporter](./sources/install_blackbox_exporter.md)
-  - [HTTP探针](./sources/blackbox-http-probe.md)
-  - [TCP探针](./sources/blackbox-tcp-probe.md)
-  - [DNS探针](./sources/blackbox-dns-probe.md)
-  - [ICMP探针](./sources/blackbox-icmp-probe.md)
-  - [IPv4和IPv6](./sources/blackbox-ipvx-probe.md)
-  - 小结
-- [第9章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
-  - Kubernetes简介
-  - 搭建Kubernetes本地测试环境
-  - Prometheus Vs Heapster
-  - 在Kubernetes下部署Prometheus
-  - 采集Kubelet状态
+- [第8章 使用Prometheus监控Kubernetes集群](./chapter8/READMD.md)
+  - [初识Kubernetes](./sources/kubernetes-with-minikube.md)
+  - [在Kubernetes下部署Prometheus](./sources/deploy-prometheus-in-kubernetes.md)
+  - 采集节点信息状态
   - 采集应用资源用量
   - 采集集群节点状态指标
   - 使用Grafana创建可视化仪表盘
   - 基于Prometheus实现应用的弹性伸缩
   - 使用Prometheus Opertor管理Prometheus
+  - Prometheus Vs Heapster
   - 总结
-- [第10章 使用Prometheus监控Rancher集群](./chapter10/README.md)
+- [第9章 使用Prometheus监控Rancher集群](./chapter10/README.md)
 - [参考资料](./REFERENCES.md)

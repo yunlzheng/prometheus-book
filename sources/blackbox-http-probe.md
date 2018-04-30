@@ -1,4 +1,4 @@
-# HTTP探针
+## HTTP探针
 
 HTTP探针是进行黑盒监控时最常用的探针之一，通过HTTP探针能够网站或者HTTP服务建立有效的监控，包括其本身的可用性，以及用户体验相关的如响应时间等等。除了能够在服务出现异常的时候及时报警，还能帮助系统管理员分析和优化网站体验。
 
@@ -13,7 +13,7 @@ modules:
 
 通过prober配置项指定探针类型。配置项http用于自定义探针的探测方式，这里有没对http配置项添加任何配置，表示完全使用HTTP探针的默认配置，该探针将使用HTTP GET的方式对目标服务进行探测，并且验证返回状态码是否为2XX，是则表示验证成功，否则失败。
 
-## 自定义HTTP请求
+### 自定义HTTP请求
 
 HTTP服务通常会以不同的形式对外展现，有些可能就是一些简单的网页，而有些则可能是一些基于REST的API服务。 对于不同类型的HTTP的探测需要管理员能够对HTTP探针的行为进行更多的自定义设置，包括：HTTP请求方法、HTTP头信息、请求参数等。对于某些启用了安全认证的服务还需要能够对HTTP探测设置相应的Auth支持。对于HTTPS类型的服务还需要能够对证书进行自定义设置。
 
@@ -58,7 +58,7 @@ http_basic_auth_example:
         ca_file: "/certs/my_cert.crt"
 ```
 
-## 自定义探针行为
+### 自定义探针行为
 
 在默认情况下HTTP探针只会对HTTP返回状态码进行校验，如果状态码为2XX（200 <= StatusCode < 300）则表示探测成功，并且探针返回的指标probe_success值为1。
 
@@ -107,4 +107,12 @@ probe_http_ssl 0
         - "Could not connect to database"
       fail_if_not_matches_regexp:
         - "Download the latest version here"
+```
+
+最后需要提醒的时，默认情况下HTTP探针会走IPV6的协议。 在大多数情况下，可以使用preferred_ip_protocol=ip4强制通过IPV4的方式进行探测。在Bloackbox响应的监控样本中，也会通过指标probe_ip_protocol，表明当前的协议使用情况：
+
+```
+# HELP probe_ip_protocol Specifies whether probe ip protocol is IP4 or IP6
+# TYPE probe_ip_protocol gauge
+probe_ip_protocol 6
 ```
