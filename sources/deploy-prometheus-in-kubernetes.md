@@ -202,18 +202,61 @@ kubectl exec -it prometheus-69f9ddb588-czn2c ls /var/run/secrets/kubernetes.io/s
 ca.crt     namespace  token
 ```
 
-接下来我们就可以使用这些证书以及令牌访问Kubernetes的API了，如下所示，使用role声明了当前服务发现的目标是Kubernetes集群中的所有节点，并且通过ca_file和bearer_token_file指定了用于访问Kubernetes API的证书和令牌信息：
+# Kubernetes下的服务发现
+
+接下来我们就可以使用这些证书以及令牌访问Kubernetes的API了，如下所示，修改prometheus-config.yml文件，通过ca_file和bearer_token_file指定了用于访问Kubernetes API的证书和令牌信息。同时，使用role指定当前将通过Kubernetes API查找所有的Node节点：
 
 ```
-- job_name: 'kubernetes-nodes'
-  scheme: https
-  tls_config:
-    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-  kubernetes_sd_configs:
-  - role: node
+apiVersion: v1
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval:     15s 
+      evaluation_interval: 15s
+    scrape_configs:
+    - job_name: 'kubernetes-nodes'
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: node
+kind: ConfigMap
+metadata:
+  name: prometheus-config
 ```
 
-完整的kubernetes_sd_config配置读者可以从以下网址找到[https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config)。
+更新Prometheus配置文件，并重建Prometheus实例：
 
-在完成这些准备工作后，接下来我们就可以通过Prometheus监控Kubernetes下部署的各类资源，以及Kubernetes集群本身。
+```
+$ kubectl apply -f prometheus-config.yml
+configmap "prometheus-config" configured
+
+$ kubectl get pods
+prometheus-69f9ddb588-rbrs2        1/1       Running   0          4m
+
+$ kubectl delete pods prometheus-69f9ddb588-rbrs2
+pod "prometheus-69f9ddb588-rbrs2" deleted
+
+$ kubectl get pods
+prometheus-69f9ddb588-rbrs2        0/1       Terminating   0          4m
+prometheus-69f9ddb588-wtlsn        1/1       Running       0          14s
+```
+
+Promtheus使用新的配置文件重建之后，打开Prometheus UI，通过Service Discovery页面可以查看到当前Prometheus通过Kubernetes发现的所有Node实例了：
+
+![Service Discovery发现的实例](http://p2n2em8ut.bkt.clouddn.com/service-discovery-nodes.png)
+
+查看Target页面，可以看到当前Prometheus中包含一个Target实例，并且Prometheus开始尝试从该实例中获取监控数据：
+
+![](http://p2n2em8ut.bkt.clouddn.com/service-discover-node-targets.png)
+
+不幸的是，这里会提示一个有关证书的错误信息：
+
+```
+Get https://192.168.99.100:10250/metrics: x509: cannot validate certificate for 192.168.99.100 because it doesn't contain any IP SANs
+```
+
+这是由于Kubernetes生成的证书中并不包含192.168.99.100的IP地址，因此访问Kubernetes时发生了错误。不过目前为止，值得高兴的是我们已经能够正常的部署Prometheus，并且它也能够正常的使用Kubernetes下的服务发现能力。
+
+kubernetes_sd_config中除了指定服务发现的role为node以外，还支持service，pod，endpoints，ingress等四种服务发现目标。 接下来，我们将依次介绍和使用这些服务发现的能力。
