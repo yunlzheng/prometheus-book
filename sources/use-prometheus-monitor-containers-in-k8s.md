@@ -90,9 +90,9 @@ data:
 
 这里定义了三个relabel步骤：
 
-1，默认获取到的target地址为，当前节点中kubelet的访问地址。因此通过通过正则表达式(.+):(.+)匹配出IP地址和端口，并将将匹配到的内容按照$1:4194的形式覆盖```__address__```的值。 从而获得cAdvisor访问地址；
-2，默认返回的```__scheme__```为https，通过直接修改其值为http，从而可以让Prometheus通过访问[http://IP:4193/metrics](http://IP:4193/metrics)作为采集目标地址；
-3，最后通过labelmap将该节点上的自定义标签，写入到样本中，从而可以方便用户通过这些标签对数据进行聚合。
+1. 默认获取到的target地址为，当前节点中kubelet的访问地址。因此通过通过正则表达式(.+):(.+)匹配出IP地址和端口，并将将匹配到的内容按照$1:4194的形式覆盖```__address__```的值。 从而获得cAdvisor访问地址；
+2. 默认返回的```__scheme__```为https，通过直接修改其值为http，从而可以让Prometheus通过访问[http://IP:4193/metrics](http://IP:4193/metrics)作为采集目标地址；
+3. 最后通过labelmap将该节点上的自定义标签，写入到样本中，从而可以方便用户通过这些标签对数据进行聚合。
 
 ![cAdvisor数据采集状态](http://p2n2em8ut.bkt.clouddn.com/k8s-sd-with-node-with-relabel-1.png)
 
