@@ -70,4 +70,11 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
 
 ![Pod平均启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds_avg.png)
 
-其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计API响应时间的分布情况。
+其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计API响应时间的分布情况：
+
+|Action|Resources|
+|-|-|
+|PUT|Pods, Nodes, Deployments, DaemonSets等|
+|POST|Pods, Nodes, Deployments, DaemonSets等|
+|LIST|Pods, Nodes, Deployments, DaemonSets等|
+|GET|Pods, Nodes, Deployments, DaemonSets等|
