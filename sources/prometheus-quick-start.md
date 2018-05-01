@@ -119,7 +119,7 @@ INFO[0000] Listening on :9100                            source="node_exporter.g
 
 ![node exporter页面](http://p2n2em8ut.bkt.clouddn.com/node_exporter_home_page.png)
 
-## node exporter监控指标
+## Node Exporter监控指标
 
 访问[http://localhost:9100/metrics](http://localhost:9100/metrics)，可以看到当前node exporter获取到的当前主机的所有监控数据，如下所示：
 
