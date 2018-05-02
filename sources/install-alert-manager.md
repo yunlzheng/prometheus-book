@@ -58,7 +58,7 @@ Alert菜单下可以查看Alertmanager接收到的告警内容。Silences菜单�
 
 ## 关联Prometheus与Alertmanager
 
-前面已经介绍过告警在Prometheus的架构中被划分成两个独立的部分。Prometheus负责产生告警，而Alertmanager负责告警产生后的后续处理。因此Alertmanager部署完成后，需要在Prometheus中设置Alertmanager相关的信息。
+在Prometheus的架构中被划分成两个独立的部分。Prometheus负责产生告警，而Alertmanager负责告警产生后的后续处理。因此Alertmanager部署完成后，需要在Prometheus中设置Alertmanager相关的信息。
 
 编辑Prometheus配置文件prometheus.yml,并添加以下内容
 

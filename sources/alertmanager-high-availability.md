@@ -1,6 +1,6 @@
 # Alertmanager高可用
 
-在前面的部分我们主要讨论了Prometheus Server自身的高可用问题。而接下来，重点将放在告警处理也就是Alertmanager部分。如下所示。
+在上一小节中我们主要讨论了Prometheus Server自身的高可用问题。而接下来，重点将放在告警处理也就是Alertmanager部分。如下所示。
 
 ![Alertmanager成为单点](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-single-am.png)
 

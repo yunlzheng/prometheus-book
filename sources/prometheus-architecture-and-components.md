@@ -8,7 +8,7 @@
 
 ## Prometheus Server
 
-在前面的小节中我们通过部署Prometheus Server大致对Prometheus Server有了初步的认识。Prometheus Server是Prometheus组件中的核心部分，负责实现对监控数据的获取，存储以及查询。
+Prometheus Server是Prometheus组件中的核心部分，负责实现对监控数据的获取，存储以及查询。
 Prometheus Server可以通过静态配置管理监控目标，也可以配合使用Service Discovery的方式动态管理监控目标，并从这些监控目标中获取数据。其次Prometheus Server需要对采集到的监控数据进行存储，Prometheus Server本身就是一个时序数据库，将采集到的监控数据按照时间序列的方式存储在本地磁盘当中。最后Prometheus Server对外提供了自定义的PromQL语言，实现对数据的查询以及分析。
 
 Prometheus Server内置的Express Browser UI，通过这个UI可以直接通过PromQL实现数据的查询以及可视化。
