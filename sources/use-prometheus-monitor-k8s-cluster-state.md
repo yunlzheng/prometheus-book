@@ -20,7 +20,7 @@ NAME         ENDPOINTS        AGE
 kubernetes   10.0.2.15:8443   133d
 ```
 
-Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和令牌访问![https://kubernetes.default.svc:443/metrics](https://kubernetes.default.svc:443/metrics)即可获取apiserver组件中记录的所有监控样数据。
+Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和令牌访问[https://kubernetes.default.svc:443/metrics](https://kubernetes.default.svc:443/metrics)即可获取apiserver组件中记录的所有监控样数据。
 
 了解以上基础知识以后，我们只需要对应修改Prometheus的配置文件即可。修改prometheus-config.yml文件，为Pometheus配置文件添加以下内容：
 
@@ -50,7 +50,7 @@ Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和�
 
 当Prometheus能够从Kubernetes的APIServer中获取监控样本数据后，就可以对当前Kubernetes集群的性能做出评估。
 
-![Kubernetes架构](https://d33wubrfki0l68.cloudfront.net/e298a92e2454520dddefc3b4df28ad68f9b91c6f/70d52/images/docs/pre-ccm-arch.png)
+![Kubernetes架构](http://p2n2em8ut.bkt.clouddn.com/kubernetes-artch-overview.png)
 
 如上所示是Kubernetes的架构图，从图中可以看出，无论是Kubernetes的自身组件还是客户端请求都需要经过Kubernetes的apiserver，因此在评估Kubernetes性能时，我们首先需要关注Kubernetes的API响应时间。对于Pod启动时间可以通过指标kubelet_pod_start_latency_microseconds获取。
 
