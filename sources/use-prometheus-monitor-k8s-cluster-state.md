@@ -1,4 +1,4 @@
-# 监控Kubernetes API Server运行状态
+# 监控集群状态
 
 当使用Kubernetes管理一个多节点的集群中，除了需要关注集群中部署应用的运行状态和节点的资源使用情况以外，我们还应该关注Kubernetes本身的状态。Kubernetes作为一个中央化的任务调度系统，我们希望它能够相对较快的完成对用户操作的响应。在这一小节中，我们将利用Prometheus监控Kubernetes API的响应时间，从而评估当前集群的运行状态以及性能。
 
@@ -48,11 +48,7 @@ Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和�
 
 ## 评估Kubernetes性能
 
-当Prometheus能够从Kubernetes的APIServer中获取监控样本数据后，就可以对当前Kubernetes集群的性能做出评估。
-
-![Kubernetes架构](http://p2n2em8ut.bkt.clouddn.com/kubernetes-artch-overview.png)
-
-如上所示是Kubernetes的架构图，从图中可以看出，无论是Kubernetes的自身组件还是客户端请求都需要经过Kubernetes的apiserver，因此在评估Kubernetes性能时，我们首先需要关注Kubernetes的API响应时间。对于Pod启动时间可以通过指标kubelet_pod_start_latency_microseconds获取。
+当Prometheus能够从Kubernetes的APIServer中获取监控样本数据后，就可以对当前Kubernetes集群的性能做出评估。无论是Kubernetes的自身组件还是客户端请求都需要经过Kubernetes的apiserver，因此在评估Kubernetes性能时，我们首先需要关注Kubernetes的API响应时间。对于Pod启动时间可以通过指标kubelet_pod_start_latency_microseconds获取。
 
 例如，通过以下PromQL获取当前集群99%的Pod启动时间大致在18.40s以内：
 
@@ -70,7 +66,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
 
 ![Pod平均启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds_avg.png)
 
-其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计API响应时间的分布情况：
+其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计以下各种类型API响应时间的分布情况：
 
 |Action|Resources|
 |-|-|

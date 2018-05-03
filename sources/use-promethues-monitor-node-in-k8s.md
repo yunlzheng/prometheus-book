@@ -1,10 +1,10 @@
-# 监控Kubernetes集群中的节点
+# 监控集群基础设施
 
-在第1章的“初始Prometheus”小节，我们已经基本了解和使用过Node Exporter。Node Exporter能够采集和获取当前所在主机的运行状态数据。这部分，将带领读者在Kubernetes安装和部署Node Exporter，并且通过Prometheus的服务发现机制自动的获取集群中所有节点上运行的Node Exporter的监控样本数据。
+在第1章的“初始Prometheus”小节，我们已经基本了解和使用过Node Exporter。Node Exporter能够采集和获取当前所在主机的运行状态数据。本节将带领读者在Kubernetes中部署Node Exporter，并且通过Prometheus自动监控集群中所有节点资源使用情况。
 
 ## 使用Daemonset部署Node Exporter
 
-在本章的“部署Prometheus”小节，我们使用了Kubernetes内置的控制器之一Deployment。Deployment能够确保Prometheus的Pod能够按照预期的状态，在集群中运行。而与Prometheus的部署不同的是，我们需要在Kubernetes集群中的每个节点只运行一个唯一的Node Exporter实例，这时候就需要使用Kubernetes的另外一种控制器Daemonset。顾名思义，Daemonset的管理方式类似于操作系统中的守护进程。Daemonset会确保在集群中所有（也可以指定）节点上运行一个唯一的Pod实例。
+在本章的“部署Prometheus”小节，我们使用了Kubernetes内置的控制器之一Deployment。Deployment能够确保Prometheus的Pod能够按照预期的状态在集群中运行，而Pod实例可能随机运行在任意节点上。而与Prometheus的部署不同的是，对于Node Exporter而言每个节点只运行一个唯一的实例，此时，就需要使用Kubernetes的另外一种控制器Daemonset。顾名思义，Daemonset的管理方式类似于操作系统中的守护进程。Daemonset会确保在集群中所有（也可以指定）节点上运行一个唯一的Pod实例。
 
 创建node-exporter-daemonset.yml文件，并写入以下内容：
 

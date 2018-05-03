@@ -14,9 +14,9 @@ Pod是Kubernetes中的最小调度资源。Pod中会包含一组容器，它们�
 
 通过Controller和Pod我们定义了应用程序是如何运行的，接下来需要解决如何使用这些部署在Kubernetes集群中的应用。Kubernetes将这一问题划分为两个问题域，第一，集群内的应用如何通讯。第二，外部的用户如何访问部署在集群内的应用？
 
-对于第一个问题，在Kubernetes中可以定义服务（Service）来解决。Service在Kubernetes集群内扮演了动态负载均衡的角色。在Kubernetes下部署的Pod实例都会包含一组描述自身信息的标签（Lables），而创建Service，可以声明一个标签选择器（Selector）。Service通过标签选择器，找到匹配标签规则的Pod实例，并将对Service的请求转发到代理的Pod中。Service创建完成后，集群内的应用就可以通过使用Service的名称作为DNS域名进行相互访问。
+对于第一个问题，在Kubernetes中通过定义Service（服务）来解决。Service在Kubernetes集群内扮演了服务发现和负载均衡的作用。在Kubernetes下部署的Pod实例都会包含一组描述自身信息的Lable，而创建Service，可以声明一个Selector（标签选择器）。Service通过Selector，找到匹配标签规则的Pod实例，并将对Service的请求转发到代理的Pod中。Service创建完成后，集群内的应用就可以通过使用Service的名称作为DNS域名进行相互访问。
 
-而对于第二个问题，Kubernetes中定义了单独的资源入口（Ingress）。Ingress是一个工作在7层的负载均衡器，其负责代理外部进入集群内的请求，并将流量转发到对应的服务中。
+而对于第二个问题，Kubernetes中定义了单独的资源Ingress（入口）。Ingress是一个工作在7层的负载均衡器，其负责代理外部进入集群内的请求，并将流量转发到对应的服务中。
 
 最后，对于同一个Kubernetes集群其可能被多个组织使用，为了隔离这些不同组织创建的应用程序，Kubernetes定义了命名空间（Namespace）对资源进行隔离。
 
@@ -30,7 +30,7 @@ Pod是Kubernetes中的最小调度资源。Pod中会包含一组容器，它们�
 brew cask install minikube
 ```
 
-其它操作系统用户，可以查看Minikube项目的官方说明文档进行安装即可。安装完成了，就可以在本机通过命令行启动Kubernetes集群:
+其它操作系统用户，可以查看Minikube项目的官方说明文档进行安装即可。安装完成后，在本机通过命令行启动Kubernetes集群:
 
 ```
 $ minikube start
@@ -44,7 +44,7 @@ Setting up kubeconfig...
 Kubectl is now configured to use the cluster.
 ```
 
-启动完成后MiniKube会自动配置本机的kubelet命令行工具，用于与对集群资源进行管理。同时Kubernetes也提供了一个Dashboard管理界面，在MiniKube下可以通过以下命令打开：
+MiniKube会自动配置本机的kubelet命令行工具，用于与对集群资源进行管理。同时Kubernetes也提供了一个Dashboard管理界面，在MiniKube下可以通过以下命令打开：
 
 ```
 $ minikube dashboard
@@ -58,7 +58,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-然后通过kubectl命令行工具，找到Dashboard对应的Service对外暴露的端口，如下所示，kubernetes-dashboard是一个NodePort类型的Service，并对外暴露了30000端口：
+通过kubectl命令行工具，找到Dashboard对应的Service对外暴露的端口，如下所示，kubernetes-dashboard是一个NodePort类型的Service，并对外暴露了30000端口：
 
 ```
 kubectl get service --namespace=kube-system

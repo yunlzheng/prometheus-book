@@ -1,4 +1,4 @@
-# 监控Kubernetes中运行的容器
+# 应用容器监控
 
 在第4章的”监控容器运行状态“小节中，我们介绍了如何使用cAdvisor监控主机中容器的运行状态。而Kubernetes直接在Kubelet组件中集成了cAdvisor。cAdvisor会自动采集CPU，内存，文件系统，网络等资源的使用情况，默认运行端口为4194。因此在Kubernetes集群中的各个节点，已经默认包含了cAdvisor的支持：
 

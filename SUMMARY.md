@@ -72,9 +72,9 @@
   - [Prometheus与Kubernetes](./sources/prometheus-with-kubernetes.md)
   - [部署Prometheus](./sources/deploy-prometheus-in-kubernetes.md)
   - [Kubernetes下的服务发现](./sources/service-discovery-with-kubernetes.md)
-  - [监控Kubernetes中的容器](./sources/use-prometheus-monitor-containers-in-k8s.md)
-  - [监控Kubernetes集群中的节点](./sources/use-promethues-monitor-node-in-k8s.md)
-  - [监控Kubernetes集群状态](./sources/use-prometheus-monitor-k8s-cluster-state.md)
+  - [应用容器监控](./sources/use-prometheus-monitor-containers-in-k8s.md)
+  - [监控集群基础设施](./sources/use-promethues-monitor-node-in-k8s.md)
+  - [监控集群状态](./sources/use-prometheus-monitor-k8s-cluster-state.md)
   - [使用Grafana创建可视化仪表盘](./sources/use-grafana-in-k8s.md)
   - Prometheus Vs Heapster
   - 基于Prometheus实现应用的弹性伸缩
