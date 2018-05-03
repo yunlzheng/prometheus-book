@@ -4,7 +4,7 @@ Consul是由HashiCorp开发的一个支持多数据中心的分布式服务发�
 
 ## Consul初体验
 
-用过可以通过Consul官网![https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
+用过可以通过Consul官网[https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
 
 在本地可以使用开发者模式在本地快速启动一个单节点的Consul环境：
 
@@ -101,7 +101,7 @@ $ consul agent -dev -config-dir=/etc/consul.d
 
 一旦服务注册成功之后，用户就可以通过DNS或HTTP API的方式查询服务信息。在Consul当中默认情况下，所有的服务都可以使用NAME.service.consul域名的方式进行访问。
 
-例如，这是可以使用node_exporter.service.consul域名查询node_exporter服务的信息：
+例如，可以使用node_exporter.service.consul域名查询node_exporter服务的信息：
 
 ```
 $ dig @127.0.0.1 -p 8600 node_exporter.service.consul

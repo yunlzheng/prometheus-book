@@ -85,7 +85,7 @@ $ curl 'http://localhost:9090/api/v1/query?query=up&time=2015-07-01T20:10:51.781
 }
 ```
 
-在前面我们已经了解了，PromQL表达式可能返回多种数据类型，在响应内容中使用resultType表示当前返回的数据类型，包括：
+PromQL表达式可能返回多种数据类型，在响应内容中使用resultType表示当前返回的数据类型，包括：
 
 * 瞬时向量：vector
 
