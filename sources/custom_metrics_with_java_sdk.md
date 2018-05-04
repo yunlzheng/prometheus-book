@@ -189,7 +189,7 @@ public class GarbageCollectorExports extends Collector {
 
 ![使用自定义Collector监控第三方监控指标](http://p2n2em8ut.bkt.clouddn.com/custom_collector.png)
 
-以下代码，演示了如何写在Exporter中创建自定义Collector:
+以下代码，演示了如何在Exporter中创建自定义Collector:
 
 ```
 class YourCustomCollector extends Collector {

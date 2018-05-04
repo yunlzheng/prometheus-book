@@ -86,7 +86,7 @@ global:
   [ smtp_require_tls: <bool> | default = true ]
 ```
 
-以腾讯邮箱为例:
+以Gmail邮箱为例:
 
 ```
 global:
@@ -107,33 +107,6 @@ receivers:
 这时如果手动拉高主机CPU使用率，使得监控样本数据满足告警触发条件。在SMTP配置正确的情况下，可以接收到如下的告警内容：
 
 ![告警](http://p2n2em8ut.bkt.clouddn.com/mail-alert-page.png)
-
-## 与Slack集成
-
-```
-# Whether or not to notify about resolved alerts.
-[ send_resolved: <boolean> | default = false ]
-
-# The Slack webhook URL.
-[ api_url: <secret> | default = global.slack_api_url ]
-
-# The channel or user to send notifications to.
-channel: <tmpl_string>
-
-# API request data as defined by the Slack webhook API.
-[ color: <tmpl_string> | default = '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}' ]
-[ username: <tmpl_string> | default = '{{ template "slack.default.username" . }}' ]
-[ title: <tmpl_string> | default = '{{ template "slack.default.title" . }}' ]
-[ title_link: <tmpl_string> | default = '{{ template "slack.default.titlelink" . }}' ]
-[ icon_emoji: <tmpl_string> ]
-[ icon_url: <tmpl_string> ]
-[ pretext: <tmpl_string> | default = '{{ template "slack.default.pretext" . }}' ]
-[ text: <tmpl_string> | default = '{{ template "slack.default.text" . }}' ]
-[ fallback: <tmpl_string> | default = '{{ template "slack.default.fallback" . }}' ]
-
-# The HTTP client's configuration.
-[ http_config: <http_config> | default = global.http_config ]
-```
 
 ## 自定义模板
 
