@@ -43,21 +43,6 @@ Prometheus操作指南：云原生监控之道
   * [小结](./chapter5/SUMMARY.md)
 * [第5章 可视化一切](./chapter4/README.md)
   * [Grafana简介](./sources/grafana-intro.md)
-  * [安装Grafana]
-        * 使用二进制包安装Grafana
-        * 使用容器安装Grafana
-  * 使用Prometheus数据源
-  * 创建监控Dashboard
-  * 自定义Panel
-  * 标签
-  * 表格
-  * 注解
-  * 使用模板
-  * Repeat Panel
-  * 共享Dashboard
-  * 时间范围
-  * SingleStat面板
-  * [小结](./chapter5/SUMMARY.md)
 * [第6章 集群与高可用](./chapter7/READMD.md)
   * [本地存储](./sources/prometheus-local-storage.md)
   * [远程存储](./sources/prometheus-remote-storage.md)
@@ -83,9 +68,5 @@ Prometheus操作指南：云原生监控之道
   * [监控集群基础设施](./sources/use-promethues-monitor-node-in-k8s.md)
   * [监控集群状态](./sources/use-prometheus-monitor-k8s-cluster-state.md)
   * [使用Grafana创建可视化仪表盘](./sources/use-grafana-in-k8s.md)
-  * Prometheus Vs Heapster
-  * 基于Prometheus实现应用的弹性伸缩
-  * 使用Prometheus Opertor管理Prometheus
-  * 总结
 * [第9章 使用Prometheus监控Rancher集群](./chapter10/README.md)
 * [参考资料](./REFERENCES.md)
