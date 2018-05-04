@@ -27,7 +27,7 @@
   * [基于Label的动态告警处理](./sources/alert-manager-routes.md)
   * [内置告警接收器Receiver](./sources/alert-manager-with-smtp.md)
   * [使用Webhook扩展Alertmanager](./sources/alert-manager-extension-with-webhook.md)
-  * [屏蔽告警通知](./sources/alert-manager-inhibit.md)
+  * [屏蔽告警通知](./sources/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   * [小结](./chapter3/SUMMARY.md)
 
@@ -82,7 +82,7 @@
   * [监控集群状态](./sources/use-prometheus-monitor-k8s-cluster-state.md)
   * [使用Grafana创建可视化仪表盘](./sources/use-grafana-in-k8s.md)
   * Prometheus Vs Heapster
-  * 基于Prometheus实现应用的弹性伸缩
+  * 基于Prometheus实现应用的弹性伸缩
   * 使用Prometheus Opertor管理Prometheus
   * 总结
 * [第9章 使用Prometheus监控Rancher集群](./chapter10/README.md)
