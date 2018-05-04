@@ -4,7 +4,7 @@ Consul是由HashiCorp开发的一个支持多数据中心的分布式服务发�
 
 ## Consul初体验
 
-用过可以通过Consul官网[https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
+用户可以通过Consul官网[https://www.consul.io/downloads.html](https://www.consul.io/downloads.html)下载对应操作系统版本的软件包。Consul与Prometheus同样使用Go语言进行开发，因此安装和部署的方式也极为简单，解压并将命令行工具放到系统PATH路径下即可。
 
 在本地可以使用开发者模式在本地快速启动一个单节点的Consul环境：
 
@@ -80,7 +80,9 @@ localhost.node.consul.	0	IN	A	127.0.0.1
 ;; MSG SIZE  rcvd: 66
 ```
 
-在Consul当中服务可以通过服务定义文件或者是HTTP API的方式进行注册。这里我们将使用服务定义文件的方式将本地运行的node_exporter通过服务的方式注册到Consul当中，创建配置目录：
+在Consul当中服务可以通过服务定义文件或者是HTTP API的方式进行注册。这里使用服务定义文件的方式将本地运行的node_exporter通过服务的方式注册到Consul当中。
+
+创建配置目录：
 
 ```
 sudo mkdir /etc/consul.d
@@ -91,7 +93,7 @@ echo '{"service": {"name": "node_exporter", "tags": ["exporter"], "port": 9100}}
     | sudo tee /etc/consul.d/node_exporter.json
 ```
 
-重新启动consul服务，并且声明服务定义文件所在目录：
+重新启动Consul服务，并且声明服务定义文件所在目录：
 
 ```
 $ consul agent -dev -config-dir=/etc/consul.d
@@ -99,7 +101,7 @@ $ consul agent -dev -config-dir=/etc/consul.d
     2018/04/15 22:23:47 [DEBUG] agent: Service "node_exporter" in sync
 ```
 
-一旦服务注册成功之后，用户就可以通过DNS或HTTP API的方式查询服务信息。在Consul当中默认情况下，所有的服务都可以使用NAME.service.consul域名的方式进行访问。
+一旦服务注册成功之后，用户就可以通过DNS或HTTP API的方式查询服务信息。默认情况下，所有的服务都可以使用NAME.service.consul域名的方式进行访问。
 
 例如，可以使用node_exporter.service.consul域名查询node_exporter服务的信息：
 

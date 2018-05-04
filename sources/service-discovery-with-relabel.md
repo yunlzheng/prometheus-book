@@ -16,28 +16,36 @@
 
 接下来，我们将学习如何通过Prometheus强大的Relabel机制来实现以上这些具体的目标。
 
-## 认识Target实例的Metadata
+## Prometheus的Relabeling机制
 
 在Prometheus所有的Target实例中，都包含一些默认的Metadata标签信息。可以通过Prometheus UI的Targets页面中查看这些实例的Metadata标签的内容：
 
 ![实例的Metadata信息](http://p2n2em8ut.bkt.clouddn.com/prometheus_file_target_metadata.png)
 
-默认情况下所有的Target都包含以下基本Metadata标签信息：
+默认情况下，当Prometheus加载Target实例完成后，这些Target时候都会包含一些默认的标签：
 
 * ```__address__```：当前Target实例的访问地址```<host>:<port>```
 * ```__scheme__```：采集目标服务访问地址的HTTP Scheme，HTTP或者HTTPS
 * ```__metrics_path__```：采集目标服务访问地址的访问路径
 * ```__param_<name>```：采集任务目标服务的中包含的请求参数
 
-默认情况下，Target中包含的所有不以__为前缀的标签都会写入到从该实例获取到的监控样本中。例如在“基于文件的服务发现”小结中，如果通过labels自定义的标签会直接写入到样本数据中：
+上面这些标签将会告诉Prometheus如何从该Target实例中获取监控数据。除了这些默认的标签以外，我们还可以为Target添加自定义的标签，例如，在“基于文件的服务发现”小节中的示例中，我们通过JSON配置文件，为Target实例添加了自定义标签env，如下所示该标签最终也会保存到从该实例采集的样本数据中：
 
 ```
 node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 ```
 
-不过这里有一些例外，例如在默认情况下，Prometheus会将当前实例标签```__address__```的值写入到样本的instance标签中。这种在采集和保存样本数据之前动态重写样本标签的工作机制在Prometheus下称为Relabeling。同时Prometheus允许用户通过在采集任务中设置relabel_configs来添加自定义的Relabel过程。Relabeling机制可以让我们为样本动态的添加一些额外的维度。
+一般来说，Target以```__```作为前置的标签是作为系统内部使用的，因此这些标签不会被写入到样本数据中。不过这里有一些例外，例如，我们会发现所有通过Prometheus采集的样本数据中都会包含一个名为instance的标签，该标签的内容对应到Target实例的```__address__```。 这里实际上是发生了一次标签的重写处理。
 
-例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
+这种发生在采集样本数据之前，对Target实例的标签进行重写的机制在Prometheus被称为Relabeling。
+
+![Relabeling作用时间](http://p2n2em8ut.bkt.clouddn.com/when-relabel-work.png)
+
+Promtheus允许用户在采集任务设置中通过relabel_configs来添加自定义的Relabeling过程。
+
+## 使用replace/labelmap重写标签
+
+Relabeling最基本的应用场景就是基于Target实例中包含的metadata标签，动态的添加或者覆盖标签。例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
 
 * __meta_consul_address: consul地址
 * __meta_consul_dc: consul中服务所在的数据中心
@@ -61,8 +69,6 @@ node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"} 93970.8203
 node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle", dc="dc1"} 93970.8203125
 ```
 
-## 使用Relabeling重写标签
-
 在每一个采集任务的配置中可以添加多个relabel_config配置，一个最简单的relabel配置如下：
 
 ```
@@ -77,17 +83,17 @@ scrape_configs:
       target_label: "dc"
 ```
 
-该采集任务通过Consul动态发现Node Exporter实例信息作为监控采集目标。在上一下节中，我们知道通过Consul动态发现的监控Target都会包含一些额外的Metadata标签，比如标签__meta_consul_dc表明了当前实例所在的Consul数据中心，因此我们希望从这些实例中采集到的监控样本中也可以包含这样一个标签，例如：
+该采集任务通过Consul动态发现Node Exporter实例信息作为监控采集目标。在上一小节中，我们知道通过Consul动态发现的监控Target都会包含一些额外的Metadata标签，比如标签__meta_consul_dc表明了当前实例所在的Consul数据中心，因此我们希望从这些实例中采集到的监控样本中也可以包含这样一个标签，例如：
 
 ```
 node_cpu{cpu="cpu0",dc="dc1",instance="172.21.0.6:9100",job="consul_sd",mode="guest"}
 ```
 
-这样我们可以方便的根据dc标签的值，根据不同的数据中心聚合分析各自的数据。
+这样可以方便的根据dc标签的值，根据不同的数据中心聚合分析各自的数据。
 
-在这个例子中，我们直接从Target实例中获取__meta_consul_dc的值，并且重写所有从该实例获取的样本中。
+在这个例子中，通过从Target实例中获取__meta_consul_dc的值，并且重写所有从该实例获取的样本中。
 
-一个完整的relabel_config配置如下：
+完整的relabel_config配置如下所示：
 
 ```
 # The source labels select values from existing labels. Their content is concatenated
