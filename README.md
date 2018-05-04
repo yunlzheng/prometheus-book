@@ -27,7 +27,7 @@ Prometheus操作指南：云原生监控之道
   * [基于Label的动态告警处理](./sources/alert-manager-routes.md)
   * [内置告警接收器Receiver](./sources/alert-manager-with-smtp.md)
   * [使用Webhook扩展Alertmanager](./sources/alert-manager-extension-with-webhook.md)
-  * [屏蔽告警通知](./sources/alert-manager-inhibit.md)
+  * [屏蔽告警通知](./sources/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./sources/prometheus-recoding-rules.md)
   * [小结](./chapter3/SUMMARY.md)
 
