@@ -1,6 +1,6 @@
 # 应用容器监控
 
-在第4章的”监控容器运行状态“小节中，我们介绍了如何使用cAdvisor监控主机中容器的运行状态。而Kubernetes直接在Kubelet组件中集成了cAdvisor。cAdvisor会自动采集CPU，内存，文件系统，网络等资源的使用情况，默认运行端口为4194。因此在Kubernetes集群中的各个节点，已经默认包含了cAdvisor的支持：
+在第4章的”监控容器运行状态“小节中，我们介绍了如何使用cAdvisor监控主机中容器的运行状态。而Kubernetes直接在Kubelet组件中集成了cAdvisor，cAdvisor会自动采集当前节点上容器CPU，内存，文件系统，网络等资源的使用情况，其默认运行端口为4194。
 
 登录到MiniKube主机，并且访问本机的4194端口，可以获取到当前节点上cAdvisor的监控样本数据：
 
@@ -31,11 +31,18 @@ process_virtual_memory_bytes 1.1649622016e+10
 如上所示，当role的配置为node时，Prometheus会通过Kubernetes API找到集群中的所有Node对象，并且将其转换为Prometheus的Target对象，从Prometheus UI中可以查看该Target实例包含的所有Metadata标签信息，如下所示，在从MiniKube集群中获取到的一个节点Metadata标签信息：
 
 ```
-__address__="192.168.99.100:10250"  __meta_kubernetes_node_address_Hostname="minikube" __meta_kubernetes_node_address_InternalIP="192.168.99.100" __meta_kubernetes_node_annotation_alpha_kubernetes_io_provided_node_ip="192.168.99.100" 
-__meta_kubernetes_node_annotation_node_alpha_kubernetes_io_ttl="0" __meta_kubernetes_node_annotation_volumes_kubernetes_io_controller_managed_attach_detach="true" 
-__meta_kubernetes_node_label_beta_kubernetes_io_arch="amd64"  __meta_kubernetes_node_label_beta_kubernetes_io_os="linux" __meta_kubernetes_node_label_kubernetes_io_hostname="minikube"  __meta_kubernetes_node_name="minikube"
-__metrics_path__="/metrics" 
-__scheme__="https"  
+__address__="192.168.99.100:10250"
+__meta_kubernetes_node_address_Hostname="minikube"
+__meta_kubernetes_node_address_InternalIP="192.168.99.100"
+__meta_kubernetes_node_annotation_alpha_kubernetes_io_provided_node_ip="192.168.99.100"
+__meta_kubernetes_node_annotation_node_alpha_kubernetes_io_ttl="0"
+__meta_kubernetes_node_annotation_volumes_kubernetes_io_controller_managed_attach_detach="true"
+__meta_kubernetes_node_label_beta_kubernetes_io_arch="amd64"
+__meta_kubernetes_node_label_beta_kubernetes_io_os="linux"
+__meta_kubernetes_node_label_kubernetes_io_hostname="minikube"
+__meta_kubernetes_node_name="minikube"
+__metrics_path__="/metrics"
+__scheme__="https"
 instance="minikube"  
 job="kubernetes-nodes"
 ```
@@ -53,7 +60,7 @@ job="kubernetes-nodes"
 $ kubectl get nodes/minikube -o yaml
 ```
 
-## 使用Relabel修改Target采集任务设置
+### 使用Relabeling修改采集任务
 
 为了能够通过Prometheus采集到cAdvisor的metrics服务，我们为cAdvisor定义了单独采集任务。该任务将基于Node模式发现集群中所有的节点，并通过Relabel修改Target的数据采集配置，从而获取到cAdvisor的监控数据，修改prometheus-config.yml如下：
 
@@ -98,15 +105,15 @@ data:
 
 如上所示，Prometheus通过自动发现Node节点，并通过Relabel自定义采集方式后的结果。
 
-需要注意的是，通过集群中主机的4194端口获取cAdvisor数据，并不适用于所以Kubernetes集群，这种方式限制了cAdvisor服务的运行端口。除了直接访问各个节点的cAdvisor服务以外，我们还可以通过Kubernetes的API Server作为代理获取节点上的cAdvisor监控数据。
+> 需要注意的是，通过集群中主机的4194端口获取cAdvisor数据，并不适用于所以Kubernetes集群，这种方式限制了cAdvisor服务的运行端口。除了直接访问各个节点的cAdvisor服务以外，我们还可以通过Kubernetes的API Server作为代理获取节点上的cAdvisor监控数据。
 
-例如，想要获取节点minikube上cAdvisor的监控数据可以ca证书和令牌在Kubernetes集群内访问地址获取：
+除了直接访问cAdvisor监听的端口以外，更通用的方式是通过apiserver访问kubelet提供的/metrics/cadvisor接口获取cAdvisor的样本数据。例如，想要获取节点minikube上cAdvisor的监控数据可以使用ca证书和令牌在Kubernetes集群内访问以下地址获取：
 
 ```
 https://kubernetes.default.svc:443/api/v1/nodes/minikube/proxy/metrics/cadvisor
 ```
 
-因此，修改kubernetes-cadvisor的relabel配置，将最终任务采集的数据指向API Server提供的代理地址即可：
+因此，修改kubernetes-cadvisor的relabel配置，通过获取节点的```__meta_kubernetes_node_name```并重写```__metrics_path__```将采集任务地址重定向到apiserver的API地址：
 
 ```
     - job_name: 'kubernetes-cadvisor'

@@ -170,7 +170,40 @@ metadata:
     prometheus.io/scrape: 'true'
 ```
 
-这样通过relabel的keep模式，选择只获取包含该标签的Endpoint作为监控目标：
+通过Kubernetes获取到的Endpoint对象，如下所示，是通过Kubernetes自动发现的Endpoint对象的所有metadata标签：
+
+```
+__address__="192.168.99.100:9100"
+__meta_kubernetes_endpoint_port_name="scrape"
+__meta_kubernetes_endpoint_port_protocol="TCP"
+__meta_kubernetes_endpoint_ready="true"
+__meta_kubernetes_endpoints_name="node-exporter"
+__meta_kubernetes_namespace="default"
+__meta_kubernetes_pod_container_name="node-exporter"
+__meta_kubernetes_pod_container_port_name="scrape"
+__meta_kubernetes_pod_container_port_number="9100"
+__meta_kubernetes_pod_container_port_protocol="TCP"
+__meta_kubernetes_pod_host_ip="192.168.99.100"
+__meta_kubernetes_pod_ip="192.168.99.100"
+__meta_kubernetes_pod_label_app="node-exporter"
+__meta_kubernetes_pod_label_controller_revision_hash="4286002507"
+__meta_kubernetes_pod_label_pod_template_generation="1"
+__meta_kubernetes_pod_name="node-exporter-st4cd"
+__meta_kubernetes_pod_node_name="minikube"
+__meta_kubernetes_pod_ready="true"
+__meta_kubernetes_pod_uid="7fe1c063-4ce5-11e8-a82a-08002717c1c9"
+__meta_kubernetes_service_annotation_prometheus_io_scrape="true"
+__meta_kubernetes_service_label_app="node-exporter"
+__meta_kubernetes_service_label_name="node-exporter"
+__meta_kubernetes_service_name="node-exporter"
+__metrics_path__="/metrics"
+__scheme__="http"
+job="kubernetes-service-endpoints"
+```
+
+由于该Endpoint属于特定的Servie，并且backend指向了具体的Pod实例，所以返回的metadata标签中包含了关联的Service的信息（以```__meta_kubernetes_service```作为前缀）以及后端Pod的相关信息（以```__meta_kubernetes_pod```作为浅醉）。
+
+通过relabeling的keep模式，选择只获取包含了标签```__meta_kubernetes_service_annotation_prometheus_io_scrape```并且其值为true的Endpoint作为监控目标：
 
 ```
   - job_name: 'kubernetes-service-endpoints'
@@ -180,11 +213,13 @@ metadata:
     - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
       action: keep
       regex: true
+    - source_labels: [__meta_kubernetes_endpoints_name]
+      target_label: job
 ```
 
 ![Relabeling保留符合规则的Endpoint](http://p2n2em8ut.bkt.clouddn.com/kubernetes-service-endpoints-sd.png)
 
-完整的采集任务配置如下所示：
+这种基于Service的annotations来控制Prometheus的方式，还可以扩展出更多的玩法。例如，如果应用程序并没有通过/metrics暴露监控样本数据。 下面是一个更完整的采集任务配置如下所示：
 
 ```
  -  job_name: 'kubernetes-service-endpoints'
