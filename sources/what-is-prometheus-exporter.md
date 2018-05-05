@@ -1,10 +1,16 @@
 # Exporter是什么
 
-简单来说Exporter是指可以向Prometheus提供用于获取监控样本数据的应用程序实例。如下所示：
+广义上讲所有可以向Prometheus提供监控样本数据的程序都可以被称为一个Exporter。而Exporter的一个实例称为target，如下所示，Prometheus通过轮训的方式定期从这些target中获取样本数据:
 
 ![Exporter](http://p2n2em8ut.bkt.clouddn.com/prometheus-exporter.png)
 
-下面表格列举一些社区中常用的Exporter：
+## Exporter的来源
+
+从Exporter的来源上来讲，主要分为两类：
+
+* 社区提供的
+
+Prometheus社区提供了丰富的Exporter实现，涵盖了从基础设施，中间件以及网络等各个方面的监控功能。这些Exporter可以实现大部分通用的监控需求。下表列举一些社区中常用的Exporter：
 
 | 范围       |  常用Exporter |
 |------     |-------------|
@@ -18,25 +24,25 @@
 |   监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等   |
 |   其它| Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等|
 
-## 扩展Prometheus
+* 用户自定义的
 
-除了这些社区直接提供的Exporter程序，Prometheus还提供了丰富的SDK。使用这些SDK用户可以快速实现自己的Exporter程序。目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
+除了直接使用社区提供的Exporter程序以外，用户还可以基于Prometheus提供的Client Library创建自己的Exporter程序，目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
 
-对于用户而言，一般可以在3种场景下使用Prometheus提供的这些SDK：
+## Exporter的运行方式
 
-* 直接创建Exporter程序。当用户需要采集特定的监控指标时，可以使用SDK创建一个单独运行的Exporter程序。
+从Exporter的运行方式上来讲，又可以分为：
 
-* 直接在应用程序当中集成。 直接将对Prometheus的支持内置到应用程序当中，这种方式可以更好的监控应用(或者服务)的内部运行状态。目前开源社区中已经有很多软件件直接集成了对Prometheus的支持，例如：Ceph, Collectd, ETCD, Kubernetes, Linkerd，Telegraf等。
+* 独立使用的
 
-* 封装到公共库中。 用户可以把Promtheus SDK集成到公共库中，从而可以使得使用了这些公共库的应用程序透明地集成对Prometheus的支持。 目前开源社区中也有这样的例子，例如Clojure中的prometheus-clj，Java下的Hystrix metrics publisher都是这样的模式。
+以我们已经使用过的Node Exporter为例，由于操作系统本身并不直接支持Prometheus，同时用户也无法通过直接从操作系统层面上提供对Prometheus的支持。因此，用户只能通过独立运行一个程序的方式，通过操作系统提供的相关接口，将系统的运行状态数据转换为可供Prometheus读取的监控数据。 除了Node Exporter以外，比如MySQL Exporter、Redis Exporter等都是通过这种方式实现的。 这些Exporter程序扮演了一个中间代理人的角色。
 
-![Prometheus Client Library应用场景](http://p2n2em8ut.bkt.clouddn.com/client-library-usage.png)
+* 集成到应用中的
+
+为了能够更好的监控系统的内部运行状态，有些开源项目如Kubernetes，ETCD等直接在代码中使用了Prometheus的Client Library，提供了对Prometheus的直接支持。这种方式打破的监控的界限，让应用程序可以直接将内部的运行状态暴露给Prometheus，适合于一些需要更多自定义监控指标需求的项目。
 
 ## Exporter规范
 
-无论是社区已有的Exporter程序还是基于Client Library实现的自定义Exporter，他们都需要按照Prometheus的格式规范返回监控样本数据。因此即使目前已有的Client Library还不支持你所使用的编程语言，你可以直接将监控样本转换为Promthues要求的格式即可。
-
-以node exporter为例，当访问/metrics地址时会返回以下内容：
+所有的Exporter程序都需要按照Prometheus的规范，返回监控的样本数据。以Node Exporter为例，当访问/metrics地址时会返回以下内容：
 
 ``` text
 # HELP node_cpu Seconds the cpus spent in each mode.
@@ -47,23 +53,9 @@ node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 node_load1 3.0703125
 ```
 
-这是一种基于纯文本的格式规范。其中HELP用于解释当前指标的含义，TYPE则说明当前指标的数据类型。
+这是一种基于文本的格式规范，在Prometheus 2.0之前的版本还支持Protocol buffer规范。相比于Protocol buffer文本具有更好的可读性，以及跨平台性。Prometheus 2.0的版本也已经不再支持Protocol buffer，这里就不对Protocol buffer规范做详细的阐述。
 
-除了通过纯文本的形式返回样本数据以外，Prometheus 2.0之前的版本还支持Protocol buffer的输出格式。虽然Protocol buffer有更好的性能，但是文本具有更好的可读性，以及跨平台性。Prometheus 2.0的版本也已经不再支持Protocol buffer，这里就不对Protocol buffer规范做详细的阐述。
-
-纯文本格式要求Exporter通过HTTP协议以及UTF-8编码格式返回当前所有的监控样本。
-
-其中HTTP响应的Header中需要定义Content-Type类型为**text/plain; version=0.0.4** 其中version用于指定Text-based的格式版本，当没有指定版本的时候，默认使用最新格式规范的版本。同时HTTP响应头还需要指定压缩格式Content-Encoding为gzip。以下是HTTP响应头信息的示例：
-
-```
-HTTP/1.1 200 OK
-Content-Encoding: gzip
-Content-Length: 2906
-Content-Type: text/plain; version=0.0.4
-Date: Sat, 17 Mar 2018 08:47:06 GMT
-```
-
-Prometheus会对内容逐行解析，在解析时Prometheus会按照空格或者是制表符对行内容进行分割。如果当前行是以#开头，那么Prometheus会认为当前行内容为注释内容。一般来说注释内容分为HELP或者TYPE。
+Exporter返回的样本数据，主要由三个部分组成：样本的一般注释信息（HELP），样本的类型注释信息（TYPE）和样本。Prometheus会对Exporter响应的内容逐行解析：
 
 如果当前行以# HELP开始，Promtheus将会按照以下规则对内容进行解析，得到当前的指标名称以及相应的说明信息：
 
@@ -77,7 +69,7 @@ Prometheus会对内容逐行解析，在解析时Prometheus会按照空格或者
 # TYPE <metrics_name> <metrics_type>
 ```
 
-TYPE注释行必须出现在指标的第一个样本之前。如果没有当前指标类型会被定为为untyped。 除了# 开头的所有行都会被视为是监控样本数据。 每一行样本需要满足以下格式规范:
+TYPE注释行必须出现在指标的第一个样本之前。如果没有明确的指标类型需要返回为untyped。 除了# 开头的所有行都会被视为是监控样本数据。 每一行样本需要满足以下格式规范:
 
 ```
 metric_name [
@@ -119,4 +111,18 @@ rpc_duration_seconds_sum 1.7560473e+07
 rpc_duration_seconds_count 2693
 ```
 
-接下来，我们将带来读者了解常见Exporter的用法，以及如何使用Client Library实现自定义Exporter。
+对于某些Promtheus还没有提供支持的编程语言，用户只需要按照以上规范返回响应的文本数据即可。
+
+## 指定样本格式的版本
+
+在Exporter响应的HTTP头信息中，可以通过Content-Type指定特定的规范版本，例如：
+
+```
+HTTP/1.1 200 OK
+Content-Encoding: gzip
+Content-Length: 2906
+Content-Type: text/plain; version=0.0.4
+Date: Sat, 17 Mar 2018 08:47:06 GMT
+```
+
+其中version用于指定Text-based的格式版本，当没有指定版本的时候，默认使用最新格式规范的版本。同时HTTP响应头还需要指定压缩格式为gzip。
