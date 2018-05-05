@@ -1,4 +1,4 @@
-# 在Spring Boot中集成Prometheus
+# 在Sring Boot中集成
 
 这部分将以Spring Boot/Spring Cloud为例，介绍基于Promtheus Client Library扩展Prometheus的一些实际的应用场景。
 

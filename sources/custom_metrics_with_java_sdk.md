@@ -1,8 +1,10 @@
-# 扩展Prometheus
+# client_java
 
 为了方便用户集成，Prometheus提供了多种Client Library。通过这些Client Library用户可以创建自定义的Exporter程序，也可以直接在业务系统中集成对Prometheus的支持。 这一小节中，我们将学习如何使用Promthues官方提供的[client_java](https://github.com/prometheus/client_java)创建Exporter程序。
 
-## 快速入门
+这部分我们将带领读者学习Prometheus社区提供的client_java（[Github地址](https://github.com/prometheus/client_java)）的基本用法，并基于它实现一个简单的Exporter程序。
+
+## 初识client_java
 
 你可以根据自己的喜好使用Maven或者Gradle创建应用程序，在本书中将以Gradle为例。
 
@@ -38,7 +40,6 @@ public class Server {
     }
 
 }
-
 ```
 
 运行main函数，并且访问[http://localhost:1234/metrics](http://localhost:1234/metrics)，可以在网页中看到以下内容。
