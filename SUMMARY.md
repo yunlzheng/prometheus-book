@@ -40,7 +40,7 @@
     * [监控MySQL运行状态：MySQLD Exporter](./sources/use-promethues-monitor-mysql.md)
     * [网络探测：Blackbox Exporter](./sources/install_blackbox_exporter.md)
   * [使用Java自定义Exporter](./sources/custom_exporter_with_java.md)
-    * [client_java介绍](./sources/custom_metrics_with_java_sdk.md)
+    * [使用client_java](./sources/client_library_java.md)
     * [在Sring Boot中集成](./sources/custom_app_support_prometheus.md)
   * [小结](./chapter5/SUMMARY.md)
 * [第5章 可视化一切](./chapter4/README.md)
