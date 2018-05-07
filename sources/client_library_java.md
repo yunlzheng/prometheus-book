@@ -20,7 +20,9 @@ public class YourCustomCollector extends Collector {
         List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
 
         String metricName = "my_guage_1";
+
         // Your code to get metrics
+        
         MetricFamilySamples.Sample sample = new MetricFamilySamples.Sample(metricName, Arrays.asList("l1"), Arrays.asList("v1"), 4);
         MetricFamilySamples.Sample sample2 = new MetricFamilySamples.Sample(metricName, Arrays.asList("l1", "l2"), Arrays.asList("v1", "v2"), 3);
 
@@ -63,7 +65,7 @@ client_java下的simpleclient_httpserver模块实现了一个简单的HTTP服务
 
 ```
 compile 'io.prometheus:simpleclient_httpserver:0.3.0'
-``
+```
 
 添加依赖之后，就可以在Exporter程序的main方法中启动一个HTTPServer实例：
 
@@ -125,12 +127,10 @@ DefaultExports.initialize();
 
 ```
 $ curl http://127.0.0.1:1234/metrics
-...
 # HELP jvm_buffer_pool_used_bytes Used bytes of a given JVM buffer pool.
 # TYPE jvm_buffer_pool_used_bytes gauge
 jvm_buffer_pool_used_bytes{pool="direct",} 8192.0
 jvm_buffer_pool_used_bytes{pool="mapped",} 0.0
-...
 ```
 
 除了之前自定义的监控指标以外，在响应内容中还会得到当前JVM的运行状态数据。在client_java项目中除了使用内置了对JVM监控的Collector以外，还实现了对Hibernate，Guava Cache，Jetty，Log4j、Logback等监控数据收集的支持。用户只需要添加相应的依赖，就可以直接进行使用。
