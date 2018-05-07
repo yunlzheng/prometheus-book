@@ -14,7 +14,7 @@ compile 'io.prometheus:simpleclient:0.3.0'
 
 当无法直接修改监控目标时，可以通过自定义Collector的方式，实现对监控样本收集，该收集器需要实现collect()方法并返回一组监控样本，如下所示：
 
-```
+```Java
 public class YourCustomCollector extends Collector {
     public List<MetricFamilySamples> collect() {
         List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
@@ -40,7 +40,7 @@ public class YourCustomCollector extends Collector {
 
 直接使用MetricFamilySamples.Sample和MetricFamilySamples的方式适用于当某监控指标的样本之间的标签可能不一致的情况，例如，当监控容器时，不同容器实例可能包含一些自定义的标签，如果需要将这些标签反应到样本上，那么每个样本的标签则不可能保持一致。而如果所有样本的是一致的情况下，我们还可以使用client_java针对不同指标类型的实现GaugeMetricFamily，CounterMetricFamily，SummaryMetricFamily等，例如：
 
-```
+```Java
 class YourCustomCollector2 extends Collector {
   List<MetricFamilySamples> collect() {
     List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
@@ -69,7 +69,7 @@ compile 'io.prometheus:simpleclient_httpserver:0.3.0'
 
 添加依赖之后，就可以在Exporter程序的main方法中启动一个HTTPServer实例：
 
-```
+```Java
 public class CustomExporter {
     public static void main(String[] args) throws IOException {
         HTTPServer server = new HTTPServer(1234);
@@ -79,7 +79,7 @@ public class CustomExporter {
 
 而在启动之前，别忘记调用Collector的register()方法。否则HTTPServer是找不到任何的Collector实例的：
 
-```
+```Java
 new YourCustomCollector().register();
 new YourCustomCollector2().register();
 ```
@@ -113,13 +113,13 @@ my_guage{l1="v1",l2="v2",} 3.0
 
 通过client_java中定义的标准接口，用户可以快速实现自己的监控数据收集器，并通过HTTPServer将样本数据输出给Prometheus。除了提供接口规范以外，client_java还提供了多个内置的Collector模块，以simpleclient_hotspot为例，该模块中内置了对JVM虚拟机运行状态（GC，内存池，JMX，类加载，线程池等）数据的Collector实现，用户可以通过在Gradle中添加以下依赖，导入simpleclient_hotspot：
 
-```
+```Groovy
 compile 'io.prometheus:simpleclient_hotspot:0.3.0'
 ```
 
 通过调用io.prometheus.client.hotspot.DefaultExport的initialize方法注册该模块中所有的Collector实例：
 
-```
+```Java
 DefaultExports.initialize();
 ```
 
@@ -143,7 +143,7 @@ jvm_buffer_pool_used_bytes{pool="mapped",} 0.0
 
 以Gauge为例，当我们需要监控某个业务当前正在处理的请求数量，可以使用以下方式实现：
 
-```
+```Java
 public class YourClass {
 
     static final Gauge inprogressRequests = Gauge.build()
@@ -164,7 +164,7 @@ Gauge对象主要包含两个方法inc()和dec()，分别用于计数器+1和-1�
 
 如果监控指标中还需要定义标签，则可以使用Gauge构造器的labelNames()方法，声明监控指标的标签，同时在样本计数时，通过指标的labels()方法指定标签的值，如下所示：
 
-```
+```Java
 public class YourClass {
 
     static final Gauge inprogressRequests = Gauge.build()
@@ -187,7 +187,7 @@ Counter与Gauge的使用方法一致，唯一的区别在于Counter实例只包�
 
 Summary和Histogram用于统计和分析样本的分布情况。如下所示，通过Summary可以将HTTP请求的字节数以及请求处理时间作为统计样本，直接统计其样本的分布情况。
 
-```
+```Java
 class YourClass {
   static final Summary receivedBytes = Summary.build()
      .name("requests_size_bytes").help("Request size in bytes.").register();
@@ -208,7 +208,7 @@ class YourClass {
 
 除了使用Timer进行计时以外，Summary实例也提供了timer()方法，可以对线程或者Lamda表达式运行时间进行统计：
 
-```
+```java
 class YourClass {
   static final Summary requestLatency = Summary.build()
     .name("requests_latency_seconds").help("Request latency in seconds.").register();
@@ -230,7 +230,7 @@ class YourClass {
 
 Summary和Histogram的用法基本保持一致，区别在于Summary可以指定在客户端统计的分位数，如下所示：
 
-```
+```java
 static final Summary requestLatency = Summary.build()
     .quantile(0.5, 0.05)   // 其中0.05为误差
     .quantile(0.9, 0.01)   // 其中0.01为误差
@@ -239,7 +239,7 @@ static final Summary requestLatency = Summary.build()
 
 对于Histogram而言，默认的分布桶为[.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10]，如果需要指定自定义的桶分布，可以使用buckets()方法指定，如下所示：
 
-```
+```java
  static final Histogram requestLatency = Histogram.build()
             .name("requests_latency_seconds").help("Request latency in seconds.")
             .buckets(0.1, 0.2, 0.4, 0.8)
@@ -253,13 +253,13 @@ static final Summary requestLatency = Summary.build()
 
 添加依赖：
 
-```
+```Groovy
 compile 'io.prometheus:simpleclient_pushgateway:0.3.0'
 ```
 
 如下所示，PushGateway的实现类可以从所有注册到defaultRegistry的Collector实例中获取样本数据并直接推送  到外部部署的PushGateway服务中。
 
-```
+```Java
 public class PushGatewayIntegration {
 
     public void push() throws IOException {
