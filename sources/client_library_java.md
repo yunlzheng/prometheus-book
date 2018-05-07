@@ -10,7 +10,7 @@ client_java是Prometheus针对JVM类开发语言的client library库，我们可
 
 ```
 compile 'io.prometheus:simpleclient:0.3.0'
-``
+```
 
 当无法直接修改监控目标时，可以通过自定义Collector的方式，实现对监控样本收集，该收集器需要实现collect()方法并返回一组监控样本，如下所示：
 
@@ -137,5 +137,136 @@ jvm_buffer_pool_used_bytes{pool="mapped",} 0.0
 
 ## 在业务代码中进行监控埋点
 
+在client_java中除了使用Collector直接采集样本数据以外，还直接提供了对Prometheus中4种监控类型的实现分别是：Counter、Gauge、Summary和Histogram。 基于这些实现，开发人员可以非常方便的在应用程序的业务流程中进行监控埋点。
+
+## 简单类型Gauge和Counter
+
+以Gauge为例，当我们需要监控某个业务当前正在处理的请求数量，可以使用以下方式实现：
+
+```
+public class YourClass {
+
+    static final Gauge inprogressRequests = Gauge.build()
+            .name("inprogress_requests").help("Inprogress requests.").register();
+
+    void processRequest() {
+        inprogressRequests.inc();
+        // Your code here.
+        inprogressRequests.dec();
+    }
+
+}
+```
+
+Gauge继承自Collector，registoer()方法会将该Gauge实例注册到CollectorRegistry中。这里创建了一个名为inprogress_requests的监控指标，其注释信息为"Inprogress requests"。
+
+Gauge对象主要包含两个方法inc()和dec()，分别用于计数器+1和-1。
+
+如果监控指标中还需要定义标签，则可以使用Gauge构造器的labelNames()方法，声明监控指标的标签，同时在样本计数时，通过指标的labels()方法指定标签的值，如下所示：
+
+```
+public class YourClass {
+
+    static final Gauge inprogressRequests = Gauge.build()
+            .name("inprogress_requests")
+            .labelNames("method")
+            .help("Inprogress requests.").register();
+
+    void processRequest() {
+        inprogressRequests.labels("get").inc();
+        // Your code here.
+        inprogressRequests.labels("get").dec();
+    }
+
+}
+```
+
+Counter与Gauge的使用方法一致，唯一的区别在于Counter实例只包含一个inc()方法，用于计数器+1。
+
+### 复杂类型Summary和Histogram
+
+Summary和Histogram用于统计和分析样本的分布情况。如下所示，通过Summary可以将HTTP请求的字节数以及请求处理时间作为统计样本，直接统计其样本的分布情况。
+
+```
+class YourClass {
+  static final Summary receivedBytes = Summary.build()
+     .name("requests_size_bytes").help("Request size in bytes.").register();
+  static final Summary requestLatency = Summary.build()
+     .name("requests_latency_seconds").help("Request latency in seconds.").register();
+  
+  void processRequest(Request req) {
+    Summary.Timer requestTimer = requestLatency.startTimer();
+    try {
+      // Your code here.
+    } finally {
+      receivedBytes.observe(req.size());
+      requestTimer.observeDuration();
+    }
+  }
+}
+```
+
+除了使用Timer进行计时以外，Summary实例也提供了timer()方法，可以对线程或者Lamda表达式运行时间进行统计：
+
+```
+class YourClass {
+  static final Summary requestLatency = Summary.build()
+    .name("requests_latency_seconds").help("Request latency in seconds.").register();
+  
+  void processRequest(Request req) {
+    requestLatency.timer(new Runnable() {
+      public abstract void run() {
+        // Your code here.    
+      }
+    });  
+      
+    // Or the Java 8 lambda equivalent   
+    requestLatency.timer(() -> {
+      // Your code here.
+    });
+  }
+}
+```
+
+Summary和Histogram的用法基本保持一致，区别在于Summary可以指定在客户端统计的分位数，如下所示：
+
+```
+static final Summary requestLatency = Summary.build()
+    .quantile(0.5, 0.05)   // 其中0.05为误差
+    .quantile(0.9, 0.01)   // 其中0.01为误差
+    .name("requests_latency_seconds").help("Request latency in seconds.").register();
+```
+
+对于Histogram而言，默认的分布桶为[.005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10]，如果需要指定自定义的桶分布，可以使用buckets()方法指定，如下所示：
+
+```
+ static final Histogram requestLatency = Histogram.build()
+            .name("requests_latency_seconds").help("Request latency in seconds.")
+            .buckets(0.1, 0.2, 0.4, 0.8)
+            .register();
+```
+
 
 ## 与PushGateway集成
+
+对于一些短周期或者临时采集的样本数据，client_java还提供了对PushGateway的支持：
+
+添加依赖：
+
+```
+compile 'io.prometheus:simpleclient_pushgateway:0.3.0'
+```
+
+如下所示，PushGateway的实现类可以从所有注册到defaultRegistry的Collector实例中获取样本数据并直接推送  到外部部署的PushGateway服务中。
+
+```
+public class PushGatewayIntegration {
+
+    public void push() throws IOException {
+        CollectorRegistry registry = CollectorRegistry.defaultRegistry;
+        PushGateway pg = new PushGateway("127.0.0.1:9091");
+        pg.pushAdd(registry, "my_batch_job");
+    }
+
+}
+```
