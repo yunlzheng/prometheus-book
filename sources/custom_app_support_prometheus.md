@@ -1,6 +1,6 @@
 # 在Sring Boot中集成
 
-这部分将以Spring Boot/Spring Cloud为例，介绍基于Promtheus Client Library扩展Prometheus的一些实际的应用场景。
+本小节将以Spring Boot为例，介绍如何在应用代码中集成client_java。
 
 添加Prometheus Java Client相关的依赖：
 
@@ -362,4 +362,4 @@ public class CustomExporter extends Collector {
 }
 ```
 
-当然这里也可以使用CounterMetricFamily，SummaryMetricFamily声明其它的指标类型。
+这里也可以使用CounterMetricFamily，SummaryMetricFamily声明其它的指标类型。
