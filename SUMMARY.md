@@ -85,7 +85,7 @@
   * [使用Grafana创建可视化仪表盘](./sources/use-grafana-in-k8s.md)
   * Prometheus Vs Heapster
   * 基于Prometheus实现应用的弹性伸缩
-  * 使用Prometheus Opertor管理Prometheus
+  * 使用Opertor管理Prometheus
   * 总结
 * [第9章 使用Prometheus监控Rancher集群](./chapter10/README.md)
 * [参考资料](./REFERENCES.md)

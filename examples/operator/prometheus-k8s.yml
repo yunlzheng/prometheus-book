@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-k8s
+  labels:
+    prometheus: k8s
+spec:
+  version: v1.3.0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-k8s
+spec:
+  type: NodePort
+  ports:
+  - name: web
+    port: 9090
+    protocol: TCP
+    targetPort: web
+  selector:
+    prometheus: prometheus-k8s
