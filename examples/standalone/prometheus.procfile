@@ -1,3 +1,4 @@
-p1: prometheus --config.file=./prometheus.yml --storage.tsdb.path=/data/prometheus/ --web.listen-address="127.0.0.1:9090"
+prometheus: prometheus --config.file=./prometheus.yml --storage.tsdb.path=/data/prometheus/ --web.listen-address="0.0.0.0:9090"
+grafana: docker run -p 3000:3000 -e GF_USERS_DEFAULT_THEME=light -v grafana-storage:/var/lib/grafana grafana/grafana 
 cadvisor: docker run --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=8080:8080  google/cadvisor:latest
 node_exporter: node_exporter
