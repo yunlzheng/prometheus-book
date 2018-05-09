@@ -45,18 +45,26 @@
   * [小结](./chapter5/SUMMARY.md)
 * [第5章 可视化一切](./chapter4/README.md)
   * [Grafana简介](./sources/grafana-intro.md)
-  * 安装Grafana
-  * 使用Prometheus数据源
   * 创建监控Dashboard
-  * 自定义Panel
+  * 自定义面板
+    * 通用设置
+    * 指标
+    * 坐标轴
+    * 图例
+    * 显示
+    * 告警
+    * 时间范围
+  * 动态面板
+    * 模板
+  * 共享Dashboard
+  * 注解
   * 标签
   * 表格
-  * 注解
-  * 使用模板
   * Repeat Panel
   * 共享Dashboard
   * 时间范围
   * SingleStat面板
+  * 告警
   * [小结](./chapter5/SUMMARY.md)
 * [第6章 集群与高可用](./chapter7/READMD.md)
   * [本地存储](./sources/prometheus-local-storage.md)
