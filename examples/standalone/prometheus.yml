@@ -7,6 +7,8 @@ scrape_configs:
   static_configs:
   - targets:
     - 'localhost:9100'
+    - 'bar:9100'
+    - 'foo:9100'
 - job_name: 'cadvisor'
   static_configs:
   - targets:
