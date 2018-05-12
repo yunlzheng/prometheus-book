@@ -7,6 +7,8 @@
 Grafana是一个开源的数据可视化工具，它可以支持40多种不同的数据来源，并以插件的形式支持用户进行扩展。
 
 * 可视化
-* 多种datasource支持
+* 多数据源
 * 注解
 * 告警
+
+![Grafana Dashboard](http://p2n2em8ut.bkt.clouddn.com/grafana-dashboard-example.png)
