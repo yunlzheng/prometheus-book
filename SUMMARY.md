@@ -43,15 +43,14 @@
     * [使用client_java](./sources/client_library_java.md)
     * [在Sring Boot中集成](./sources/custom_app_support_prometheus.md)
   * [小结](./chapter5/SUMMARY.md)
-* [第5章 可视化一切](./chapter4/README.md)
-  * [Grafana简介](./sources/grafana-intro.md)
-  * 数据可视化
-    * Dashboard&Folder
-    * 使用 Graph Panel
-    * 使用注解
-    * 使用Heatmap Pane;
+* [第5章 可视化一切](./grafana/README.md)
+  * [Grafana简介](./grafana/grafana-intro.md)
+  * [数据可视化](./grafana/grafana-panels.md)
+    * [变化趋势：Graph](./grafana/use_graph_panel.md)
+    * [当前状态：SingleStat](./grafana/use_singlestat_panel.md)
+    * [分布统计：使用Heatmap](./grafana/use_heatmap_panel.md)
     * 使用Tabel Panel
-    * SingleStat面板
+    * 使用注解
   * 自定义面板
     * 通用设置
     * 指标
@@ -66,6 +65,7 @@
     * 动态Row
   * 共享Dashboard
   * 告警
+  * 团队与权限管理
   * [小结](./chapter5/SUMMARY.md)
 * [第6章 集群与高可用](./chapter7/READMD.md)
   * [本地存储](./sources/prometheus-local-storage.md)

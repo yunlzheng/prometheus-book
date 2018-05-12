@@ -1,0 +1,3 @@
+# 使用Heatmap分析数据分布
+
+Heatmap是是Grafana v4.3版本以后新添加的可视化面板，特别适用于Prometheus下展示Histograms以及Summary类型监控指标的数据可视化。
