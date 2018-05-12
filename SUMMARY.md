@@ -45,7 +45,13 @@
   * [小结](./chapter5/SUMMARY.md)
 * [第5章 可视化一切](./chapter4/README.md)
   * [Grafana简介](./sources/grafana-intro.md)
-  * 创建监控Dashboard
+  * 数据可视化
+    * Dashboard&Folder
+    * 使用 Graph Panel
+    * 使用注解
+    * 使用Heatmap Pane;
+    * 使用Tabel Panel
+    * SingleStat面板
   * 自定义面板
     * 通用设置
     * 指标
@@ -55,15 +61,10 @@
     * 告警
     * 时间范围
   * 动态面板
-    * 模板
+    * 动态参数
+    * 动态Panel
+    * 动态Row
   * 共享Dashboard
-  * 注解
-  * 标签
-  * 表格
-  * Repeat Panel
-  * 共享Dashboard
-  * 时间范围
-  * SingleStat面板
   * 告警
   * [小结](./chapter5/SUMMARY.md)
 * [第6章 集群与高可用](./chapter7/READMD.md)
