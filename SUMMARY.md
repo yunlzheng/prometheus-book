@@ -45,7 +45,7 @@
   * [小结](./chapter5/SUMMARY.md)
 * [第5章 可视化一切](./grafana/README.md)
   * [Grafana简介](./grafana/grafana-intro.md)
-  * [数据可视化](./grafana/grafana-panels.md)
+  * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
     * [变化趋势：Graph](./grafana/use_graph_panel.md)
     * [当前状态：SingleStat](./grafana/use_singlestat_panel.md)
     * [分布统计：使用Heatmap](./grafana/use_heatmap_panel.md)
