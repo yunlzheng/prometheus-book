@@ -4,7 +4,34 @@ Graph面板是最常用的一种可视化面板，其通过折线图或者柱状
 
 ![Graph面板](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_panel.png)
 
-## 认识Graph
+## 认识Graph Panel
 
 通过Dashboard的“Add Panel”用户可以选择并添加一个类型为Graph的可视化面板。
 
+对于Graph类型的面板来说，除了在上一小节中介绍过的General和Metric配置选项以外，还包含一些列的样式控制选项。
+
+Graph:
+
+* General:
+* Metrics:
+* Axes
+* Legend
+* Display
+* Alert
+* Time range
+
+Singlestat:
+
+* General
+* Metrics
+* Options
+* Value Mappings
+* Time range
+
+Heatmap:
+
+* General
+* Metrics
+* Axes
+* Display
+* Time range
