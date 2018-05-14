@@ -36,15 +36,15 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 
 ![Axes选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_axes.png)
 
-默认情况下，Y轴会直接显示当前样本的值，通过**Left Y**的**Unit**可以让Graph Panel自动格式化样本值。当前表达式返回的当前主机CPU使用率的小数表示，因此这里选择单位为**percent(0.0.-1.0)**。除了百分比以外，Graph Panel支持如日期、货币、重量、面积等各种类型单位的自动换算，用户根据自己当前样本的值含义选择即可。
+默认情况下，Y轴会直接显示当前样本的值，通过**Left Y**的**Unit**可以让Graph Panel自动格式化样本值。当前表达式返回的当前主机CPU使用率的小数表示，因此，这里选择单位为**percent(0.0.-1.0)**。除了百分比以外，Graph Panel支持如日期、货币、重量、面积等各种类型单位的自动换算，用户根据自己当前样本的值含义选择即可。
 
 #### Legend：图例管理
 
-除了在Metrics控制图例的显示格式以外，在Graph Panel的**Legend选项**可以进一步控制图例的显示方式，如下所示：
+除了在Metrics设置图例的显示名称以外，在Graph Panel的**Legend选项**可以进一步控制图例的显示方式，如下所示：
 
 ![Legend选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_legend.png)
 
-**Options中**可以控制图例的显示方式以及展示位置，**Vlaues**中可以控制是否显示当前时间序列的最小值，平均值等等。 Decimals用于控制这些值显示时保留的小数位，如下所示：
+**Options中**可以设置图例的显示方式以及展示位置，**Vlaues**中可以设置是否显示当前时间序列的最小值，平均值等。 **Decimals**用于配置这些值显示时保留的小数位，如下所示：
 
 ![Legend控制图例的显示示例](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_legend_sample.png)
 
@@ -54,13 +54,13 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 
 ![Display选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_display_draw.png)
 
-**Draw Options**主要用于控制当前图标的展示形式、样式以及交互提示行为，其中Draw Modes用于控制图形样式：Bar（柱状）、Lines（线条）、Points（点），用户可以根据自己的需求同时启用多种模式。Mode Options则控制相关的样式。Hover tooltip用于控制当鼠标移动到图形时，显示提示框中的内容。
+**Draw Options**用于设置当前图标的展示形式、样式以及交互提示行为。其中，Draw Modes用于控制图形展示形式：Bar（柱状）、Lines（线条）、Points（点），用户可以根据自己的需求同时启用多种模式。Mode Options则设置各个展示模式下的相关样式。Hover tooltip用于控制当鼠标移动到图形时，显示提示框中的内容。
 
-如果希望当前图表中的某条时间序列以不同的形式展示，则可以通过**Series overrides**控制，顾名思义，可以为指定的时间序列指定自定义的Draw Options定义，从而让其以不同的样式展示。例如：
+如果希望当前图表中的时间序列以不同的形式展示，则可以通过**Series overrides**控制，顾名思义，可以为指定的时间序列指定自定义的Draw Options配置，从而让其以不同的样式展示。例如：
 
 ![Series overrides](http://p2n2em8ut.bkt.clouddn.com/grafana_series_overrides.png)
 
-这里定义了一条自定义规则，其匹配图例名称满足**/localhost/**的时间序列，并定义其以点的形式显示在图表中，修改后的图标显示效果如下：
+这里定义了一条自定义规则，其匹配图例名称满足**/localhost/**的时间序列，并定义其以点的形式显示在图表中，修改后的图标显示效果如下：
 
 ![Series overrides效果](http://p2n2em8ut.bkt.clouddn.com/grafana_series_overrides_demo.png)
 
@@ -100,8 +100,8 @@ prometheus_tsdb_compaction_duration_count 36
 
 ![Metrics设置](http://p2n2em8ut.bkt.clouddn.com/grafana_bucket_setting.png)
 
-Graph Panel重新计算了Bucket边界，如下所示，在0~1ms范围内的任务次数为2，在1~2ms范围内的运行任务次数为34。通过图形的面积，可以反映出各个Bucket下的大致数据分布情况：
+Graph Panel重新计算了Bucket边界，如下所示，在0~1ms范围内的任务次数为2，在1~2ms范围内的运行任务次数为34。通过图形的面积，可以反映出各个Bucket下的大致数据分布情况：
 
 ![Histogram数据可视化](http://p2n2em8ut.bkt.clouddn.com/grafana_bucket_demo.png)
 
-不过通过Graph Panel展示Histogram也并不太直观，其并不能直接反映出Bucket的大小以及分布情况，因此在Grafana V5版本以后更推荐使用Heatmap Panel的方式展示Histogram样本数据。关于Heatmap Panel的使用将会在接下来的部分介绍。
+不过通过Graph Panel展示Histogram也并不太直观，其并不能直接反映出Bucket的大小以及分布情况，因此在Grafana V5版本以后更推荐使用Heatmap Panel的方式展示Histogram样本数据。关于Heatmap Panel的使用将会在接下来的部分介绍。
