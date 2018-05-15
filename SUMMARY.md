@@ -46,19 +46,11 @@
 * [第5章 可视化一切](./grafana/README.md)
   * [Grafana简介](./grafana/grafana-intro.md)
   * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
-    * [变化趋势：Graph](./grafana/use_graph_panel.md)
-    * [分布统计：Heatmap](./grafana/use_heatmap_panel.md)
-    * [当前状态：SingleStat](./grafana/use_singlestat_panel.md)
-    * 使用Tabel Panel
+    * [变化趋势：Graph Panel](./grafana/use_graph_panel.md)
+    * [分布统计：Heatmap Panel](./grafana/use_heatmap_panel.md)
+    * [当前状态：SingleStat Panel](./grafana/use_singlestat_panel.md)
+    * [表格：Tabel Panel](./grafana/use_table_panel.md)
     * 使用注解
-  * 自定义面板
-    * 通用设置
-    * 指标
-    * 坐标轴
-    * 图例
-    * 显示
-    * 告警
-    * 时间范围
   * 动态面板
     * 动态参数
     * 动态Panel

@@ -32,7 +32,7 @@ Grafana中所有类型的Panel都会包含一个General选项:
 
 ## 认识Prometheus Query Editor
 
-Metric选中中可以定义了Grafana从哪些数据源中查询样本数据。**Data Source**中指定当前查询的数据源，Grafana会加载当前组织中添加的所有数据源。其中还会包含两个特殊的数据源：**Mixed**和**Grafana**。 Mixed用于需要从多个数据源中查询和渲染数据的场景，Grafana则用于需要查询Grafana自身状态时使用。
+Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。**Data Source**中指定当前查询的数据源，Grafana会加载当前组织中添加的所有数据源。其中还会包含两个特殊的数据源：**Mixed**和**Grafana**。 Mixed用于需要从多个数据源中查询和渲染数据的场景，Grafana则用于需要查询Grafana自身状态时使用。
 
 由于不同类型的数据源不同，当选中数据源时，Panel会根据当前数据源类型显示不同的Query Editor。这里我们主要介绍Prometheus Query Editor，如下所示，当选中的数据源类型为Protheus时，会显示如下界面：
 

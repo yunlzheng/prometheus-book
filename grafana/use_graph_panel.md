@@ -1,4 +1,4 @@
-# 使用Graph面板
+# 变化趋势：Graph Panel
 
 Graph面板是最常用的一种可视化面板，其通过折线图或者柱状图的形式显示监控样本随时间而变化的趋势。Graph面板天生适用于Prometheus中Gauge和Counter类型监控指标的监控数据可视化。例如，当需要查看主机CPU、内存使用率的随时间变化的情况时，可以使用Graph面板。同时，Graph还可以非常方便的支持多个数据之间的对比。
 
@@ -26,7 +26,7 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
-根据当前Promtheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph Panel会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为**{{ instance }}**控制每条线的图例名称：
+根据当前Promtheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph Panel会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
 
 ![使用Legend format模板化图例](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_metrics_legend.png)
 
