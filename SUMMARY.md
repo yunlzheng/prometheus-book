@@ -47,8 +47,8 @@
   * [Grafana简介](./grafana/grafana-intro.md)
   * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
     * [变化趋势：Graph](./grafana/use_graph_panel.md)
-    * [当前状态：SingleStat](./grafana/use_singlestat_panel.md)
     * [分布统计：Heatmap](./grafana/use_heatmap_panel.md)
+    * [当前状态：SingleStat](./grafana/use_singlestat_panel.md)
     * 使用Tabel Panel
     * 使用注解
   * 自定义面板
