@@ -32,7 +32,7 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 
 在Graph Panel的**Axes选项**中可以控制图标的X轴和Y轴相关的行为，如下所示：
 
-#### Axes：管理坐标轴行为
+#### Axes：管理坐标轴
 
 ![Axes选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_axes.png)
 

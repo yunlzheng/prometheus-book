@@ -16,7 +16,7 @@ Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图�
 
 其中大部分的配置选项与Graph Panel基本保持一致，这里就不重复介绍了。
 
-### Metrics设置
+### Metrics：控制数据源
 
 如下所示，当使用Heatmap可视化Histogram类型的监控指标时，需要设置**Format as**选项为**Heatmap**。当使用Heatmap格式化数据后，Grafana会自动根据样本的中的le标签，计算各个Bucket桶内的分布，并且按照Bucket对数据进行重新排序：
 
@@ -24,7 +24,7 @@ Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图�
 
 而**Legend format**模板将会控制Y轴中的显示内容。
 
-### Axes设置
+### Axes：管理坐标轴
 
 由于Histogram类型指标自带了分区范围Bucket，因此这里的Date format需要定义为**Time series buckets**。该选项表示Heatmap Panel不需要自身对数据的分布情况进行计算，直接使用时间序列中返回的Bucket即可。
 
