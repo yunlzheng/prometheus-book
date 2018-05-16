@@ -39,6 +39,12 @@
       "id": "singlestat",
       "name": "Singlestat",
       "version": "5.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": "5.0.0"
     }
   ],
   "annotations": {
@@ -49,8 +55,27 @@
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
+        "limit": 100,
         "name": "Annotations & Alerts",
+        "showIn": 0,
         "type": "dashboard"
+      },
+      {
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "expr": "a",
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "limit": 100,
+        "name": "Annotations",
+        "showIn": 0,
+        "tagKeys": "a",
+        "tags": [
+          "test"
+        ],
+        "textFormat": "a",
+        "titleFormat": "a",
+        "type": "tags"
       }
     ]
   },
@@ -58,7 +83,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1526376234305,
+  "iteration": 1526460430622,
   "links": [],
   "panels": [
     {
@@ -741,9 +766,470 @@
         }
       ],
       "valueName": "current"
+    },
+    {
+      "columns": [
+        {
+          "text": "Avg",
+          "value": "avg"
+        },
+        {
+          "text": "Min",
+          "value": "min"
+        },
+        {
+          "text": "Max",
+          "value": "max"
+        },
+        {
+          "text": "Current",
+          "value": "current"
+        }
+      ],
+      "datasource": "${DS_PROMETHEUS}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 64
+      },
+      "id": 30,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "时间",
+          "dateFormat": "MM/DD/YY h:mm:ss a",
+          "link": false,
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "指标名称",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "#f29191",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Metric",
+          "preserveFormat": false,
+          "sanitize": false,
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "磁盘空间",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": "value",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/.*9100/",
+          "thresholds": [
+            ""
+          ],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sum(node_filesystem_avail{fstype=\"hfs\"}) without (job, mountpoint)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}  {{ device }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Time series aggregations",
+      "transform": "timeseries_aggregations",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "${DS_PROMETHEUS}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 70
+      },
+      "id": 37,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "时间",
+          "dateFormat": "MM/DD/YY h:mm:ss a",
+          "link": false,
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "指标名称",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "#f29191",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Metric",
+          "preserveFormat": false,
+          "sanitize": false,
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "磁盘空间",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": "value",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/.*9100/",
+          "thresholds": [
+            ""
+          ],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sum(node_filesystem_avail) by (instance) / 1024",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Time series to column",
+      "transform": "timeseries_to_columns",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "${DS_PROMETHEUS}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 76
+      },
+      "id": 38,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "时间",
+          "dateFormat": "MM/DD/YY h:mm:ss a",
+          "link": false,
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "指标名称",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "#f29191",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Metric",
+          "preserveFormat": false,
+          "sanitize": false,
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "磁盘空间",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": "value",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/.*9100/",
+          "thresholds": [
+            ""
+          ],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "node_filesystem_avail{instance=\"localhost:9100\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{ device }}",
+          "refId": "A"
+        }
+      ],
+      "title": "time series to row",
+      "transform": "timeseries_to_rows",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "${DS_PROMETHEUS}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 41,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "MM/DD/YY h:mm:ss a",
+          "link": false,
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "value",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "node_filesystem_avail{instance=\"localhost:9100\"}",
+          "format": "table",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Table format",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "-- Grafana --",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 88
+      },
+      "id": 34,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "hide": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Annotation Table Sample",
+      "transform": "annotations",
+      "transparent": false,
+      "type": "table"
     }
   ],
-  "refresh": "30s",
+  "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [],
@@ -803,5 +1289,5 @@
   "timezone": "",
   "title": "Prometheus Usage",
   "uid": "R_4Xnp7mz",
-  "version": 58
+  "version": 83
 }
