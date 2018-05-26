@@ -2,13 +2,17 @@ global:
   scrape_interval: 15s
   scrape_timeout: 10s
   evaluation_interval: 15s
+rule_files:
+- rules/*.rule
+alerting:
+  alertmanagers:
+  - static_configs:
+      - targets: ['localhost:9093']
 scrape_configs:
 - job_name: 'node'
   static_configs:
   - targets:
     - 'localhost:9100'
-    - 'bar:9100'
-    - 'foo:9100'
 - job_name: 'cadvisor'
   static_configs:
   - targets:

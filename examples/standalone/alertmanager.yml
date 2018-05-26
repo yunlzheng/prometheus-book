@@ -1,0 +1,7 @@
+route:
+  receiver: 'default-receiver'
+receivers:
+  - name: default-receiver
+    webhook_configs:
+     - url: http://localhost:8081/webhook
+       send_resolved: true
