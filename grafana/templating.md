@@ -25,3 +25,16 @@
 ```
 
 变量的值可以支持单选或者多选，当对接Prometheus时，Grafana会自动将$node的值格式化为如“**host1|host2|host3**”的形式。配合使用PromQL的标签正则匹配“**=~**”，通过动态改变PromQL从而实现基于标签快速对时间序列进行过滤。
+
+## 变量定义
+
+通过Dashboard页面的Settings选项，可以进入Dashboard的配置页面并且选择Variables子菜单。
+
+![为Dashboard添加变量](http://p2n2em8ut.bkt.clouddn.com/grafana_templating_add_variables.png)
+
+|类型|工作方式|
+|-|--|
+|Query|允许用户通过Datasource查询表达式的返回值动态生成变量的可选值|
+|Interval|该变量代表时间跨度，通过Interval类型的变量，可以动态改变PromQL区间向量表达式中的时间范围。如rate(node_cpu[2m])|
+|Datasource|允许用户动态切换当前Dashboard的数据源，特别适用于同一个Dashboard展示多个数据源数据的情况|
+|Custom|用户直接通过手动的方式，定义变量的可选值|
