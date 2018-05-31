@@ -1,6 +1,8 @@
 kind: Service
 apiVersion: v1
 metadata:
+  annotations:
+    prometheus.io/probe: 'true'
   name: nginx-service
 spec:
   selector:
