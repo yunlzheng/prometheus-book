@@ -75,5 +75,7 @@ Prometheus操作指南：云原生监控之道
   * [监控集群基础设施](./kubernetes/use-promethues-monitor-node-in-k8s.md)
   * [监控集群状态](./kubernetes/use-prometheus-monitor-k8s-cluster-state.md)
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
+  * [使用Prometheus Operator](./kubernetes/use-prometheus-operator.md)
+  * [使用Alertmanager Operator](./kubernetes/use-alertmanager-operator.md)
 * [第9章 使用Prometheus监控Rancher集群](./rancher/README.md)
 * [参考资料](./REFERENCES.md)

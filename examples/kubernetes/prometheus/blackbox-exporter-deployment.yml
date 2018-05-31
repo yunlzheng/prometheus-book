@@ -1,0 +1,36 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: blackbox-exporter
+  name: blackbox-exporter
+spec:
+  ports:
+  - name: blackbox
+    port: 9115
+    protocol: TCP
+  selector:
+    app: blackbox-exporter
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: blackbox-exporter
+  name: blackbox-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blackbox-exporter
+  template:
+    metadata:
+      labels:
+        app: blackbox-exporter
+    spec:
+      containers:
+      - image: prom/blackbox-exporter
+        imagePullPolicy: Always
+        name: blackbox-exporter
