@@ -13,6 +13,13 @@ kubectl create -f prometheus/prometheus-ingress.yml
 部署Exporters
 
 ```
-kubectl create prometheus/node-exporter-daemonset.yml
+kubectl create -f prometheus/node-exporter-daemonset.yml
 kubectl create -f prometheus/blackbox-exporter-deployment.yml
+```
+
+部署测试应用
+
+```
+kubectl create -f nginx-deployment.yml
+kubectl create -f nginx/nginx-service.yml
 ```
