@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: prometheus
   annotations:
+    prometheus.io/probe: 'true'
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
