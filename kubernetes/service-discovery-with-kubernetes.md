@@ -140,7 +140,7 @@ Promtheus使用新的配置文件重建之后，打开Prometheus UI，通过Serv
 
 查看Target页面，可以看到当前Prometheus中包含一个Target实例，并且Prometheus开始尝试从该实例中获取监控数据：
 
-![](http://p2n2em8ut.bkt.clouddn.com/service-discover-node-targets.png)
+![Target状态](http://p2n2em8ut.bkt.clouddn.com/service-discover-node-targets.png)
 
 这里会提示一个有关证书的错误信息。不过，现在这个问题并不重要，我们已经能够通过服务发现找到Kubernetes下的资源对象。 而且我们也并不需要监控所有的东西，我们还需要通过Prometheus的relabling机制去过滤并找到真正需要监控的资源。
 
