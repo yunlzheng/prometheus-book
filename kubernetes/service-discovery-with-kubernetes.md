@@ -4,9 +4,7 @@
 
 ## Kubernetes的访问授权
 
-在Kubernetes下，Promethues主要通过Kubernetes API查找以下4类资源，分别是:Node、Service、Pod、Endpoints、Ingress。为了能够让Prometheus能够访问收到认证保护的Kubernetes API，我们首先需要做的是，对Prometheus进行访问授权。
-
-在Kubernetes中主要使用基于角色的访问控制模型(Role-Based Access Control)，用于管理Kubernetes下资源访问权限。首先我们需要在Kubernetes下定义角色（ClusterRole），并且为该角色赋予响应的访问权限。同时创建Prometheus所使用的账号（ServiceAccount），最后则是将该账号与角色进行绑定（ClusterRoleBinding）。这些所有的操作在Kubernetes同样被视为是一系列的资源，可以通过YAML文件进行描述并创建，这里创建prometheus-rbac-setup.yml文件，并写入以下内容：
+为了能够让Prometheus能够访问收到认证保护的Kubernetes API，我们首先需要做的是，对Prometheus进行访问授权。在Kubernetes中主要使用基于角色的访问控制模型(Role-Based Access Control)，用于管理Kubernetes下资源访问权限。首先我们需要在Kubernetes下定义角色（ClusterRole），并且为该角色赋予响应的访问权限。同时创建Prometheus所使用的账号（ServiceAccount），最后则是将该账号与角色进行绑定（ClusterRoleBinding）。这些所有的操作在Kubernetes同样被视为是一系列的资源，可以通过YAML文件进行描述并创建，这里创建prometheus-rbac-setup.yml文件，并写入以下内容：
 
 ```
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -59,7 +57,7 @@ serviceaccount "prometheus" created
 clusterrolebinding "prometheus" created
 ```
 
-在完成角色权限以及用户的绑定之后，就可以指定Promtheus使用特定的ServiceAccount创建Pod实例。修改prometheus-deployment.yml文件，并添加serviceAccountName和serviceAccount定义：
+在完成角色权限以及用户的绑定之后，就可以指定Prometheus使用特定的ServiceAccount创建Pod实例。修改prometheus-deployment.yml文件，并添加serviceAccountName和serviceAccount定义：
 
 ```
 spec:
@@ -95,7 +93,30 @@ ca.crt     namespace  token
 
 ## 服务发现
 
-通过这些证书和令牌，Prometheus就可以正常的访问Kubernetes的API。如下所示，在Prometheus配置文件中，创建了一个名为kubernetes-nodes的监控采集任务，为了能够使Prometheus能够正常调用Kubernetes API，这里通过ca_file和bearer_token_file指定了CA证书以及令牌，在kubernetes_sd_configs配置中指定当前的服务发现模式为node，该模式下Prometheus会自动发现集群中所有的节点信息。
+在Kubernetes下，Promethues通过与Kubernetes API集成目前主要支持5中服务发现模式，分别是：Node、Service、Pod、Endpoints、Ingress。
+
+通过kubectl命令行，可以方便的获取到当前集群中的所有节点信息：
+
+```
+$ kubectl get nodes -o wide
+NAME       STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE            KERNEL-VERSION   CONTAINER-RUNTIME
+minikube   Ready     <none>    164d      v1.8.0    <none>        Buildroot 2017.02   4.9.13           docker://Unknown
+```
+
+为了能够让Prometheus能够获取到当前集群中所有节点的信息，在Promthues的配置文件中，我们添加如下Job配置：
+
+```
+- job_name: 'kubernetes-nodes'
+  tls_config:
+    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+  kubernetes_sd_configs:
+  - role: node
+```
+
+通过指定kubernetes_sd_config的模式为node，Prometheus会自动从Kubernetes中发现到所有的node节点并作为当前Job监控的Target实例。如下所示，这里需要指定用于访问Kubernetes API的ca以及token文件路径。
+
+对于Ingress，Service，Endpoints, Pod的使用方式也是类似的，下面给出了一个完整Prometheus配置的示例：
 
 ```
 apiVersion: v1
@@ -105,13 +126,42 @@ data:
       scrape_interval:     15s 
       evaluation_interval: 15s
     scrape_configs:
+
     - job_name: 'kubernetes-nodes'
-      scheme: https
       tls_config:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes_sd_configs:
       - role: node
+
+    - job_name: 'kubernetes-service'
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: service
+   
+    - job_name: 'kubernetes-endpoints'
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: endpoints
+
+    - job_name: 'kubernetes-ingress'
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: ingress
+ 
+    - job_name: 'kubernetes-pods'
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: pod
+
 kind: ConfigMap
 metadata:
   name: prometheus-config
@@ -134,18 +184,43 @@ prometheus-69f9ddb588-rbrs2        0/1       Terminating   0          4m
 prometheus-69f9ddb588-wtlsn        1/1       Running       0          14s
 ```
 
-Promtheus使用新的配置文件重建之后，打开Prometheus UI，通过Service Discovery页面可以查看到当前Prometheus通过Kubernetes发现的所有Node实例了：
+Prometheus使用新的配置文件重建之后，打开Prometheus UI，通过Service Discovery页面可以查看到当前Prometheus通过Kubernetes发现的所有资源对象了：
 
-![Service Discovery发现的实例](http://p2n2em8ut.bkt.clouddn.com/service-discovery-nodes.png)
+![Service Discovery发现的实例](http://p2n2em8ut.bkt.clouddn.com/prometheus-k8s-sd-example1.png)
 
-查看Target页面，可以看到当前Prometheus中包含一个Target实例，并且Prometheus开始尝试从该实例中获取监控数据：
+同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Promthues获取到的Node节点的标签信息：
 
-![Target状态](http://p2n2em8ut.bkt.clouddn.com/service-discover-node-targets.png)
+```
+__address__="192.168.99.100:10250"
+__meta_kubernetes_node_address_Hostname="minikube"
+__meta_kubernetes_node_address_InternalIP="192.168.99.100"
+__meta_kubernetes_node_annotation_alpha_kubernetes_io_provided_node_ip="192.168.99.100"
+__meta_kubernetes_node_annotation_node_alpha_kubernetes_io_ttl="0"
+__meta_kubernetes_node_annotation_volumes_kubernetes_io_controller_managed_attach_detach="true"
+__meta_kubernetes_node_label_beta_kubernetes_io_arch="amd64"
+__meta_kubernetes_node_label_beta_kubernetes_io_os="linux"
+__meta_kubernetes_node_label_kubernetes_io_hostname="minikube"
+__meta_kubernetes_node_name="minikube"
+__metrics_path__="/metrics"
+__scheme__="https"
+instance="minikube"
+job="kubernetes-nodes"
+```
 
-这里会提示一个有关证书的错误信息。不过，现在这个问题并不重要，我们已经能够通过服务发现找到Kubernetes下的资源对象。 而且我们也并不需要监控所有的东西，我们还需要通过Prometheus的relabling机制去过滤并找到真正需要监控的资源。
+目前为止，我们已经能够通过Prometheus自动发现Kubernetes集群中的各类资源以及其基本信息。不过，如果现在查看Promtheus的Target状态页面，结果可能会让人不太满意：
 
-kubernetes_sd_config中除了指定服务发现模式node以外，还支持service、pod、endpoints、ingress等四种模式。不同的服务发现模式适用于不同的场景，例如:
+![Target页面状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-k8s-sd-example3.png)
 
-* node适用于与主机相关的监控资源。例如，节点中运行的Kubernetes组件状态、节点上运行的容器状态等；
-* service和igress适用于通过黑盒监控的场景。例如，对服务的可用性以及服务质量的监控；
-* endpoints和pod均可用于获取Pod实例的监控数据。例如，监控用户或者管理员部署的支持Prometheus的应用。
+虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Promethues的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
+
+接下来，我们将利用Promtheus的服务发现能力，实现对Kubernetes集群的全面监控：
+
+|目标|服务发现模式| 监控方法 |数据源|
+|-----|------| ----|---|
+|从集群各节点kubelet组件中获取节点kubelet的基本运行状态的监控指标|node|白盒监控| kubelet |
+|从集群各节点kubelet内置的cAdvisor中获取，节点中运行的容器的监控指标|node|白盒监控| kubelet|
+|从部署到各个节点的Node Exporter中采集主机资源相关的运行资源|node|白盒监控| node exporter |
+|对于内置了Promthues支持的应用，需要从Pod实例中采集其自定义监控指标|pod|白盒监控| pod|
+|获取API Server组件的访问地址，并从中获取Kubernetes集群相关的运行监控指标|endpoints|白盒监控| api server |
+|获取集群中Service的访问地址，并通过Blackbox Exporter获取网络探测指标|service|黑盒监控| blackbox exporter|
+|获取集群中Ingress的访问信息，并通过Blackbox Exporter获取网络探测指标|ingress|黑盒监控| blackbox exporter |

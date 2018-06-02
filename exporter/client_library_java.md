@@ -61,7 +61,7 @@ class YourCustomCollector2 extends Collector {
 
 ## 使用HTTP Server暴露样本数据
 
-client_java下的simpleclient_httpserver模块实现了一个简单的HTTP服务器，当向该服务器发送获取样本数据的请求后，它会自动调用所有Collector的collect()方法，并将所有样本数据转换为Promtheus要求的数据输出格式规范。如果用户使用了Gradle构建项目，可以添加以下依赖：
+client_java下的simpleclient_httpserver模块实现了一个简单的HTTP服务器，当向该服务器发送获取样本数据的请求后，它会自动调用所有Collector的collect()方法，并将所有样本数据转换为Prometheus要求的数据输出格式规范。如果用户使用了Gradle构建项目，可以添加以下依赖：
 
 ```
 compile 'io.prometheus:simpleclient_httpserver:0.3.0'

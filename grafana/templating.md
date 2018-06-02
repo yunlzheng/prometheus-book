@@ -46,7 +46,7 @@ Label属性用于指定界面中变量的显示名称，Hide属性则用于指�
 
 ## 使用变量过滤时间序列
 
-当Promtheus同时采集了多个主机节点的监控样本数据时，用户希望能够手动选择并查看其中特定主机的监控数据。这时我们需要使用Query类型的变量。
+当Prometheus同时采集了多个主机节点的监控样本数据时，用户希望能够手动选择并查看其中特定主机的监控数据。这时我们需要使用Query类型的变量。
 
 ![新建Query类型的变量](http://p2n2em8ut.bkt.clouddn.com/grafana_templating_query_variables3.png)
 
@@ -106,7 +106,7 @@ label_values(up, job)
 
 ![General中的Repeat选项](http://p2n2em8ut.bkt.clouddn.com/grafana_templating_repeat_e2.png)
 
-Repeat选项设置完成后，Grafana会根据当前用户的选择，自动创建一个到多个Panel实例。 为了能够使Singlestat Panel能够展示正确的数据，如下所示，在Promtheus中，我们依然使用了$job变量，不过此时的$job反应的是当前迭代的值：
+Repeat选项设置完成后，Grafana会根据当前用户的选择，自动创建一个到多个Panel实例。 为了能够使Singlestat Panel能够展示正确的数据，如下所示，在Prometheus中，我们依然使用了$job变量，不过此时的$job反应的是当前迭代的值：
 
 ![在Metric中使用变量](http://p2n2em8ut.bkt.clouddn.com/grafana_templating_repeat_e3.png)
 

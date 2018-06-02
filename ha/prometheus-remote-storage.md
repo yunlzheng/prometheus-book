@@ -6,7 +6,7 @@ Prometheus的本地存储设计可以减少其自身运维和管理的复杂度�
 
 ## Remote Write
 
-用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将采集到的样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
+用户可以在Prometheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将采集到的样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
 
 ![Remote Write](http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png)
 
@@ -222,7 +222,7 @@ remote_read:
   - url: "http://localhost:9201/read"
 ```
 
-重新启动Prometheus能够获取数据后，登录到influxdb容器，并验证数据写入。如下所示，当数据能够正常写入Influxdb后可以看到Promtheus相关的指标。
+重新启动Prometheus能够获取数据后，登录到influxdb容器，并验证数据写入。如下所示，当数据能够正常写入Influxdb后可以看到Prometheus相关的指标。
 
 ```
 docker exec -it 795d0ead87a1 influx

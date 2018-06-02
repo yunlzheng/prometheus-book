@@ -254,7 +254,7 @@ job="kubernetes-service-endpoints"
       target_label: job
 ```
 
-通过以上步骤，用户可以通过在Service添加注解的形式，更灵活的控制Promtheus的任务采集信息，例如，通过添加注解自定义采集数据的相关配置：
+通过以上步骤，用户可以通过在Service添加注解的形式，更灵活的控制Prometheus的任务采集信息，例如，通过添加注解自定义采集数据的相关配置：
 
 ```
 apiVersion: v1

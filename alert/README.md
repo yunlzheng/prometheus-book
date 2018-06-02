@@ -1,10 +1,10 @@
 # 第3章 Prometheus告警处理
 
-本章我们将带来读者探索Prometheus的告警处理机制，在前面的部分已经介绍了在Prometheus在Prometheus的架构中被划分为两个部分，在Promtheus Server中定义告警规则以及产生告警，Alertmanager组件则用于处理这些由Promtheus产生的告警。Alertmanager提供了多种内置第三方告警通知方式，同时还提供了对Webhook通知的支持，通过Webhook用户可以完成对告警更多个性化的扩展。
+本章我们将带来读者探索Prometheus的告警处理机制，在前面的部分已经介绍了在Prometheus在Prometheus的架构中被划分为两个部分，在Prometheus Server中定义告警规则以及产生告警，Alertmanager组件则用于处理这些由Prometheus产生的告警。Alertmanager提供了多种内置第三方告警通知方式，同时还提供了对Webhook通知的支持，通过Webhook用户可以完成对告警更多个性化的扩展。
 
 本章主要内容：
 
-* 在Promtheus中自定义告警规则
+* 在Prometheus中自定义告警规则
 * 理解Alertmanager特性
 * 基于标签的动态告警处理
 * 将告警通知发送到第三方服务

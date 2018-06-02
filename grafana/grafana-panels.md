@@ -38,7 +38,7 @@ Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。*
 
 ![Query Editor](http://p2n2em8ut.bkt.clouddn.com/graph_prometheus_query_editor.png)
 
-Grafana提供了对PromQL的完整支持，在Query Editor中，可以添加任意个Query，并且使用PromQL表达式从Promtheus中查询相应的样本数据。
+Grafana提供了对PromQL的完整支持，在Query Editor中，可以添加任意个Query，并且使用PromQL表达式从Prometheus中查询相应的样本数据。
 
 ```
 avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
@@ -50,7 +50,7 @@ avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
 {{instance}}-{{mode}}
 ```
 
-当查询到的样本数据量非常大时可以导致Grafana渲染图标时出现一些性能问题，通过**Min Step**可以控制Promtheus查询数据时的最小步长（Step），从而减少从Promtheus返回的数据量。
+当查询到的样本数据量非常大时可以导致Grafana渲染图标时出现一些性能问题，通过**Min Step**可以控制Prometheus查询数据时的最小步长（Step），从而减少从Prometheus返回的数据量。
 
 **Resolution**选项，则可以控制Grafana自身渲染的数据量。例如，如果**Resolution**的值为**1/10**，Grafana会将Prometeus返回的10个样本数据合并成一个点。因此**Resolution**越小可视化的精确性越高，反之，可视化的精度越低。
 
