@@ -213,14 +213,4 @@ job="kubernetes-nodes"
 
 虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Promethues的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
 
-接下来，我们将利用Promtheus的服务发现能力，实现对Kubernetes集群的全面监控：
-
-|目标|服务发现模式| 监控方法 |数据源|
-|-----|------| ----|---|
-|从集群各节点kubelet组件中获取节点kubelet的基本运行状态的监控指标|node|白盒监控| kubelet |
-|从集群各节点kubelet内置的cAdvisor中获取，节点中运行的容器的监控指标|node|白盒监控| kubelet|
-|从部署到各个节点的Node Exporter中采集主机资源相关的运行资源|node|白盒监控| node exporter |
-|对于内置了Promthues支持的应用，需要从Pod实例中采集其自定义监控指标|pod|白盒监控| pod|
-|获取API Server组件的访问地址，并从中获取Kubernetes集群相关的运行监控指标|endpoints|白盒监控| api server |
-|获取集群中Service的访问地址，并通过Blackbox Exporter获取网络探测指标|service|黑盒监控| blackbox exporter|
-|获取集群中Ingress的访问信息，并通过Blackbox Exporter获取网络探测指标|ingress|黑盒监控| blackbox exporter |
+接下来，我们将利用Promtheus的服务发现能力，实现对Kubernetes集群的全面监控。
