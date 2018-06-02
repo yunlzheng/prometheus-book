@@ -55,9 +55,9 @@ http_request_total{status="200", method="POST"}@1434417561287 => 4785
 
 指标的名称(metric name)可以反映被监控样本的含义（比如，http_request_total - 表示当前系统接收到的HTTP请求总量）。指标名称只能由ASCII字符、数字、下划线以及冒号组成并必须符合正则表达式```[a-zA-Z_:][a-zA-Z0-9_:]*```。
 
-标签(label)反映了当前样本的特征维度，通过这些维度Promtheus可以对样本数据进行过滤，聚合等。标签的名称只能由ASCII字符、数字以及下划线组成并满足正则表达式```[a-zA-Z_][a-zA-Z0-9_]*```。
+标签(label)反映了当前样本的特征维度，通过这些维度Prometheus可以对样本数据进行过滤，聚合等。标签的名称只能由ASCII字符、数字以及下划线组成并满足正则表达式```[a-zA-Z_][a-zA-Z0-9_]*```。
 
-其中以__作为前缀的标签，是系统保留的关键字，只能在系统内部使用。标签的值则可以包含任何Unicode编码的字符。在Promtheus的底层实现中指标名称实际上是以```__name__=<metric name>```的形式保存在数据库中的，因此以下两种方式均表示的同一条time-series：
+其中以__作为前缀的标签，是系统保留的关键字，只能在系统内部使用。标签的值则可以包含任何Unicode编码的字符。在Prometheus的底层实现中指标名称实际上是以```__name__=<metric name>```的形式保存在数据库中的，因此以下两种方式均表示的同一条time-series：
 
 ```
 api_http_requests_total{method="POST", handler="/messages"}

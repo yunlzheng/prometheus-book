@@ -4,7 +4,7 @@
 
 ![Table Panel示例](http://p2n2em8ut.bkt.clouddn.com/grafana_table_panel_example2.png)
 
-对于Promtheus采集到的时间序列数据，Table Panel支持直接将PromQL返回的时间序列格式化为表格的形式进行展示，也可以直接展示时间序列并且对样本数据进行统计聚合。
+对于Prometheus采集到的时间序列数据，Table Panel支持直接将PromQL返回的时间序列格式化为表格的形式进行展示，也可以直接展示时间序列并且对样本数据进行统计聚合。
 
 ## 格式化时间序列
 

@@ -6,11 +6,11 @@
 
 为了提升Promthues的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以确保Promthues持续可用。
 
-同时基于Alertmanager的告警分组机制即使不同的Promtheus Sever分别发送相同的告警给Alertmanager，Alertmanager也可以自动将这些告警合并为一个通知向receiver发送。
+同时基于Alertmanager的告警分组机制即使不同的Prometheus Sever分别发送相同的告警给Alertmanager，Alertmanager也可以自动将这些告警合并为一个通知向receiver发送。
 
 ![Alertmanager特性](http://p2n2em8ut.bkt.clouddn.com/alertmanager-features.png)
 
-但不幸的是，虽然Alertmanager能够同时处理多个相同的Promtheus Server所产生的告警。但是由于单个Alertmanager的存在，当前的部署结构存在明显的单点故障风险，当Alertmanager单点失效后，告警的后续所有业务全部失效。
+但不幸的是，虽然Alertmanager能够同时处理多个相同的Prometheus Server所产生的告警。但是由于单个Alertmanager的存在，当前的部署结构存在明显的单点故障风险，当Alertmanager单点失效后，告警的后续所有业务全部失效。
 
 如下所示，最直接的方式，就是尝试部署多套Alertmanager。但是由于Alertmanager之间不存在并不了解彼此的存在，因此则会出现告警通知被不同的Alertmanager重复发送多次的问题。
 
@@ -290,7 +290,7 @@ cat /dev/zero>/dev/null
 
 > 注意，对于多核主机，如果CPU达不到预期，运行多个命令。
 
-当CPU利用率达到告警规则触发条件，两个Promtheus实例告警分别被触发。查看Alertmanager输出日志：
+当CPU利用率达到告警规则触发条件，两个Prometheus实例告警分别被触发。查看Alertmanager输出日志：
 
 ```
 11:14:41      a3 | level=debug ts=2018-03-12T03:14:41.945493505Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
@@ -298,7 +298,7 @@ cat /dev/zero>/dev/null
 11:14:41      a2 | level=debug ts=2018-03-12T03:14:41.945687812Z caller=dispatch.go:188 component=dispatcher msg="Received alert" alert=hostCpuUsageAlert[7d698ac][active]
 ```
 
-3个Alertmanager实例分别接收到来自不同Promtheus实例的告警信息。而Webhook服务只接收到来自Alertmanager集群的一条告警通知：
+3个Alertmanager实例分别接收到来自不同Prometheus实例的告警信息。而Webhook服务只接收到来自Alertmanager集群的一条告警通知：
 
 ```
 11:15:11 webhook | 2018/03/12 11:15:11 {

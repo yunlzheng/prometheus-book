@@ -26,7 +26,7 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
-根据当前Promtheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph Panel会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
+根据当前Prometheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph Panel会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
 
 ![使用Legend format模板化图例](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_metrics_legend.png)
 
@@ -94,7 +94,7 @@ prometheus_tsdb_compaction_duration_sum 51.31017077500001
 prometheus_tsdb_compaction_duration_count 36
 ```
 
-在第2章的“Metric类型”小节中，我们已经介绍过Histogram的指标，Histogram用于统计样本数据的分布情况，其中标签le定义了分布桶Bucket的边界，如上所示，表示当前Promtheus共进行了36次数据压缩，总耗时为51.31017077500001ms。其中任务耗时在0~1ms区间内的为2次、在0~2ms区间范围内为36次，以此类推。
+在第2章的“Metric类型”小节中，我们已经介绍过Histogram的指标，Histogram用于统计样本数据的分布情况，其中标签le定义了分布桶Bucket的边界，如上所示，表示当前Prometheus共进行了36次数据压缩，总耗时为51.31017077500001ms。其中任务耗时在0~1ms区间内的为2次、在0~2ms区间范围内为36次，以此类推。
 
 如下所示，如果需要在Graph中显示Histogram类型的监控指标，需要在Query Editor中定义查询结果的**Format as**为Heatmap。通过该设置Grafana会自动计算Histogram中的Bucket边界范围以及该范围内的值：
 

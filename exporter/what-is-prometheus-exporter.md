@@ -57,7 +57,7 @@ node_load1 3.0703125
 
 Exporter返回的样本数据，主要由三个部分组成：样本的一般注释信息（HELP），样本的类型注释信息（TYPE）和样本。Prometheus会对Exporter响应的内容逐行解析：
 
-如果当前行以# HELP开始，Promtheus将会按照以下规则对内容进行解析，得到当前的指标名称以及相应的说明信息：
+如果当前行以# HELP开始，Prometheus将会按照以下规则对内容进行解析，得到当前的指标名称以及相应的说明信息：
 
 ``` text
 # HELP <metrics_name> <doc_string>
@@ -111,7 +111,7 @@ rpc_duration_seconds_sum 1.7560473e+07
 rpc_duration_seconds_count 2693
 ```
 
-对于某些Promtheus还没有提供支持的编程语言，用户只需要按照以上规范返回响应的文本数据即可。
+对于某些Prometheus还没有提供支持的编程语言，用户只需要按照以上规范返回响应的文本数据即可。
 
 ## 指定样本格式的版本
 

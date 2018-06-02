@@ -76,7 +76,6 @@
 
 * [第8章 使用Prometheus监控Kubernetes集群](./kubernetes/READMD.md)
   * [初识Kubernetes](./kubernetes/kubernetes-with-minikube.md)
-  * [Prometheus与Kubernetes](./kubernetes/prometheus-with-kubernetes.md)
   * [部署Prometheus](./kubernetes/deploy-prometheus-in-kubernetes.md)
   * [Kubernetes下的服务发现](./kubernetes/service-discovery-with-kubernetes.md)
   * [应用容器监控](./kubernetes/use-prometheus-monitor-containers-in-k8s.md)

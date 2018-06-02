@@ -41,7 +41,7 @@ node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 
 ![Relabeling作用时间](http://p2n2em8ut.bkt.clouddn.com/when-relabel-work.png)
 
-Promtheus允许用户在采集任务设置中通过relabel_configs来添加自定义的Relabeling过程。
+Prometheus允许用户在采集任务设置中通过relabel_configs来添加自定义的Relabeling过程。
 
 ## 使用replace/labelmap重写标签
 
@@ -170,7 +170,7 @@ scrape_configs:
 
 ## 使用hashmod计算source_labels的Hash值
 
-当relabel_config设置为hashmod时，Promtheus会根据modulus的值作为系数，计算source_labels值的hash值。例如：
+当relabel_config设置为hashmod时，Prometheus会根据modulus的值作为系数，计算source_labels值的hash值。例如：
 
 ```
 scrape_configs

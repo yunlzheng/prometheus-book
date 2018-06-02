@@ -181,7 +181,7 @@ up{instance="localhost:9100",job="node"}	1
 
 ## 数据与可视化
 
-### 使用Promtheus UI
+### 使用Prometheus UI
 
 通过Prometheus UI用户可以利用PromQL实时查询监控数据，并且支持一些基本的数据可视化能力。进入到Prometheus UI,切换到Graph标签
 
