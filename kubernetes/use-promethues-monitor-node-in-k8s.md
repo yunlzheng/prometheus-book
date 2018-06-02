@@ -30,6 +30,8 @@ spec:
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
   name: node-exporter
 spec:
   template:
