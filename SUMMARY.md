@@ -86,7 +86,7 @@
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
   * [使用Prometheus Operator](./kubernetes/use-prometheus-operator.md)
   * [使用Alertmanager Operator](./kubernetes/use-alertmanager-operator.md)
-  * 使用Opertor管理Prometheus
+  * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
   * 基于Prometheus实现应用的弹性伸缩
   * 总结
 * [第9章 使用Prometheus监控Rancher集群](./rancher/README.md)
