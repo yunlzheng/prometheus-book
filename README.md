@@ -68,14 +68,16 @@ Prometheus操作指南：云原生监控之道
 
 * [第8章 使用Prometheus监控Kubernetes集群](./kubernetes/READMD.md)
   * [初识Kubernetes](./kubernetes/kubernetes-with-minikube.md)
-  * [Prometheus与Kubernetes](./kubernetes/prometheus-with-kubernetes.md)
   * [部署Prometheus](./kubernetes/deploy-prometheus-in-kubernetes.md)
   * [Kubernetes下的服务发现](./kubernetes/service-discovery-with-kubernetes.md)
   * [应用容器监控](./kubernetes/use-prometheus-monitor-containers-in-k8s.md)
   * [监控集群基础设施](./kubernetes/use-promethues-monitor-node-in-k8s.md)
   * [监控集群状态](./kubernetes/use-prometheus-monitor-k8s-cluster-state.md)
+  * [监控Service和Ingress可用性](./kubernetes/use-prometheus-monitor-k8s-svc-and-ingress-state.md)
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
   * [使用Prometheus Operator](./kubernetes/use-prometheus-operator.md)
-  * [使用Alertmanager Operator](./kubernetes/use-alertmanager-operator.md)
+  * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
+  * 基于Prometheus实现应用的弹性伸缩
+  * 总结
 * [第9章 使用Prometheus监控Rancher集群](./rancher/README.md)
 * [参考资料](./REFERENCES.md)
