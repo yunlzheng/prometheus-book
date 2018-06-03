@@ -51,7 +51,7 @@
     * [当前状态：SingleStat Panel](./grafana/use_singlestat_panel.md)
     * [表格：Tabel Panel](./grafana/use_table_panel.md)
     * 使用注解
-  * ![模板化Dashboard](./grafana/templating.md)
+  * [模板化Dashboard](./grafana/templating.md)
     * 动态参数
     * Repeat面板
   * 共享Dashboard
