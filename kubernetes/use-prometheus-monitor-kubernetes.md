@@ -14,7 +14,7 @@
 |获取集群中Service的访问地址，并通过Blackbox Exporter获取网络探测指标|service|黑盒监控| blackbox exporter|
 |获取集群中Ingress的访问信息，并通过Blackbox Exporter获取网络探测指标|ingress|黑盒监控| blackbox exporter |
 
-## 监控节点中kubelet运行状态
+## 从Kubelet获取节点运行状态
 
 Kubelet组件运行在Kubernetes集群的各个节点中，其复杂维护和管理节点上Pod的运行状态。kubelet组件的正常运行直接关系到该节点是否能够正常的被Kubernetes集群正常使用。
 
@@ -105,7 +105,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
 
 除此以外，监控指标kubelet_docker_*还可以体现出kubelet与当前节点的docker服务的调用情况，从而可以反映出docker本身是否会影响kubelet的性能表现等问题。
 
-## 监控集群中容器的资源使用情况
+## ## 从Kubelet获取节点容器资源使用情况
 
 各节点的kubelet组件中除了包含自身的监控指标信息以外，kubelet组件还内置了对cAdvisor的支持。cAdvisor能够获取当前节点上运行的所有容器的资源使用情况，通过访问kubelet的/metrics/cadvisor地址可以获取到cadvisor的监控指标，因此和获取kubelet监控指标类似，这里同样通过node模式自动发现所有的kubelet信息，并通过适当的relabel过程，修改监控采集任务的配置。 与采集kubelet自身监控指标相似，这里也有两种方式采集cadvisor中的监控指标：
 
@@ -154,7 +154,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
 
 ![直接访问kubelet](http://p2n2em8ut.bkt.clouddn.com/prometheus-cadvisor-step2.png)
 
-## 监控集群节点的资源使用情况
+## 使用NodeExporter监控集群资源使用情况
 
 为了能够采集集群中各个节点的资源使用情况，我们需要在各节点中部署一个Node Exporter实例。在本章的“部署Prometheus”小节，我们使用了Kubernetes内置的控制器之一Deployment。Deployment能够确保Prometheus的Pod能够按照预期的状态在集群中运行，而Pod实例可能随机运行在任意节点上。而与Prometheus的部署不同的是，对于Node Exporter而言每个节点只需要运行一个唯一的实例，此时，就需要使用Kubernetes的另外一种控制器Daemonset。顾名思义，Daemonset的管理方式类似于操作系统中的守护进程。Daemonset会确保在集群中所有（也可以指定）节点上运行一个唯一的Pod实例。
 
@@ -274,6 +274,55 @@ prometheus.io/path: 'metrics'
 
 通过以上relabel过程实现对Pod实例的过滤，以及采集任务地址替换，从而实现对特定Pod实例监控指标的采集。需要说明的是kubernetes-pods并不是只针对Node Exporter而言，对于用户任意部署的Pod实例，只要其提供了对Prometheus的支持，用户都可以通过为Pod添加注解的形式为其添加监控指标采集的支持。
 
-## 从api-server获取集群运行监控指标
+## 从kube-apiserver获取集群运行监控指标
+
+在开始正式内容之前，我们需要先了解一下Kubernetes中Service是如何实现负载均衡的，如下图所示，一般来说Service有两个主要的使用场景：
+
+![Service负载均衡](http://p2n2em8ut.bkt.clouddn.com/kubernetes_service_endpoints.png)
+
+* 代理对集群内部应用Pod实例的请求：当创建Service时如果指定了标签选择器，Kubernetes会监听集群中所有的Pod变化情况，通过Endpoints自动维护满足标签选择器的Pod实例的访问信息；
+* 代理对集群外部服务的请求：当创建Service时如果不指定任何的标签选择器，此时需要用户手动创建Service对应的Endpoint资源。 例如，一般来说，为了确保数据的安全，我们通常讲数据库服务部署到集群外。 这是为了避免集群内的应用硬编码数据库的访问信息，这是就可以通过在集群内创建Service，并指向外部的数据库服务实例。
+
+kube-apiserver扮演了整个Kubernetes集群管理的入口的角色，负责对外暴露Kubernetes API。kube-apiserver组件一般是独立部署在集群外的，为了能够让部署在集群内的应用（kubernetes插件或者用户应用）能够与kube-apiserver交互，Kubernetes会默认在命名空间下创建一个名为kubernetes的服务，如下所示：
+
+```
+$ kubectl get svc kubernetes -o wide
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE       SELECTOR
+kubernetes            ClusterIP   10.96.0.1       <none>        443/TCP          166d      <none>
+```
+
+而该kubernetes服务代理的后端实际地址通过endpoints进行维护，如下所示：
+
+```
+$ kubectl get endpoints kubernetes
+NAME         ENDPOINTS        AGE
+kubernetes   10.0.2.15:8443   166d
+```
+
+通过这种方式集群内的应用或者系统主机就可以通过集群内部的DNS域名kubernetes.default.svc访问到部署外部的kube-apiserver实例。
+
+因此，如果我们想要监控kube-apiserver相关的指标，只需要通过endpoints资源找到kubernetes对应的所有后端地址即可。
+
+如下所示，创建监控任务kubernetes-apiservers，这里指定了服务发现模式为endpoints。Promtheus会查找当前集群中所有的endpoints配置，并通过relabel进行判断是否为apiserver对应的访问地址：
+
+```
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+```
+
+在relabel_configs配置中第一步用于判断当前endpoints是否为kube-apiserver对用的地址。第二步，替换监控采集地址到kubernetes.default.svc:443即可。重新加载配置文件，重建Promthues实例，得到以下结果。
+
+![apiserver任务状态](http://p2n2em8ut.bkt.clouddn.com/promethues-api-server-sd.eq1.png)
 
 ## 对Ingress和Service进行网络探测
