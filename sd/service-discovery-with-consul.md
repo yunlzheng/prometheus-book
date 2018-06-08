@@ -53,7 +53,7 @@ $ curl localhost:8500/v1/catalog/nodes
 ]
 ```
 
-Consul还提供了内置的DNS服务，可以通过Consul的DNS服务通过域名的方式访问其中的节点：
+Consul还提供了内置的DNS服务，可以通过Consul的DNS服务的方式访问其中的节点：
 
 ```
 $ dig @127.0.0.1 -p 8600 localhost.node.consul

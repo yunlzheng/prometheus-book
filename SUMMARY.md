@@ -80,7 +80,6 @@
   * [Kubernetes下的服务发现](./kubernetes/service-discovery-with-kubernetes.md)
   * [监控Kubernetes集群](./kubernetes/use-prometheus-monitor-kubernetes.md)
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
-  * [使用Prometheus Operator](./kubernetes/use-prometheus-operator.md)
   * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
   * 基于Prometheus实现应用的弹性伸缩
   * 总结
