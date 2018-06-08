@@ -443,3 +443,32 @@ blackbox-exporter           ClusterIP   10.109.144.192   <none>        9115/TCP 
       - source_labels: [__meta_kubernetes_service_name]
         target_label: kubernetes_name
 ```
+
+对于Ingress而言，也是一个相对类似的过程，这里给出对Ingress探测的Promthues任务配置作为参考：
+
+```
+    - job_name: 'kubernetes-ingresses'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      kubernetes_sd_configs:
+      - role: ingress
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_ingress_scheme,__address__,__meta_kubernetes_ingress_path]
+        regex: (.+);(.+);(.+)
+        replacement: ${1}://${2}${3}
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter.default.svc.cluster.local:9115
+      - source_labels: [__param_target]
+        target_label: instance
+      - action: labelmap
+        regex: __meta_kubernetes_ingress_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_ingress_name]
+        target_label: kubernetes_name
+```
