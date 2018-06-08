@@ -326,3 +326,120 @@ kubernetes   10.0.2.15:8443   166d
 ![apiserver任务状态](http://p2n2em8ut.bkt.clouddn.com/promethues-api-server-sd.eq1.png)
 
 ## 对Ingress和Service进行网络探测
+
+为了能够对Ingress和Service进行探测，我们需要在集群部署Blackbox Exporter实例。 如下所示，创建blackbox-exporter.yaml用于描述部署相关的内容:
+
+```
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: blackbox-exporter
+  name: blackbox-exporter
+spec:
+  ports:
+  - name: blackbox
+    port: 9115
+    protocol: TCP
+  selector:
+    app: blackbox-exporter
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: blackbox-exporter
+  name: blackbox-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blackbox-exporter
+  template:
+    metadata:
+      labels:
+        app: blackbox-exporter
+    spec:
+      containers:
+      - image: prom/blackbox-exporter
+        imagePullPolicy: IfNotPresent
+        name: blackbox-exporter
+```
+
+通过kubectl命令部署Blackbox Exporter实例，这里将部署一个Blackbox Exporter的Pod实例，同时通过服务blackbox-exporter在集群内暴露访问地址blackbox-exporter.default.svc.cluster.local，对于集群内的任意服务都可以通过该内部DNS域名访问Blackbox Exporter实例：
+
+```
+$ kubectl get pods
+NAME                                        READY     STATUS        RESTARTS   AGE
+blackbox-exporter-f77fc78b6-72bl5           1/1       Running       0          4s
+
+$ kubectl get svc
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+blackbox-exporter           ClusterIP   10.109.144.192   <none>        9115/TCP         3m
+```
+
+为了能够让Prometheus能够自动的对Service进行探测，我们需要通过服务发现自动找到所有的Service信息。 如下所示，在Prometheus的配置文件中添加名为kubernetes-services的监控采集任务：
+
+```
+    - job_name: 'kubernetes-services'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      kubernetes_sd_configs:
+      - role: service
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter.default.svc.cluster.local:9115
+      - source_labels: [__param_target]
+        target_label: instance
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: kubernetes_name
+```
+
+在该任务配置中，通过指定kubernetes_sd_config的role为service指定服务发现模式：
+
+```
+  kubernetes_sd_configs:
+    - role: service
+```
+
+为了区分集群中需要进行探测的Service实例，我们通过标签‘prometheus.io/probe: true’进行判断，从而过滤出需要探测的所有Service实例：
+
+```
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+```
+
+并且将通过服务发现获取到的Service实例地址```__address__```转换为获取监控数据的请求参数。同时将```__address```执行Blackbox Exporter实例的访问地址，并且重写了标签instance的内容：
+
+```
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter.default.svc.cluster.local:9115
+      - source_labels: [__param_target]
+        target_label: instance
+```
+
+最后，为监控样本添加了额外的标签信息：
+
+```
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: kubernetes_name
+```

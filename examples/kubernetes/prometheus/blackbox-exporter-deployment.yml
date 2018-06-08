@@ -32,5 +32,5 @@ spec:
     spec:
       containers:
       - image: prom/blackbox-exporter
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: blackbox-exporter
