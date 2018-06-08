@@ -30,7 +30,7 @@
 ]
 ```
 
-同时还可以通过为这些实例添加一些额外的标签信息，例如使用env标签标示当前节点所在的环境，这样从这些实例中采集到的样本信息将包含这些标签信息，从而可以为后续按照环境进行监控数据的聚合。
+同时还可以通过为这些实例添加一些额外的标签信息，例如使用env标签标示当前节点所在的环境，这样从这些实例中采集到的样本信息将包含这些标签信息，从而可以通过该标签按照环境对数据进行统计。
 
 创建Prometheus配置文件/etc/prometheus/prometheus-file-sd.yml，并添加以下内容：
 
@@ -46,7 +46,7 @@ scrape_configs:
     - targets.json
 ```
 
-这里定义了一个基于file_sd_configs的监控采集任务，其中模式的任务名称为file_ds。在JSON文件中可以使用job标签覆盖默认的Job名称，此时启动Prometheus服务：
+这里定义了一个基于file_sd_configs的监控采集任务，其中模式的任务名称为file_ds。在JSON文件中可以使用job标签覆盖默认的job名称，此时启动Prometheus服务：
 
 ```
 prometheus --config.file=/etc/prometheus/prometheus-file-sd.yml --storage.tsdb.path=/data/prometheus

@@ -164,7 +164,7 @@ kubernetes_sd_configs:
 - role: endpoints
 ```
 
-不过，为了区分集群中哪些Endpoint是可以采集的，而哪些是不可以采集的。我们可以通过为Service添加特定的标签进行标记。例如，Node Exporter的Service中包含了自定义的注解：
+不过，为了区分集群中哪些Endpoint是可以采集的，而哪些是不可以采集的，我们可以通过为Service添加特定的标签进行标记。例如，Node Exporter的Service中包含了自定义的注解：
 
 ```
 metadata:

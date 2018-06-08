@@ -4,11 +4,11 @@ Kubenetes是一款由Google开发的开源的容器编排工具（[GitHub源码]
 
 ## Kubernetes应用管理模型
 
-下图展示了，Kubernetes的应用管理模型
+下图展示了Kubernetes的应用管理模型：
 
 ![Kubernetes应用管理模型](http://p2n2em8ut.bkt.clouddn.com/kubernetes-app-model.png)
 
-Pod是Kubernetes中的最小调度资源。Pod中会包含一组容器，它们一起工作，并且对外提供一个（或者一组）功能。对于这组容器而言它们共享相同的网络和存储资源，因此它们之间可以直接通过本地网络（127.0.0.1）直接进行访问。当Pod被创建时，调度器（kube-schedule）会从集群中找到满足条件的节点运行它。
+Pod是Kubernetes中的最小调度资源。Pod中会包含一组容器，它们一起工作，并且对外提供一个（或者一组）功能。对于这组容器而言它们共享相同的网络和存储资源，因此它们之间可以直接通过本地网络（127.0.0.1）进行访问。当Pod被创建时，调度器（kube-schedule）会从集群中找到满足条件的节点运行它。
 
 如果部署应用程序时，需要启动多个实例（副本），则需要使用到控制器（Controller）。用户可以在Controller定义Pod的调度规则、运行的副本数量以及升级策略等等信息，当某些Pod发生故障之后，Controller会尝试自动修复，直到Pod的运行状态满足Controller中定义的预期状态为止。Kubernetes中提供了多种Controller的实现，包括：Deployment（无状态应用）、StatefulSet（有状态应用）、Daemonset（守护模式）等，以支持不同类型应用的部署和调度模式。
 
@@ -26,7 +26,7 @@ Pod是Kubernetes中的最小调度资源。Pod中会包含一组容器，它们�
 
 ![Kubernetes架构](http://p2n2em8ut.bkt.clouddn.com/kubernetes-artch-overview.png)
 
-Kubernetes的核心组件主要由两部分组成：Master组件和Node组件，其中Matser组件提供了集群层面的管理功能，它们负责响应用户请求，处理集群实际，并且对集群资源进行统一的调度和管理。Node组件会运行在集群的所有节点上，它们负责管理和维护节点中运行的Pod，为Kubernetes集群提供运行时环境。
+Kubernetes的核心组件主要由两部分组成：Master组件和Node组件，其中Matser组件提供了集群层面的管理功能，它们负责响应用户请求并且对集群资源进行统一的调度和管理。Node组件会运行在集群的所有节点上，它们负责管理和维护节点中运行的Pod，为Kubernetes集群提供运行时环境。
 
 Master组件主要包括：
 

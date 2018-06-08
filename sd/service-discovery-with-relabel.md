@@ -4,13 +4,13 @@
 
 ![基于Consul的服务发现](http://p2n2em8ut.bkt.clouddn.com/bolg_sd_mutil_cluster.png)
 
-如上图所示，对于线上环境我们可能会划分为:dev, stage, prod不同的集群。每一个集群运行多个主机节点，每个服务器节点上运行一个Node Exporter实例。Node Exporter实例会自动测试到服务注册中心Consul服务当中，Prometheus可以根据Consul返回的Node Exporter实例信息产生Target列表，并且向这些Target轮训监控数据。
+如上图所示，对于线上环境我们可能会划分为:dev, stage, prod不同的集群。每一个集群运行多个主机节点，每个服务器节点上运行一个Node Exporter实例。Node Exporter实例会自动注册到Consul中，而Prometheus则根据Consul返回的Node Exporter实例信息动态的维护Target列表，从而向这些Target轮询监控数据。
 
 然而，如果我们可能还需要：
 
 * 按照不同的环境dev, stage, prod聚合监控数据？
 * 对于研发团队而言，我可能只关心dev环境的监控数据，如何处理？
-* 为每一个团队单独搭建一个Prometheus Server？ 那么如何让不同团队的Prometheus Server采集不同的环境监控数据？
+* 如果为每一个团队单独搭建一个Prometheus Server。那么如何让不同团队的Prometheus Server采集不同的环境监控数据？
 
 面对以上这些场景下的需求时，我们实际上是希望Prometheus Server能够按照某些规则（比如标签）从服务发现注册中心返回的Target实例中有选择性的采集某些Exporter实例的监控数据。
 
@@ -35,7 +35,7 @@
 node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 ```
 
-一般来说，Target以```__```作为前置的标签是作为系统内部使用的，因此这些标签不会被写入到样本数据中。不过这里有一些例外，例如，我们会发现所有通过Prometheus采集的样本数据中都会包含一个名为instance的标签，该标签的内容对应到Target实例的```__address__```。 这里实际上是发生了一次标签的重写处理。
+一般来说，Target以```__```作为前置的标签是在系统内部使用的，因此这些标签不会被写入到样本数据中。不过这里有一些例外，例如，我们会发现所有通过Prometheus采集的样本数据中都会包含一个名为instance的标签，该标签的内容对应到Target实例的```__address__```。 这里实际上是发生了一次标签的重写处理。
 
 这种发生在采集样本数据之前，对Target实例的标签进行重写的机制在Prometheus被称为Relabeling。
 
@@ -47,15 +47,15 @@ Prometheus允许用户在采集任务设置中通过relabel_configs来添加自�
 
 Relabeling最基本的应用场景就是基于Target实例中包含的metadata标签，动态的添加或者覆盖标签。例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
 
-* __meta_consul_address: consul地址
-* __meta_consul_dc: consul中服务所在的数据中心
-* __meta_consulmetadata: 服务的metadata
-* __meta_consul_node: 服务所在consul节点的信息
-* __meta_consul_service_address: 服务访问地址
-* __meta_consul_service_id: 服务ID
-* __meta_consul_service_port: 服务端口
-* __meta_consul_service: 服务名称
-* __meta_consul_tags: 服务包含的标签信息
+* __meta_consul_address：consul地址
+* __meta_consul_dc：consul中服务所在的数据中心
+* __meta_consulmetadata：服务的metadata
+* __meta_consul_node：服务所在consul节点的信息
+* __meta_consul_service_address：服务访问地址
+* __meta_consul_service_id：服务ID
+* __meta_consul_service_port：服务端口
+* __meta_consul_service：服务名称
+* __meta_consul_tags：服务包含的标签信息
 
 在默认情况下，从Node Exporter实例采集上来的样本数据如下所示：
 
@@ -63,7 +63,7 @@ Relabeling最基本的应用场景就是基于Target实例中包含的metadata�
 node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle"} 93970.8203125
 ```
 
-我们希望能有一个额外的标签dc可以表示该样本的来源的数据中心：
+我们希望能有一个额外的标签dc可以表示该样本所属的数据中心：
 
 ```
 node_cpu{cpu="cpu0",instance="localhost:9100",job="node",mode="idle", dc="dc1"} 93970.8203125
@@ -126,7 +126,7 @@ node_cpu{cpu="cpu0",dc="dc1",instance="172.21.0.6:9100",job="consul_sd",mode="gu
 
 repalce操作允许用户根据Target的Metadata标签重写或者写入新的标签键值对，在多环境的场景下，可以帮助用户添加与环境相关的特征维度，从而可以更好的对数据进行聚合。
 
-除了使用replace以外，还可以定义action的配置为labelmap。与replace不同的时，labelmap会根据regex的定义去匹配Target实例所有标签的名称，并且以匹配到的内容为新的标签名称，其值作为新标签的值。
+除了使用replace以外，还可以定义action的配置为labelmap。与replace不同的是，labelmap会根据regex的定义去匹配Target实例所有标签的名称，并且以匹配到的内容为新的标签名称，其值作为新标签的值。
 
 例如，在监控Kubernetes下所有的主机节点时，为将这些节点上定义的标签写入到样本中时，可以使用如下relabel_config配置：
 
