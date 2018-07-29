@@ -1,10 +1,10 @@
-# 分布统计：Heatmap Panel
+# 分布统计：Heatmap面板
 
 Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图可以直观的查看样本的分布情况。在Grafana v5.1版本中Heatmap完善了对Prometheus的支持。这部分，将介绍如何使用Heatmap Panel实现对Prometheus监控指标的可视化。
 
 ## 使用Heatmap可视化Histogram样本分布情况
 
-在上一小节中，我们尝试了使用Graph Panel来可视化Histogram类型的监控指标prometheus_tsdb_compaction_duration_bucket。虽然能展示各个Bucket区间内的样本分布，但是无论是以线图还是柱状图的形式展示，都不够直观。对于Histogram类型的监控指标来说，更好的选择是采用Heatmap Panel，如下所示，Heatmap Panel可以自动对Histogram类型的监控指标分布情况进行计划，获取到每个区间范围内的样本个数，并且以颜色的深浅来表示当前区间内样本个数的大小。而图形的高度，则反映出当前时间点，样本分布的离散程度。
+在上一小节中，我们尝试了使用Graph面板来可视化Histogram类型的监控指标prometheus_tsdb_compaction_duration_bucket。虽然能展示各个Bucket区间内的样本分布，但是无论是以线图还是柱状图的形式展示，都不够直观。对于Histogram类型的监控指标来说，更好的选择是采用Heatmap Panel，如下所示，Heatmap Panel可以自动对Histogram类型的监控指标分布情况进行计划，获取到每个区间范围内的样本个数，并且以颜色的深浅来表示当前区间内样本个数的大小。而图形的高度，则反映出当前时间点，样本分布的离散程度。
 
 ![Heatmap示例](http://p2n2em8ut.bkt.clouddn.com/grafana_heatmap_sample.png)
 
@@ -14,7 +14,7 @@ Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图�
 
 ![Heapmap Panel编辑页面](http://p2n2em8ut.bkt.clouddn.com/grafana_heatmap_editor.png)
 
-其中大部分的配置选项与Graph Panel基本保持一致，这里就不重复介绍了。
+其中大部分的配置选项与Graph面板基本保持一致，这里就不重复介绍了。
 
 ### Metrics：控制数据源
 

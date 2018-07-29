@@ -34,7 +34,7 @@ Grafana中所有类型的Panel都会包含一个General选项:
 
 Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。**Data Source**中指定当前查询的数据源，Grafana会加载当前组织中添加的所有数据源。其中还会包含两个特殊的数据源：**Mixed**和**Grafana**。 Mixed用于需要从多个数据源中查询和渲染数据的场景，Grafana则用于需要查询Grafana自身状态时使用。
 
-由于不同类型的数据源不同，当选中数据源时，Panel会根据当前数据源类型显示不同的Query Editor。这里我们主要介绍Prometheus Query Editor，如下所示，当选中的数据源类型为Protheus时，会显示如下界面：
+当选中数据源时，Panel会根据当前数据源类型加载不同的Query Editor界面。这里我们主要介绍Prometheus Query Editor，如下所示，当选中的数据源类型为Prometheus时，会显示如下界面：
 
 ![Query Editor](http://p2n2em8ut.bkt.clouddn.com/graph_prometheus_query_editor.png)
 
@@ -54,7 +54,7 @@ avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
 
 **Resolution**选项，则可以控制Grafana自身渲染的数据量。例如，如果**Resolution**的值为**1/10**，Grafana会将Prometeus返回的10个样本数据合并成一个点。因此**Resolution**越小可视化的精确性越高，反之，可视化的精度越低。
 
-**Format as**选项定义如何格式化Prometheus返回的样本数据。这里提供了3个选项：Table,Time Series和Heatmap，分别用于Tabel Panel，Graph Panel和Heatmap Panel的数据可视化。
+**Format as**选项定义如何格式化Prometheus返回的样本数据。这里提供了3个选项：Table,Time Series和Heatmap，分别用于Tabel面板，Graph面板和Heatmap面板的数据可视化。
 
 除此以外，Query Editor还提供了调试相关的功能，点击**Query Inspector**可以展开相关的调试面板：
 

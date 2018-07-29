@@ -1,16 +1,16 @@
-# 变化趋势：Graph Panel
+# 变化趋势：Graph面板
 
 Graph面板是最常用的一种可视化面板，其通过折线图或者柱状图的形式显示监控样本随时间而变化的趋势。Graph面板天生适用于Prometheus中Gauge和Counter类型监控指标的监控数据可视化。例如，当需要查看主机CPU、内存使用率的随时间变化的情况时，可以使用Graph面板。同时，Graph还可以非常方便的支持多个数据之间的对比。
 
 ![Graph面板](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_panel.png)
 
-## Graph Panel与Prometheus
+## Graph面板与Prometheus
 
-Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数据在一段时间内的变化趋势，因此其天生适合Prometheus中的Counter和Gauge类型的监控指标的可视化，对于Histogram类型的指标也可以支持，不过可视化效果不如Heatmap Panel来的直观。
+Graph面板通过折线图或者柱状图的形式，能够展示监控样本数据在一段时间内的变化趋势，因此其天生适合Prometheus中的Counter和Gauge类型的监控指标的可视化，对于Histogram类型的指标也可以支持，不过可视化效果不如Heatmap Panel来的直观。
 
-接下来，我们将尝试使用Graph Panel可视化Prometheus中常用的4中指标类型的监控指标。
+接下来，我们将尝试使用Graph面板可视化Prometheus中常用的4中指标类型的监控指标。
 
-### 使用Graph Panel可视化Counter/Gauge
+### 使用Graph面板可视化Counter/Gauge
 
 ![Prometheus Counter可视化](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_v2.png)
 
@@ -26,25 +26,25 @@ Graph Panel通过折线图或者柱状图的形式，能够展示监控样本数
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
-根据当前Prometheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph Panel会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
+根据当前Prometheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph面板会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
 
 ![使用Legend format模板化图例](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_metrics_legend.png)
 
-在Graph Panel的**Axes选项**中可以控制图标的X轴和Y轴相关的行为，如下所示：
-
 #### Axes：管理坐标轴
+
+在Graph面板的**Axes选项**中可以控制图标的X轴和Y轴相关的行为，如下所示：
 
 ![Axes选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_axes.png)
 
-默认情况下，Y轴会直接显示当前样本的值，通过**Left Y**的**Unit**可以让Graph Panel自动格式化样本值。当前表达式返回的当前主机CPU使用率的小数表示，因此，这里选择单位为**percent(0.0.-1.0)**。除了百分比以外，Graph Panel支持如日期、货币、重量、面积等各种类型单位的自动换算，用户根据自己当前样本的值含义选择即可。
+默认情况下，Y轴会直接显示当前样本的值，通过**Left Y**的**Unit**可以让Graph面板自动格式化样本值。当前表达式返回的当前主机CPU使用率的小数表示，因此，这里选择单位为**percent(0.0.-1.0)**。除了百分比以外，Graph面板支持如日期、货币、重量、面积等各种类型单位的自动换算，用户根据自己当前样本的值含义选择即可。
 
 #### Legend：图例管理
 
-除了在Metrics设置图例的显示名称以外，在Graph Panel的**Legend选项**可以进一步控制图例的显示方式，如下所示：
+除了在Metrics设置图例的显示名称以外，在Graph面板的**Legend选项**可以进一步控制图例的显示方式，如下所示：
 
 ![Legend选项](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_legend.png)
 
-**Options中**可以设置图例的显示方式以及展示位置，**Vlaues**中可以设置是否显示当前时间序列的最小值，平均值等。 **Decimals**用于配置这些值显示时保留的小数位，如下所示：
+**Options中**可以设置图例的显示方式以及展示位置，**Values**中可以设置是否显示当前时间序列的最小值，平均值等。 **Decimals**用于配置这些值显示时保留的小数位，如下所示：
 
 ![Legend控制图例的显示示例](http://p2n2em8ut.bkt.clouddn.com/grafana_graph_counter_demo_legend_sample.png)
 
@@ -68,11 +68,11 @@ Display选项中的最后一个是**Thresholds**，Threshold主要用于一些�
 
 ![Threshold设置](http://p2n2em8ut.bkt.clouddn.com/grafana_thresholds_demo.png)
 
-Graph Panel则会在图表中显示一条阈值，并且将所有高于该阈值的区域显示为warining状态，通过可视化的方式直观的在图表中显示一些可能出现异常的区域。
+Graph面板则会在图表中显示一条阈值，并且将所有高于该阈值的区域显示为warining状态，通过可视化的方式直观的在图表中显示一些可能出现异常的区域。
 
 需要注意的是，如果用户为该图表自定义了Alert（告警）配置，Thresholds将会被警用，并且根据Alert中定义的Threshold在图形中显示阈值内容。关于Alert的使用会在后续部分，详细介绍。
 
-### 使用Graph Panel可视化Histogram
+### 使用Graph面板可视化Histogram
 
 这里以Prometheus自身的监控指标prometheus_tsdb_compaction_duration为例，该监控指标记录了Prometheus进行数据压缩任务的运行耗时的分布统计情况。如下所示，是Prometheus返回的样本数据：
 
@@ -100,8 +100,8 @@ prometheus_tsdb_compaction_duration_count 36
 
 ![Metrics设置](http://p2n2em8ut.bkt.clouddn.com/grafana_bucket_setting.png)
 
-Graph Panel重新计算了Bucket边界，如下所示，在0~1ms范围内的任务次数为2，在1~2ms范围内的运行任务次数为34。通过图形的面积，可以反映出各个Bucket下的大致数据分布情况：
+Graph面板重新计算了Bucket边界，如下所示，在0~1ms范围内的任务次数为2，在1~2ms范围内的运行任务次数为34。通过图形的面积，可以反映出各个Bucket下的大致数据分布情况：
 
 ![Histogram数据可视化](http://p2n2em8ut.bkt.clouddn.com/grafana_bucket_demo.png)
 
-不过通过Graph Panel展示Histogram也并不太直观，其并不能直接反映出Bucket的大小以及分布情况，因此在Grafana V5版本以后更推荐使用Heatmap Panel的方式展示Histogram样本数据。关于Heatmap Panel的使用将会在接下来的部分介绍。
+不过通过Graph面板展示Histogram也并不太直观，其并不能直接反映出Bucket的大小以及分布情况，因此在Grafana V5版本以后更推荐使用Heatmap面板的方式展示Histogram样本数据。关于Heatmap面板的使用将会在接下来的部分介绍。
