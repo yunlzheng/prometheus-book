@@ -1,4 +1,4 @@
-# 在Sring Boot中集成
+# 在Spring Boot中集成
 
 本小节将以Spring Boot为例，介绍如何在应用代码中集成client_java。
 

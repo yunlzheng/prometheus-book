@@ -41,7 +41,7 @@ Prometheus操作指南：云原生监控之道
     * [网络探测：Blackbox Exporter](./exporter/install_blackbox_exporter.md)
   * [使用Java自定义Exporter](./exporter/custom_exporter_with_java.md)
     * [使用client_java](./exporter/client_library_java.md)
-    * [在Sring Boot中集成](./exporter/custom_app_support_prometheus.md)
+    * [在Spring Boot中集成](./exporter/custom_app_support_prometheus.md)
   * [小结](./exporter/SUMMARY.md)
 * [第5章 可视化一切](./grafana/README.md)
   * [Grafana简介](./grafana/grafana-intro.md)
