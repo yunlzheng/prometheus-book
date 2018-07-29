@@ -50,11 +50,8 @@
     * [分布统计：Heatmap Panel](./grafana/use_heatmap_panel.md)
     * [当前状态：SingleStat Panel](./grafana/use_singlestat_panel.md)
     * [表格：Tabel Panel](./grafana/use_table_panel.md)
-    * 使用注解
   * [模板化Dashboard](./grafana/templating.md)
-    * 动态参数
-    * Repeat面板
-  * 共享Dashboard
+  * [共享Dashboard](./grafana/share_dashboard.md)
   * 告警
   * 团队与权限管理
   * [小结](./grafana/SUMMARY.md)
