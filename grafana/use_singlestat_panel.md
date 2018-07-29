@@ -1,4 +1,4 @@
-# 当前状态：SingleStat Panel
+# 当前状态：SingleStat面板
 
 Singlem Panel侧重于展示系统的当前状态而非变化趋势。如下所示，在以下场景中特别适用于使用SingleStat：
 
@@ -38,7 +38,7 @@ Coloring配置组则可以控制当前面板的背景或者字体的颜色，如
 
 通常在Promthues监控服务的健康状态时，在样本数据中会通过0表示不健康，1表示健康。 但是如果直接将0或1显示在面板中，那么可视化效果将缺乏一定的可读性。
 
-为了提升数字的可读性，在Singlestat Panel中可以通过**Vlaue Mappings**定义值的映射关系。
+为了提升数字的可读性，在Singlestat Panel中可以通过**Value Mappings**定义值的映射关系。
 
 Siglesta支持值映射（value to text）和区间映射（range to text）两种方式。 如下所示：
 

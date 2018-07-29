@@ -10,7 +10,7 @@
 
 * 数据源（Data Source）
 
-Grafana支持对接多种数据源支持，官方提供了对Prometheus，Graphite，InfluxDB等数据源的支持。Grafana作为通用的可视化工具，支持将多个数据源的数据整合到单个可视化面板中。
+Grafana支持对接多种数据源，官方提供了对Prometheus，Graphite，InfluxDB等数据源的支持。Grafana作为通用的可视化工具，支持将多个数据源的数据整合到单个可视化面板中。
 
 用户可以在Grafana的设置（Configuration）页面，添加自定义的数据源：
 
