@@ -1,0 +1,1 @@
+minikube start --disk-size=40g --registry-mirror=https://k2eue1s7.mirror.aliyuncs.com
