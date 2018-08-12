@@ -116,6 +116,8 @@ spec:
 
 ## 监控Kubernetes中部署的服务
 
+为了能够模拟应用监控的场景，首先需要在Kubernetes中安装一个测试应用，如下所示：
+
 ```
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -149,6 +151,18 @@ spec:
     port: 8080
 ```
 
+将以上内容保存为example-app.yaml，并在Kubernetes中创建相应的资源：
+
+```
+$ kubectl create -f example-app.yaml
+deployment "example-app" created
+service "example-app" created
+```
+
+访问示例应用的8080端口下的/metrics路径可以获取该应用的监控样本数据。在Prometheus Operator下所有与Prometheus相关的操作都是通过自定义资源类型实现的，对于监控配置也是相同的方式，用户只需要通过ServiceMonitor声明监控目标，并且关联到Prometheus资源即可。
+
+如下所示，定义类型为ServiceMonitor的资源对象，并且通过selector选择需要监控的目标服务标签：
+
 ```
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -163,3 +177,45 @@ spec:
   endpoints:
   - port: web
 ```
+
+将以上内容保存为example-app-monitor.yaml文件，并且创建相应的资源：
+
+```
+$ kubectl create -f example-app-monitor.yaml
+servicemonitor "example-app" created
+
+$ kubectl get servicemonitor
+NAME          AGE
+example-app   5s
+```
+
+为了告诉Promtheus使用ServiceMonitor，需要修改prometheus.yaml的内容，如下所示：
+
+```
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+  labels:
+    prometheus: prometheus
+spec:
+  replicas: 2
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      team: frontend
+```
+
+通过在Prometheus中添加serviceMonitorSelector选择器，关联需要监控的ServiceMonitor资源标签。自此，Prometheus Operator会自动根据ServiceMonitor相关的内容生成Prometheus的监控配置文件，并在不重建Pod实例的情况下重新加载该配置。
+
+通过UI查看Prometheus配置文件，Prometheus Operator自动为Prometheus创建了一个名为default/example-app/0的监控采集任务，用于采集示例应用程序的监控数据：
+
+![自动生成的Prometheus配置](http://p2n2em8ut.bkt.clouddn.com/prometheus-config-with-servermonitor.png)
+
+查看监控Target页面，可以看到当前所有的监控目标
+
+![监控Target目标](http://p2n2em8ut.bkt.clouddn.com/prometheus-operator-targets.png)
+
+到目前为止，通过Prometheus Operator自定义的资源类型Prometheus和ServiceMonitor声明了需要在Kubernetes集群中部署的Prometheus实例以及相应的监控配置。
+
+Prometheus Operator通过监听Prometheus和ServicMonitor资源的变化，自动创建和管理Prometheus的配置信息，从而实现了对Prometheus声明式的自动化管理。
