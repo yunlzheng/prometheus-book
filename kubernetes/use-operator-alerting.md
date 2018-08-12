@@ -118,6 +118,6 @@ spec:
 
 在Prometheus重新加载配置完成后，通过UI可以查看Prometheus最新的配置内容，如下所示：
 
-![Prometheus配置]](http://p2n2em8ut.bkt.clouddn.com/prometheus-alerting-auto.png)
+![Prometheus配置](http://p2n2em8ut.bkt.clouddn.com/prometheus-alerting-auto2.png)
 
 自此，通过使用Prometheus Operator提供的自定义资源内容，声明式的创建和管理Prometheus实例以及Alertmanager集群。
