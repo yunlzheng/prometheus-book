@@ -212,10 +212,8 @@ spec:
 
 ![自动生成的Prometheus配置](http://p2n2em8ut.bkt.clouddn.com/prometheus-config-with-servermonitor.png)
 
-查看监控Target页面，可以看到当前所有的监控目标
+查看监控Target页面，可以看到当前所有的监控目标:
 
 ![监控Target目标](http://p2n2em8ut.bkt.clouddn.com/prometheus-operator-targets.png)
 
-到目前为止，通过Prometheus Operator自定义的资源类型Prometheus和ServiceMonitor声明了需要在Kubernetes集群中部署的Prometheus实例以及相应的监控配置。
-
-Prometheus Operator通过监听Prometheus和ServicMonitor资源的变化，自动创建和管理Prometheus的配置信息，从而实现了对Prometheus声明式的自动化管理。
+到目前为止，通过Prometheus Operator自定义的资源类型Prometheus和ServiceMonitor声明了需要在Kubernetes集群中部署的Prometheus实例以及相应的监控配置。通过监听Prometheus和ServicMonitor资源的变化，自动创建和管理Prometheus的配置信息，从而实现了对Prometheus声明式的自动化管理。
