@@ -4,11 +4,13 @@ Prometheus Operator建立在Kubernetes的资源以及控制器的概念之上，
 
 ![Prometheus Operator架构](http://p2n2em8ut.bkt.clouddn.com/prometheus-architecture.png)
 
-如上所示，是Prometheus Operator的架构示意图。在Prometheus Operator中主要包含三类自定义资源：
+如上所示，是Prometheus Operator的架构示意图。为了能够通过声明式的对Prometheus进行自动化管理。Prometheus Operator通过自定义资源类型的方式定义了一下3个主要自定义资源类型：
 
-* Prometheus
-* ServiceMonitor
-* Alertmanager
+* Prometheus：声明式的管理Prometheus实例
+* ServiceMonitor：声明式的管理监控目标，并自定生成监控配置文件
+* Alertmanager：声明式的管理Alertmanager实例
+
+除了上图中展示的3大类型以外，还有自定义资源类型PrometheusRule，用于声明式的管理高级规则。
 
 ### Prometheus
 
