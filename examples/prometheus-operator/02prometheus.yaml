@@ -7,10 +7,10 @@ metadata:
 spec:
   replicas: 2
   serviceAccountName: prometheus
-  serviceMonitorNamespaceSelector:
-    matchExpressions:
-    - {}
   serviceMonitorSelector:
-    matchExpressions:
-    - key: k8s-app
-      operator: Exists
+    matchLabels:
+      team: frontend
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: example
