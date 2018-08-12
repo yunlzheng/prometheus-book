@@ -4,6 +4,7 @@ metadata:
   name: example-app
   labels:
     team: frontend
+    k8s-app: example-app
 spec:
   selector:
     matchLabels:

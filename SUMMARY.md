@@ -79,7 +79,6 @@
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
   * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
     * [使用Prometheus Operator监控用户应用](./kubernetes/use-operator-monitor-app.md)
-    * [使用Prometheus Operator监控集群](./kubernetes/use-operator-monitor-app.md)
     * [Prometheus Operator下的告警处理](./kubernetes/use-operator-alerting.md)
   * [小结](./kubernetes/SUMMARY.md)
 * [第9章 使用Prometheus监控Rancher集群](./rancher/README.md)
