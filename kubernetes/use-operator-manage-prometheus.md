@@ -109,14 +109,3 @@ level=info ts=2018-08-12T02:57:38.710804217Z caller=operator.go:1338 component=p
 level=info ts=2018-08-12T02:57:41.622981601Z caller=operator.go:192 component=alertmanageroperator msg="CRD API endpoints ready"
 level=info ts=2018-08-12T02:57:47.755480463Z caller=operator.go:330 component=prometheusoperator msg="CRD API endpoints ready"
 ```
-
-查看集群中的自定义资源内容：
-
-```
-$ kubectl get customresourcedefinition
-NAME                                    AGE
-alertmanagers.monitoring.coreos.com     6d
-prometheuses.monitoring.coreos.com      6d
-prometheusrules.monitoring.coreos.com   6d
-servicemonitors.monitoring.coreos.com   6d
-```
