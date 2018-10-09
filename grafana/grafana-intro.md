@@ -39,5 +39,3 @@ Grafana通过组织（Organization）提供了类似于多租户的模式。Orga
 在Organization中可以添加多个用户以及团队。Grafana基于角色和权限模式管理用户对Dashboard以及Dashboard的管理权限，其中内置了三个角色，分别是：View，Editor，Admin。 对于单个Dashboard而言Admin用户可以分配其它用户（User）或者团队（Team）的权限。
 
 对于一组相关的Dashboard，在最新版本的Grafan中还提供目录（Folder）的形式统一管理其权限。
-
-> TODO: 添加图例，展示Dashboard的组织关系。

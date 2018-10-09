@@ -52,8 +52,6 @@
     * [表格：Tabel面板](./grafana/use_table_panel.md)
   * [模板化Dashboard](./grafana/templating.md)
   * [共享Dashboard](./grafana/share_dashboard.md)
-  * 告警
-  * 团队与权限管理
   * [小结](./grafana/SUMMARY.md)
 * [第6章 集群与高可用](./ha/READMD.md)
   * [本地存储](./ha/prometheus-local-storage.md)
@@ -80,6 +78,7 @@
   * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
     * [使用Prometheus Operator监控用户应用](./kubernetes/use-operator-monitor-app.md)
     * [使用Prometheus Operator管理Alertmanager](./kubernetes/use-operator-alerting.md)
+  * [基于Prometheus的弹性伸缩](./kubernetes/hap-with-prometheus.md)
   * [小结](./kubernetes/SUMMARY.md)
 * [第9章 使用Prometheus监控Rancher集群](./rancher/README.md)
 * [参考资料](./REFERENCES.md)
