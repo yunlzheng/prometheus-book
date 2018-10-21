@@ -108,6 +108,14 @@ receivers:
 
 ![告警](http://p2n2em8ut.bkt.clouddn.com/mail-alert-page.png)
 
+## 与Slack集成
+
+> TODO
+
+## 与微信集成
+
+> 
+
 ## 自定义模板
 
 默认情况下Alertmanager使用了系统自带的默认通知模板，模板源码可以从[https://github.com/prometheus/alertmanager/blob/master/template/default.tmpl](https://github.com/prometheus/alertmanager/blob/master/template/default.tmpl)获得。Alertmanager的通知模板基于[Go的模板系统](http://golang.org/pkg/text/template)。Alertmanager也支持用户定义和使用自己的模板，一般来说有两种方式可以选择。
