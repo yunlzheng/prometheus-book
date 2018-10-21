@@ -1,0 +1,71 @@
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  labels:
+    app: node-exporter
+  name: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      containers:
+      - args:
+        - --web.listen-address=127.0.0.1:9100
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        image: quay.io/prometheus/node-exporter:v0.15.2
+        name: node-exporter
+        volumeMounts:
+        - mountPath: /host/proc
+          name: proc
+          readOnly: false
+        - mountPath: /host/sys
+          name: sys
+          readOnly: false
+      hostNetwork: true
+      hostPID: true
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      volumes:
+      - hostPath:
+          path: /proc
+        name: proc
+      - hostPath:
+          path: /sys
+        name: sys
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+spec:
+  type: ClusterIP
+  ports:
+  - name: https
+    port: 9100
+    targetPort: https
+  selector:
+    app: node-exporter
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+spec:
+  jobLabel: k8s-app
+  endpoints:
+  - interval: 30s
+    port: https
+  selector:
+    matchLabels:
+      k8s-app: node-exporter
+
