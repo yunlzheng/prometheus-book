@@ -2,15 +2,20 @@
 
 为了能够更加直观的了解Prometheus Server，接下来我们将在本地部署一个Prometheus Server实例，并且配合Node Exporter程序实现对本地主机指标的监控。
 
-##### 运行Prometheus Server
+##### 安装Prometheus Server
 
-Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里只需要下载，解压并且添加基本的配置即可正常启动Prometheus Server。
+Prometheus基于Golang编写，编译后的软件包，不依赖于任何的第三方依赖。用户只需要下载对应平台的二进制包，解压并且添加基本的配置即可正常启动Prometheus Server。
 
-可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包。当前最新版本为2.4.3。
+对于非Docker用户，可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包：
 
 ```
 export VERSION=2.4.3
 curl -LO  https://github.com/prometheus/prometheus/releases/download/$VERSION/prometheus-$VERSION.darwin-amd64.tar.gz
+```
+
+解压，并将Prometheus相关的命令，添加到系统环境变量路径即可：
+
+```
 tar -xzf prometheus-${VERSION}.darwin-amd64.tar.gz
 cp prometheus-${VERSION}.darwin-amd64/prometheus /usr/local/bin/
 cp prometheus-${VERSION}.darwin-amd64/promtool /usr/local/bin/
@@ -60,29 +65,30 @@ prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/dat
 正常的情况下，你可以看到以下输出内容：
 
 ```
-level=info ts=2018-03-11T13:38:06.302110924Z caller=main.go:225 msg="Starting Prometheus" version="(version=2.1.0, branch=HEAD, revision=85f23d82a045d103ea7f3c89a91fba4a93e6367a)"
-level=info ts=2018-03-11T13:38:06.302226312Z caller=main.go:226 build_context="(go=go1.9.2, user=root@6e784304d3ff, date=20180119-12:07:34)"
-level=info ts=2018-03-11T13:38:06.302258309Z caller=main.go:227 host_details=(darwin)
-level=info ts=2018-03-11T13:38:06.302283524Z caller=main.go:228 fd_limits="(soft=10240, hard=9223372036854775807)"
-level=info ts=2018-03-11T13:38:06.306850232Z caller=main.go:499 msg="Starting TSDB ..."
-level=info ts=2018-03-11T13:38:06.30688713Z caller=web.go:383 component=web msg="Start listening for connections" address=0.0.0.0:9090
-level=info ts=2018-03-11T13:38:06.316037503Z caller=main.go:509 msg="TSDB started"
-level=info ts=2018-03-11T13:38:06.316106814Z caller=main.go:585 msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
+msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
 level=info ts=2018-03-11T13:38:06.317645234Z caller=main.go:486 msg="Server is ready to receive web requests."
 level=info ts=2018-03-11T13:38:06.317679086Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager..."
 ```
 
-启动完成后，可以通过[http://localhost:9090](http://localhost:9090)访问Prometheus的UI界面。
+对于Docker用户，直接使用Prometheus的镜像即可启动Prometheus Server：
+
+```
+docker run -p 9090:9090 -v /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+```
+
+启动完成后，可以通过[http://localhost:9090](http://localhost:9090)访问Prometheus的UI界面：
 
 ![Prometheus UI](./static/prometheus-ui-graph.png)
 
-##### 运行node exporter
+##### 使用Node Exporter采集主机运行数据
 
-在Prometheus的架构设计中，Prometheus Server主要负责数据的收集，存储并且对外提供数据查询支持。而实际的监控样本数据的收集则是由Exporter完成。Exporter可以是一个独立运行的进程，对外暴露一个用于获取监控数据的HTTP服务。 Prometheus Server只需要定时从这些Exporter暴露的HTTP服务获取监控数据即可。
+在Prometheus的架构设计中，Prometheus Server并不直接服务监控特定的目标，其主要任务负责数据的收集，存储并且对外提供数据查询支持。因此为了能够能够监控到某些东西，如主机的CPU使用率，我们需要使用到Exporter。Prometheus周期性的从Exporter暴露的HTTP服务地址（通常是/metrics）拉取监控样本数据。
 
-为了能够采集到主机的运行指标。这里需要使用[node exporter](https://github.com/prometheus/node_exporter)，node exporter可以获取到所在主机大量的运行数据，典型的包括CPU、内存，磁盘、网络等等监控样本。
+从上面的描述中可以看出Exporter可以是一个相对开放的概念，其可以是一个独立运行的程序独立于监控目标以外，也可以是直接内置在监控目标中。只要能够向Prometheus提供标准格式的监控样本数据即可。
 
-node exporter同样采用Golang编写，并且不存在任何的第三方依赖，只需要下载，解压即可运行。可以从[https://prometheus.io/download/](https://prometheus.io/download/)获取最新的node exporter版本的二进制包。
+这里为了能够采集到主机的运行指标如CPU, 内存，磁盘等信息。我们可以使用[Node Exporter](https://github.com/prometheus/node_exporter)。
+
+Node Exporter同样采用Golang编写，并且不存在任何的第三方依赖，只需要下载，解压即可运行。可以从[https://prometheus.io/download/](https://prometheus.io/download/)获取最新的node exporter版本的二进制包。
 
 ```
 curl -OL https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.darwin-amd64.tar.gz
@@ -100,25 +106,12 @@ node_exporter
 启动成功后，可以看到以下输出：
 
 ```
-INFO[0000] Starting node_exporter (version=0.15.2, branch=HEAD, revision=98bc64930d34878b84a0f87dfe6e1a6da61e532d)  source="
-node_exporter.go:43"
-INFO[0000] Build context (go=go1.9.2, user=root@d5c4792c921f, date=20171205-14:51:43)  source="node_exporter.go:44"
-INFO[0000] No directory specified, see --collector.textfile.directory  source="textfile.go:57"
-INFO[0000] Enabled collectors:                           source="node_exporter.go:50"
-INFO[0000]  - time                                       source="node_exporter.go:52"
-INFO[0000]  - meminfo                                    source="node_exporter.go:52"
-INFO[0000]  - textfile                                   source="node_exporter.go:52"
-INFO[0000]  - filesystem                                 source="node_exporter.go:52"
-INFO[0000]  - netdev                                     source="node_exporter.go:52"
-INFO[0000]  - cpu                                        source="node_exporter.go:52"
-INFO[0000]  - diskstats                                  source="node_exporter.go:52"
-INFO[0000]  - loadavg                                    source="node_exporter.go:52"
 INFO[0000] Listening on :9100                            source="node_exporter.go:76"
 ```
 
 访问[http://localhost:9100/](http://localhost:9100/)可以看到以下页面：
 
-![node exporter页面](./static/node_exporter_home_page.png)
+![Node Exporter页面](./static/node_exporter_home_page.png)
 
 ## Node Exporter监控指标
 
