@@ -7,7 +7,7 @@
 例如，我们可以通过指标node_memory_free_bytes_total获取当前主机可用的内存空间大小，其样本单位为Bytes。这是如果客户端要求使用MB作为单位响应数据，那只需要将查询到的时间序列的样本值进行单位换算即可：
 
 ```
-node_memory_free_bytes_total / 1024
+node_memory_free_bytes_total / (1024 * 1024)
 ```
 
 node_memory_free_bytes_total表达式会查询出所有满足表达式条件的时间序列，在上一小节中我们称该表达式为瞬时向量表达式，而返回的结果成为瞬时向量。
