@@ -6,13 +6,14 @@
 
 Prometheus基于Golang编写，因此不存在任何的第三方依赖。这里只需要下载，解压并且添加基本的配置即可正常启动Prometheus Server。
 
-可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包，目前这里采用最新的稳定版本2.1.0。
+可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包。当前最新版本为2.4.3。
 
 ```
-curl -LO  https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.darwin-amd64.tar.gz
-tar -xzf prometheus-2.1.0.darwin-amd64.tar.gz
-cp prometheus-2.1.0.darwin-amd64/prometheus /usr/local/bin/
-cp prometheus-2.1.0.darwin-amd64/promtool /usr/local/bin/
+export VERSION=2.4.3
+curl -LO  https://github.com/prometheus/prometheus/releases/download/$VERSION/prometheus-$VERSION.darwin-amd64.tar.gz
+tar -xzf prometheus-${VERSION}.darwin-amd64.tar.gz
+cp prometheus-${VERSION}.darwin-amd64/prometheus /usr/local/bin/
+cp prometheus-${VERSION}.darwin-amd64/promtool /usr/local/bin/
 
 sudo mkdir -p /data/prometheus
 ```
