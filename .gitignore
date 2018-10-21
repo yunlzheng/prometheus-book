@@ -6,3 +6,5 @@ npm-debug.log
 **/**/.vagrant
 *.pdf
 examples/localhost
+.DS_Store
+**/**/.DS_Store
