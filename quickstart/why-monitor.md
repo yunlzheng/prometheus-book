@@ -2,7 +2,7 @@
 
 Prometheus受启发于Google的Brogmon监控系统（相似的Kubernetes是从Google的Brog系统演变而来），从2012年开始由前Google工程师在Soundcloud以开源软件的形式进行研发，并且于2015年早期对外发布早期版本。2016年5月继Kubernetes之后成为第二个正式加入CNCF基金会的项目，同年6月正式发布1.0版本。2017年底发布了基于全新存储层的2.0版本，能更好地与容器平台、云平台配合。
 
-![Prometheus简史](http://p2n2em8ut.bkt.clouddn.com/prometheus-release-roadmaps.png)
+![Prometheus简史](./static/prometheus-release-roadmaps.png)
 
 Prometheus作为新一代的云原生监控系统，目前已经有超过650+位贡献者参与到Prometheus的研发工作上，并且超过120+项的第三方集成。
 
@@ -20,11 +20,11 @@ Prometheus作为新一代的云原生监控系统，目前已经有超过650+位
 
 对于常用的监控系统，如Nagios、Zabbix的用户而言，往往并不能很好的解决上述问题。这里以Nagios为例，如下图所示是Nagios监控系统的基本架构：
 
-![Nagios监控系统](http://p2n2em8ut.bkt.clouddn.com/nagios-platform.png)
+![Nagios监控系统](./static/nagios-platform.png)
 
 Nagios的主要功能是监控服务和主机。Nagios软件需要安装在一台独立的服务器上运行，该服务器称为监控中心。每一台被监控的硬件主机或者服务都需要运行一个与监控中心服务器进行通信的Nagios软件后台程序，可以理解为Agent或者插件。
 
-![Nagios主机监控页面](https://www.ibm.com/developerworks/cn/linux/1309_luojun_nagios/image049.jpg)
+![Nagios主机监控页面](./static/image049.jpg)
 
 首先对于Nagios而言，大部分的监控能力都是围绕系统的一些边缘性的问题，主要针对系统服务和资源的状态以及应用程序的可用性。 例如：Nagios通过check_disk插件可以用于检查磁盘空间，check_load用于检查CPU负载等。这些插件会返回4种Nagios可识别的状态，0(OK)表示正常，1(WARNING)表示警告，2(CRITTCAL)表示错误，3(UNKNOWN)表示未知错误，并通过Web UI显示出来。
 
@@ -49,7 +49,7 @@ Prometheus基于Pull模型的架构方式，可以在任何地方（本地电脑
 
 Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的Client库，用户可以轻松的在应用程序中添加对Prometheus的支持，从而让用户可以获取服务和应用内部真正的运行状态。
 
-![监控服务内部运行状态](http://p2n2em8ut.bkt.clouddn.com/pull%20vspush.png)
+![监控服务内部运行状态](./static/pullvspush.png)
 
 ##### 强大的数据模型
 

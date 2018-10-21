@@ -25,10 +25,11 @@ Prometheus操作指南：云原生监控之道
   * [自定义Prometheus告警规则](./alert/prometheus-alert-rule.md)
   * [部署AlertManager](./alert/install-alert-manager.md)
   * [基于Label的动态告警处理](./alert/alert-manager-routes.md)
-  * [内置告警接收器Receiver](./alert/alert-manager-with-smtp.md)
+  * [使用内置告警接收器Receiver](./alert/alert-manager-with-smtp.md)
   * [使用Webhook扩展Alertmanager](./alert/alert-manager-extension-with-webhook.md)
   * [屏蔽告警通知](./alert/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./alert/prometheus-recoding-rules.md)
+  * 通知模板详解
   * [小结](./alert/SUMMARY.md)
 
 ## Part II - Prometheus进阶
