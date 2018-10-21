@@ -2,7 +2,7 @@
 
 为了能够更加直观的了解Prometheus Server，接下来我们将在本地部署一个Prometheus Server实例，并且配合Node Exporter程序实现对本地主机指标的监控。
 
-##### 安装Prometheus Server
+#### 安装Prometheus Server
 
 Prometheus基于Golang编写，编译后的软件包，不依赖于任何的第三方依赖。用户只需要下载对应平台的二进制包，解压并且添加基本的配置即可正常启动Prometheus Server。
 
@@ -80,7 +80,7 @@ docker run -p 9090:9090 -v /etc/prometheus/prometheus.yml:/etc/prometheus/promet
 
 ![Prometheus UI](./static/prometheus-ui-graph.png)
 
-##### 使用Node Exporter采集主机运行数据
+#### 使用Node Exporter采集主机运行数据
 
 在Prometheus的架构设计中，Prometheus Server并不直接服务监控特定的目标，其主要任务负责数据的收集，存储并且对外提供数据查询支持。因此为了能够能够监控到某些东西，如主机的CPU使用率，我们需要使用到Exporter。Prometheus周期性的从Exporter暴露的HTTP服务地址（通常是/metrics）拉取监控样本数据。
 
