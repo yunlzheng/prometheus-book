@@ -26,9 +26,9 @@ scrape_configs:
 
 除了通过使用“up”表达式查询当前所有Instance的状态以外，还可以通过Prometheus UI中的Targets页面查看当前所有的监控采集任务，以及各个任务下所有实例的状态:
 
-![target列表以及状态](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets.png)
+![target列表以及状态](./static/prometheus_ui_targets.png)
 
 我们也可以访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)直接从Prometheus的UI中查看当前所有的任务以及每个任务对应的实例信息。
 
-![Targets状态](http://p2n2em8ut.bkt.clouddn.com/prometheus_ui_targets_status.png)
+![Targets状态](./static/prometheus_ui_targets_status.png)
 
