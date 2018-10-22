@@ -1,4 +1,4 @@
-# Prometheus的核心组件
+# Prometheus组件
 
 上一小节，通过部署Node Exporter我们成功的获取到了当前主机的资源使用情况。接下来我们将从Prometheus的架构角度详细介绍Prometheus生态中的各个组件。
 

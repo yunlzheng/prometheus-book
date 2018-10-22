@@ -9,6 +9,7 @@
   * [初识Prometheus](./quickstart/prometheus-quick-start.md)
     * [安装Prometheus Server](./quickstart/install-prometheus-server.md)
     * [使用Node Exporter采集主机数据](./quickstart/use-node-exporter.md)
+    * [使用PromQL查询监控数据](./quickstart/promql_quickstart.md)
     * [监控数据可视化](./quickstart/use-grafana-create-dashboard.md)
   * [任务和实例](./quickstart/prometheus-job-and-instance.md)
   * [Prometheus核心组件](./quickstart/prometheus-architecture-and-components.md)

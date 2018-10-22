@@ -1,8 +1,8 @@
-## 安装Prometheus Server
+# 安装Prometheus Server
 
 Prometheus基于Golang编写，编译后的软件包，不依赖于任何的第三方依赖。用户只需要下载对应平台的二进制包，解压并且添加基本的配置即可正常启动Prometheus Server。
 
-### 从二进制包安装
+## 从二进制包安装
 
 对于非Docker用户，可以从[https://prometheus.io/download/](https://prometheus.io/download/)找到最新版本的Prometheus Sevrer软件包：
 
@@ -68,7 +68,7 @@ level=info ts=2018-03-11T13:38:06.317645234Z caller=main.go:486 msg="Server is r
 level=info ts=2018-03-11T13:38:06.317679086Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager..."
 ```
 
-### 使用容器安装
+## 使用容器安装
 
 对于Docker用户，直接使用Prometheus的镜像即可启动Prometheus Server：
 
