@@ -1,4 +1,6 @@
-## 使用Node Exporter采集主机运行数据
+# 使用Node Exporter采集主机运行数据
+
+## 安装Node Exporter
 
 在Prometheus的架构设计中，Prometheus Server并不直接服务监控特定的目标，其主要任务负责数据的收集，存储并且对外提供数据查询支持。因此为了能够能够监控到某些东西，如主机的CPU使用率，我们需要使用到Exporter。Prometheus周期性的从Exporter暴露的HTTP服务地址（通常是/metrics）拉取监控样本数据。
 
@@ -31,7 +33,7 @@ INFO[0000] Listening on :9100                            source="node_exporter.g
 
 ![Node Exporter页面](./static/node_exporter_home_page.png)
 
-### Node Exporter监控指标
+### 初始Node Exporter监控指标
 
 访问[http://localhost:9100/metrics](http://localhost:9100/metrics)，可以看到当前node exporter获取到的当前主机的所有监控数据，如下所示：
 
@@ -62,6 +64,8 @@ node_load1 3.0703125
 * node_time：当前系统时间
 * go_*：node exporter中go相关指标
 * process_*：node exporter自身进程相关运行指标
+
+## 从Node Exporter收集监控数据
 
 为了能够让Prometheus Server能够从当前node exporter获取到监控数据，这里需要修改Prometheus配置文件。编辑prometheus.yml并在scrape_configs节点下添加以下内容:
 

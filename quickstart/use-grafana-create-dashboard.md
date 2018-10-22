@@ -1,46 +1,4 @@
-## 监控数据可视化
-
-### 使用Prometheus UI
-
-通过Prometheus UI用户可以利用PromQL实时查询监控数据，并且支持一些基本的数据可视化能力。进入到Prometheus UI,切换到Graph标签
-
-![Graph Query](./static/prometheus_ui_graph_query.png)
-
-通过PromQL则可以直接以可视化的形式显示查询到的数据。例如，查询主机负载变化情况，可以使用：
-
-```
-node_load1
-```
-
-![主机负载情况](./static/node_node1_graph.png)
-
-查询主机CPU的使用率，由于node_cpu的数据类型是Counter，计算使用率需要使用rate()函数：
-
-```
-rate(node_cpu[2m])
-```
-
-![系统进程的CPU使用率](./static/node_cpu_usage_by_cpu_and_mode.png)
-
-这时如果要忽略是哪一个CPU的，只需要使用without表达式，将标签CPU去除后聚合数据即可：
-
-```
-avg without(cpu) (rate(node_cpu[2m]))
-```
-
-![系统各mode的CPU使用率](./static/node_cpu_usage_by_mode.png)
-
-那如果需要计算系统CPU的总体使用率，通过排除系统闲置的CPU使用率即可获得:
-
-```
-1 - avg without(cpu) (rate(node_cpu{mode="idle"}[2m]))
-```
-
-![系统CPU使用率](./static/node_cpu_usage_total.png)
-
-从上面这些例子中可以看出，根据样本中的标签可以很方便地对数据进行查询，过滤以及聚合等操作。同时PromQL中还提供了大量的诸如rate()这样的函数可以实现对数据的更多个性化的处理。
-
-## 使用Grafana创建可视化Dashboard
+# 使用Grafana创建可视化Dashboard
 
 Prometheus UI提供了快速验证PromQL以及临时可视化支持的能力，而在大多数场景下引入监控系统通常还需要构建可以长期使用的监控数据可视化面板（Dashboard）。这时用户可以考虑使用第三方的可视化工具如Grafana，Grafana是一个开源的可视化平台，并且提供了对Prometheus的完整支持。
 
