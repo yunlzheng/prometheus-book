@@ -8,7 +8,7 @@
 
 如下图所示，样本增长率反映出了样本变化的剧烈程度：
 
-![通过正常率表示样本的变化情况](http://p2n2em8ut.bkt.clouddn.com/counter-to-rate.png)
+![通过正常率表示样本的变化情况](./static/counter-to-rate.png)
 
 increase(v range-vector)函数是PromQL中提供的众多内置函数之一。其中参数v是一个区间向量，increase函数获取区间向量中的第一个后最后一个样本并返回其增长量。因此，可以通过以下表达式Counter类型指标的增长率：
 
@@ -34,7 +34,7 @@ irate(node_cpu[2m])
 
 irate函数相比于rate函数提供了更高的灵敏度，不过当需要分析长期趋势或者在告警规则中，irate的这种灵敏度反而容器造成干扰。因此在长期趋势分析或者告警中更推荐使用rate函数。
 
-![irate表现更高的灵敏度](http://p2n2em8ut.bkt.clouddn.com/rate_vs_irate.png)
+![irate表现更高的灵敏度](./static/rate_vs_irate.png)
 
 ## 预测Gauge指标变化趋势
 
@@ -73,7 +73,7 @@ histogram_quantile(0.5, http_request_duration_seconds_bucket)
 
 通过对Histogram类型的监控指标，用户可以轻松获取样本数据的分布情况。同时分位数的计算，也可以非常方便的用于评判当前监控指标的服务水平。
 
-![获取分布直方图的中位数](http://p2n2em8ut.bkt.clouddn.com/histogram_quantile.png)
+![获取分布直方图的中位数](./static/histogram_quantile.png)
 
 需要注意的是通过histogram_quantile计算的分位数，并非为精确值，而是通过http_request_duration_seconds_bucket和http_request_duration_seconds_sum近似计算的结果。
 
