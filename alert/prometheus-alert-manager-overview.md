@@ -2,13 +2,13 @@
 
 告警在Prometheus的架构中被划分成两个独立的部分。如下所示，通过在Prometheus中定义告警触发条件规则，并向Alertmanager发送告警信息。
 
-![Prometheus告警处理](http://p2n2em8ut.bkt.clouddn.com/prometheus-alert-artich.png)
+![Prometheus告警处理](./static/prometheus-alert-artich.png)
 
 Alertmanager作为一个独立的组件，负责接收并处理来自Prometheus Server(也可以是其它的客户端程序)的告警信息。Alertmanager可以对这些告警信息进行进一步的处理，比如消除重复的告警信息，对告警信息进行分组并且路由到正确的接受方，Prometheus内置了对邮件，Slack等通知方式的支持，同时还支持与Webhook的通知集成，以支持更多的可能性，例如可以通过Webhook与钉钉或者企业微信进行集成。同时AlertManager还提供了静默和告警抑制机制来对告警通知行为进行优化。
 
 ## Alertmanager特性
 
-![Alertmanager特性](http://p2n2em8ut.bkt.clouddn.com/alertmanager-features.png)
+![Alertmanager特性](./static/alertmanager-features.png)
 
 #### 分组
 

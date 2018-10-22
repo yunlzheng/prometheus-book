@@ -120,11 +120,11 @@ func main() {
 
 通过钉钉客户端（如：桌面或者手机）进入到群设置后选择“群机器人”。将显示如下界面：
 
-![群机器人](http://p2n2em8ut.bkt.clouddn.com/dingding-group-robot.png)
+![群机器人](./static/dingding-group-robot.png)
 
 选择“自定义机器人”，并且按照提示填写机器人名称，获取机器人webhook地址，如下所示：
 
-![获取webhook地址](http://p2n2em8ut.bkt.clouddn.com/dingtalk-robot-create-webhook.png)
+![获取webhook地址](./static/dingtalk-robot-create-webhook.png)
 
 webhook机器人创建成功后，用户就可以使用任何方式向该地址发起HTTP POST请求，即可实现向该群主发送消息。目前自定义机器人支持文本(text)，连接(link)，markdown三种消息类型。
 
@@ -158,7 +158,7 @@ $ curl -l -H "Content-type: application/json" -X POST -d '{"msgtype": "markdown"
 
 调用成功后，可以在钉钉应用群消息中接收到类似于如下通知消息:
 
-![测试消息](http://p2n2em8ut.bkt.clouddn.com/dingtalk-message-test.png)
+![测试消息](./static/dingtalk-message-test.png)
 
 ##### 定义转换器将告警通知转化为Dingtalk消息对象
 
@@ -359,4 +359,4 @@ receivers:
 
 重启Alertmanager服务后，手动拉高虚拟机CPU使用率触发告警条件，此时Dingtalk即可接收到相应的告警通知信息:
 
-![钉钉群机器人告警信息](http://p2n2em8ut.bkt.clouddn.com/alertmanager-dingtalk-test-result.png)
+![钉钉群机器人告警信息](./static/alertmanager-dingtalk-test-result.png)

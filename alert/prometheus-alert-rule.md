@@ -82,7 +82,7 @@ groups:
 
 如下所示，用户可以通过Prometheus WEB界面中的Alerts菜单查看当前Prometheus下的所有告警规则，以及其当前所处的活动状态。
 
-![告警活动状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-alert.png)
+![告警活动状态](./static/prometheus-ui-alert.png)
 
 同时对于已经pending或者firing的告警，Prometheus也会将它们存储到时间序列ALERTS{}中。
 
@@ -136,11 +136,11 @@ sudo service prometheus restart
 
 访问Prometheus UI[http://192.168.33.10:9090/rules](http://192.168.33.10:9090/rules)可以查看当前以加载的规则文件。
 
-![告警规则](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-rules.png)
+![告警规则](./static/prometheus-ui-rules.png)
 
 切换到Alerts标签[http://192.168.33.10:9090/alerts](http://192.168.33.10:9090/alerts)可以查看当前告警的活动状态。
 
-![告警活动状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-ui-alert.png)
+![告警活动状态](./static/prometheus-ui-alert.png)
 
 此时，我们可以手动拉高系统的CPU使用率，验证Prometheus的告警流程，在虚拟机上运行以下命令：
 
@@ -150,15 +150,15 @@ cat /dev/zero>/dev/null
 
 运行命令后查看CPU使用率情况，如下图所示：
 
-![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_usgae_high.png)
+![](./static/node_cpu_usgae_high.png)
 
 Prometheus首次检测到满足触发条件后，hostCpuUsageAlert显示由一条告警处于活动状态。由于告警规则中设置了1m的等待时间，当前告警状态为PENDING，如下图所示：
 
-![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_alert_pending.png)
+![](./static/node_cpu_alert_pending.png)
 
 如果1分钟后告警条件持续满足，则会实际触发告警并且告警状态为FIRING，如下图所示：
 
-![](http://p2n2em8ut.bkt.clouddn.com/node_cpu_alert_firing.png)
+![](./static/node_cpu_alert_firing.png)
 
 ## 接下来
 
