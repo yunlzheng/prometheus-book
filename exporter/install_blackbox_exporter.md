@@ -4,7 +4,7 @@
 
 黑盒监控相较于白盒监控最大的不同在于黑盒监控是以故障为导向当故障发生时，黑盒监控能快速发现故障，而白盒监控则侧重于主动发现或者预测潜在的问题。一个完善的监控目标是要能够从白盒的角度发现潜在问题，能够在黑盒的角度快速发现已经发生的问题。
 
-![黑盒监控和白盒监控](http://p2n2em8ut.bkt.clouddn.com/blackbox-whitebox-tower.png)
+![黑盒监控和白盒监控](./static/blackbox-whitebox-tower.png)
 
 ## 使用Blackbox Exporter
 
@@ -153,7 +153,7 @@ scrape_configs:
 
 通过以上3个relabel步骤，即可大大简化Prometheus任务配置的复杂度:
 
-![Blackbox Target实例](http://p2n2em8ut.bkt.clouddn.com/relabel_blackbox_targets.png)
+![Blackbox Target实例](./static/relabel_blackbox_targets.png)
 
 接下来，我们将详细介绍Blackbox中常用的HTTP探针使用方式
 

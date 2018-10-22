@@ -38,7 +38,7 @@ docker run \
 
 通过访问[http://localhost:8080](http://localhost:8080)可以查看，当前主机上容器的运行状态，如下所示：
 
-![CAdvisor可视化：CPU总量](http://p2n2em8ut.bkt.clouddn.com/cadvisor-total-usage.png)
+![CAdvisor可视化：CPU总量](./static/cadvisor-total-usage.png)
 
 CAdvisor是一个简单易用的工具，相比于使用Docker命令行工具，用户不用再登录到服务器中即可以可视化图表的形式查看主机上所有容器的运行状态。
 
@@ -95,7 +95,7 @@ prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/dat
 
 启动完成后，可以在Prometheus UI中查看到当前所有的Target状态：
 
-![Target](http://p2n2em8ut.bkt.clouddn.com/prometheus_targetes_with_cadvisor.png)
+![Target](./static/prometheus_targetes_with_cadvisor.png)
 
 当能够正常采集到cAdvisor的样本数据后，可以通过以下表达式计算容器的CPU使用率：
 
@@ -103,7 +103,7 @@ prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/dat
 sum(irate(container_cpu_usage_seconds_total{image!=""}[1m])) without (cpu)
 ```
 
-![容器CPU使用率](http://p2n2em8ut.bkt.clouddn.com/promql_container_cpu_usage.png)
+![容器CPU使用率](./static/promql_container_cpu_usage.png)
 
 查询容器内存使用量（单位：字节）:
 
@@ -117,7 +117,7 @@ container_memory_usage_bytes{image!=""}
 sum(rate(container_network_receive_bytes_total{image!=""}[1m])) without (interface)
 ```
 
-![容器网络接收量 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_network_receive_bytes_total.png)
+![容器网络接收量 字节/秒](./static/container_network_receive_bytes_total.png)
 
 查询容器网络传输量速率（单位：字节/秒）：
 
@@ -125,7 +125,7 @@ sum(rate(container_network_receive_bytes_total{image!=""}[1m])) without (interfa
 sum(rate(container_network_transmit_bytes_total{image!=""}[1m])) without (interface)
 ```
 
-![容器网络传输量 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_network_transmit_bytes_total.png)
+![容器网络传输量 字节/秒](./static/container_network_transmit_bytes_total.png)
 
 查询容器文件系统读取速率（单位：字节/秒）：
 
@@ -133,7 +133,7 @@ sum(rate(container_network_transmit_bytes_total{image!=""}[1m])) without (interf
 sum(rate(container_fs_reads_bytes_total{image!=""}[1m])) without (device)
 ```
 
-![容器文件系统读取速率 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_fs_reads_bytes_total.png)
+![容器文件系统读取速率 字节/秒](./static/container_fs_reads_bytes_total.png)
 
 查询容器文件系统写入速率（单位：字节/秒）：
 
@@ -141,4 +141,4 @@ sum(rate(container_fs_reads_bytes_total{image!=""}[1m])) without (device)
 sum(rate(container_fs_writes_bytes_total{image!=""}[1m])) without (device)
 ```
 
-![容器文件系统写入速率 字节/秒](http://p2n2em8ut.bkt.clouddn.com/container_fs_writes_bytes_total.png)
+![容器文件系统写入速率 字节/秒](./static/container_fs_writes_bytes_total.png)
