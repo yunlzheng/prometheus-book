@@ -4,7 +4,7 @@
 
 下图展示Prometheus的基本架构：
 
-![Prometheus架构](http://p2n2em8ut.bkt.clouddn.com/prometheus_%20architecture.png)
+![Prometheus架构](./static/prometheus_architecture.png)
 
 ## Prometheus Server
 
