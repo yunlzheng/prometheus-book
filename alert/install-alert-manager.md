@@ -79,11 +79,11 @@ cat /dev/zero>/dev/null
 
 等待Prometheus告警进行触发状态：
 
-![](http://p2n2em8ut.bkt.clouddn.com/prometheus-alert-firing-with-manager.png)
+![](./static/prometheus-alert-firing-with-manager.png)
 
 查看Alertmanager UI此时可以看到Alertmanager接收到的告警信息。
 
-![](http://p2n2em8ut.bkt.clouddn.com/alertmanager-alert.png)
+![](./static/alertmanager-alert.png)
 
 ## 接下来
 

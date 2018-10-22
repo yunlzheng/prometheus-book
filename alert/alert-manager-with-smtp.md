@@ -106,7 +106,7 @@ receivers:
 
 这时如果手动拉高主机CPU使用率，使得监控样本数据满足告警触发条件。在SMTP配置正确的情况下，可以接收到如下的告警内容：
 
-![告警](http://p2n2em8ut.bkt.clouddn.com/mail-alert-page.png)
+![告警](./static/mail-alert-page.png)
 
 ## 与Slack集成
 
