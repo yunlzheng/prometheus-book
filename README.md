@@ -59,7 +59,7 @@
     * [在Spring Boot中集成](./exporter/custom_app_support_prometheus.md)
   * [小结](./exporter/SUMMARY.md)
 * [第5章 数据与可视化](./grafana/README.md)
-  * 使用Console Template
+  * [使用Console Template](./grafana/console-template)
   * [Grafana详解](./grafana/grafana-intro.md)
     * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
       * [变化趋势：Graph面板](./grafana/use_graph_panel.md)
