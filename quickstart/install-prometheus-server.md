@@ -8,22 +8,20 @@ Prometheus基于Golang编写，编译后的软件包，不依赖于任何的第�
 
 ```
 export VERSION=2.4.3
-curl -LO  https://github.com/prometheus/prometheus/releases/download/$VERSION/prometheus-$VERSION.darwin-amd64.tar.gz
+curl -LO  https://github.com/prometheus/prometheus/releases/download/v$VERSION/prometheus-$VERSION.darwin-amd64.tar.gz
 ```
 
 解压，并将Prometheus相关的命令，添加到系统环境变量路径即可：
 
 ```
 tar -xzf prometheus-${VERSION}.darwin-amd64.tar.gz
-cp prometheus-${VERSION}.darwin-amd64/prometheus /usr/local/bin/
-cp prometheus-${VERSION}.darwin-amd64/promtool /usr/local/bin/
-
-sudo mkdir -p /data/prometheus
+cd prometheus-${VERSION}.darwin-amd64
 ```
 
-解压后当前目录会包含默认的Prometheus配置文件promethes.yml，拷贝配置文件到/etc/prometheus/prometheus.yml:
+解压后当前目录会包含默认的Prometheus配置文件promethes.yml:
 
 ```
+# my global config
 global:
   scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
@@ -51,21 +49,32 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['localhost:9090']
+    - targets: ['localhost:9090']
 ```
 
-启动prometheus服务：
+Promtheus作为一个时间序列数据库，其采集的数据会以文件的形似存储在本地中，默认的存储路径为`data/`，因此我们需要先手动创建该目录：
 
 ```
-prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus
+mkdir -p data
+```
+
+用户也可以通过参数`--storage.tsdb.path="data/"`修改本地数据存储的路径。
+
+启动prometheus服务，其会默认加载当前路径下的prometheus.yaml文件：
+
+```
+./prometheus
 ```
 
 正常的情况下，你可以看到以下输出内容：
 
 ```
-msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
-level=info ts=2018-03-11T13:38:06.317645234Z caller=main.go:486 msg="Server is ready to receive web requests."
-level=info ts=2018-03-11T13:38:06.317679086Z caller=manager.go:59 component="scrape manager" msg="Starting scrape manager..."
+level=info ts=2018-10-23T14:55:14.499484Z caller=main.go:554 msg="Starting TSDB ..."
+level=info ts=2018-10-23T14:55:14.499531Z caller=web.go:397 component=web msg="Start listening for connections" address=0.0.0.0:9090
+level=info ts=2018-10-23T14:55:14.507999Z caller=main.go:564 msg="TSDB started"
+level=info ts=2018-10-23T14:55:14.508068Z caller=main.go:624 msg="Loading configuration file" filename=prometheus.yml
+level=info ts=2018-10-23T14:55:14.509509Z caller=main.go:650 msg="Completed loading of configuration file" filename=prometheus.yml
+level=info ts=2018-10-23T14:55:14.509537Z caller=main.go:523 msg="Server is ready to receive web requests."
 ```
 
 ## 使用容器安装

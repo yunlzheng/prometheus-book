@@ -75,6 +75,41 @@ Prometheus在`console_libraries`目录中已经内置了一些基本的界面组
 
 无论是`.lib`文件还是`.html`文件均使用了Go Template的语言，感兴趣的读者可以自行在Go语言官网了解更多内容`https://golang.org/pkg/text/template/`
 
+## 定义图表
+
+添加图表
+
+```
+<h1>Prometheus HTTP Request Rate</h1>
+
+<h3>Queries</h3>
+<div id="queryGraph"></div>
+<script>
+new PromConsole.Graph({
+  node: document.querySelector("#queryGraph"),
+  expr: "sum(rate(prometheus_http_request_duration_seconds_count{job='prometheus'}[5m]))",
+  name: "Queries",
+  yAxisFormatter: PromConsole.NumberFormatter.humanizeNoSmallPrefix,
+  yHoverFormatter: PromConsole.NumberFormatter.humanizeNoSmallPrefix,
+  yUnits: "/s",
+  yTitle: "Queries"
+})
+</script>
+```
+
+![](./static/query_graph.png)
+
+添加查询链接：
+
+```
+<h3>Links</h3>
+{{ template "prom_query_drilldown" (args "prometheus_build_info") }}
+```
+
 ## 时间轴控制区域
 
-## 定义图表
+```
+{{ template "prom_graph_timecontrol" . }}
+```
+
+![](./static/prom_graph_timecontrol.png)
