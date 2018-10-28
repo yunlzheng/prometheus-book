@@ -12,17 +12,17 @@ Grafana中所有的面板均以插件的形式进行使用，当前内置了5种
 
 通过Grafana UI用户可以在一个Dashboard下添加Panel，点击Dashboard右上角的“Add Panel”按钮，如下所示，将会显示当前系统中所有可使用的Panel类型：
 
-![添加Panel](http://p2n2em8ut.bkt.clouddn.com/grafana_dashboard_add_panel.png)
+![添加Panel](./static/grafana_dashboard_add_panel.png)
 
 选择想要创建的面板类型即可。这里以Graph面板为例，创建Panel之后，并切换到编辑模式，就可以看到类似于如下的面板编辑界面了：
 
-![编辑Panel信息](http://p2n2em8ut.bkt.clouddn.com/grafana_edit_panel.png)
+![编辑Panel信息](./static/grafana_edit_panel.png)
 
 ## 通用设置
 
 Grafana中所有类型的Panel都会包含一个General选项:
 
-![通用设置](http://p2n2em8ut.bkt.clouddn.com/grafana_panel_general.png)
+![通用设置](./static/grafana_panel_general.png)
 
 在该选项中主要包含3部分配置：
 
@@ -36,7 +36,7 @@ Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。*
 
 当选中数据源时，Panel会根据当前数据源类型加载不同的Query Editor界面。这里我们主要介绍Prometheus Query Editor，如下所示，当选中的数据源类型为Prometheus时，会显示如下界面：
 
-![Query Editor](http://p2n2em8ut.bkt.clouddn.com/graph_prometheus_query_editor.png)
+![Query Editor](./static/graph_prometheus_query_editor.png)
 
 Grafana提供了对PromQL的完整支持，在Query Editor中，可以添加任意个Query，并且使用PromQL表达式从Prometheus中查询相应的样本数据。
 
@@ -58,6 +58,6 @@ avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
 
 除此以外，Query Editor还提供了调试相关的功能，点击**Query Inspector**可以展开相关的调试面板：
 
-![调试面板](http://p2n2em8ut.bkt.clouddn.com/grafana_query_editor_inspector.png)
+![调试面板](./static/grafana_query_editor_inspector.png)
 
 在面板中，可以查看当前Prometheus返回的样本数据，用户也可以提供Mock数据渲染图像。

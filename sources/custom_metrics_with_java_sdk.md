@@ -180,7 +180,7 @@ public class GarbageCollectorExports extends Collector {
 
 下图描述了一下通过Prometheus Java Client中HTTP Server对获取监控样本请求的处理过程。
 
-![处理流程](http://p2n2em8ut.bkt.clouddn.com/prometheus_client_java_2.png)
+![处理流程](./static/prometheus_client_java_2.png)
 
 除了使用Prometheus提供的HttpServer以外，Prometheus提供了针对Servlet，Spring Boot, Spring Web以及Dropwizard等的实现。可以让用户快速实现已有应用程序与Prometheus的集成。
 
@@ -188,7 +188,7 @@ public class GarbageCollectorExports extends Collector {
 
 在上面的例子中，已经了解过simpleclient_hotspot是如果实现对JVM相关运行指标的监控的。通过添加自定义的Collector，用户可以轻松实现对外部系统（或者服务）的监控数据收集。
 
-![使用自定义Collector监控第三方监控指标](http://p2n2em8ut.bkt.clouddn.com/custom_collector.png)
+![使用自定义Collector监控第三方监控指标](./static/custom_collector.png)
 
 以下代码，演示了如何在Exporter中创建自定义Collector:
 
