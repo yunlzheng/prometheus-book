@@ -2,7 +2,7 @@
 
 在本章的前几个小节中笔者已经分别介绍了Prometheus的几种服务发现机制。通过服务发现的方式，管理员可以在不重启Prometheus服务的情况下动态的发现需要监控的Target实例信息。
 
-![基于Consul的服务发现](http://p2n2em8ut.bkt.clouddn.com/bolg_sd_mutil_cluster.png)
+![基于Consul的服务发现](./static/bolg_sd_mutil_cluster.png)
 
 如上图所示，对于线上环境我们可能会划分为:dev, stage, prod不同的集群。每一个集群运行多个主机节点，每个服务器节点上运行一个Node Exporter实例。Node Exporter实例会自动注册到Consul中，而Prometheus则根据Consul返回的Node Exporter实例信息动态的维护Target列表，从而向这些Target轮询监控数据。
 
@@ -20,7 +20,7 @@
 
 在Prometheus所有的Target实例中，都包含一些默认的Metadata标签信息。可以通过Prometheus UI的Targets页面中查看这些实例的Metadata标签的内容：
 
-![实例的Metadata信息](http://p2n2em8ut.bkt.clouddn.com/prometheus_file_target_metadata.png)
+![实例的Metadata信息](./static/prometheus_file_target_metadata.png)
 
 默认情况下，当Prometheus加载Target实例完成后，这些Target时候都会包含一些默认的标签：
 
@@ -39,7 +39,7 @@ node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 
 这种发生在采集样本数据之前，对Target实例的标签进行重写的机制在Prometheus被称为Relabeling。
 
-![Relabeling作用时间](http://p2n2em8ut.bkt.clouddn.com/when-relabel-work.png)
+![Relabeling作用时间](./static/when-relabel-work.png)
 
 Prometheus允许用户在采集任务设置中通过relabel_configs来添加自定义的Relabeling过程。
 
@@ -187,7 +187,7 @@ scrape_configs
 
 根据当前Target实例```__address__```的值以4作为系数，这样每个Target实例都会包含一个新的标签tmp_hash，并且该值的范围在1~4之间，查看Target实例的标签信息，可以看到如下的结果，每一个Target实例都包含了一个新的tmp_hash值：
 
-![计算Hash值](http://p2n2em8ut.bkt.clouddn.com/relabel_hash_mode.png)
+![计算Hash值](./static/relabel_hash_mode.png)
 
 在第6章的“Prometheus高可用”小节中，正是利用了Hashmod的能力在Target实例级别实现对采集任务的功能分区的:
 

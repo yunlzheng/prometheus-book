@@ -151,7 +151,7 @@ $ curl http://localhost:8500/v1/catalog/service/node_exporter
 
 Consul也提供了一个Web UI可以查看Consul中所有服务以及节点的状态：
 
-![Consul UI](http://p2n2em8ut.bkt.clouddn.com/consul_ui_page.png)
+![Consul UI](./static/consul_ui_page.png)
 
 当然Consul还提供了更多的API用于支持对服务的生命周期管理（添加、删除、修改等）这里就不做过多的介绍，感兴趣的同学可以通过Consul官方文档了解更多的详细信息。
 
