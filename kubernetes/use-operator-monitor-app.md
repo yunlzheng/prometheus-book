@@ -110,7 +110,7 @@ spec:
 
 在Service创建完成后，用户可以通过浏览器访问到通过Prometheus Operator创建的实例：
 
-![Prometheus实例](http://p2n2em8ut.bkt.clouddn.com/prometheus-operator-instance.png)
+![Prometheus实例](./static/prometheus-operator-instance.png)
 
 当然，如上所示，目前为止我们的Prometheus还没有包含任何的监控配置信息。
 
@@ -210,11 +210,11 @@ spec:
 
 通过UI查看Prometheus配置文件，Prometheus Operator自动为Prometheus创建了一个名为default/example-app/0的监控采集任务，用于采集示例应用程序的监控数据：
 
-![自动生成的Prometheus配置](http://p2n2em8ut.bkt.clouddn.com/prometheus-config-with-servermonitor.png)
+![自动生成的Prometheus配置](./static/prometheus-config-with-servermonitor.png)
 
 查看监控Target页面，可以看到当前所有的监控目标:
 
-![监控Target目标](http://p2n2em8ut.bkt.clouddn.com/prometheus-operator-targets.png)
+![监控Target目标](./static/prometheus-operator-targets.png)
 
 ## 使用PrometheusRule管理告警规则
 
@@ -266,7 +266,7 @@ spec:
 
 Prometheus重新加载配置后，从UI中我们可以查看到通过PrometheusRule自动创建的告警规则配置：
 
-![Prometheus告警规则](http://p2n2em8ut.bkt.clouddn.com/prometheus-rule.png)
+![Prometheus告警规则](./static/prometheus-rule.png)
 
 到目前为止，通过Prometheus Operator自定义的资源类型Prometheus和ServiceMonitor声明了需要在Kubernetes集群中部署的Prometheus实例以及相应的监控配置。通过监听Prometheus和ServicMonitor资源的变化，自动创建和管理Prometheus的配置信息，从而实现了对Prometheus声明式的自动化管理。
 

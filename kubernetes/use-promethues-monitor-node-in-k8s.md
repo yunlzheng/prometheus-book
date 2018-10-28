@@ -90,7 +90,7 @@ process_virtual_memory_bytes 1.1984896e+08
 
 在Kubernetes下Service是作为一个内部负载均衡器的存在，它对外暴露一个唯一访问地址（ClusterIP），后端则通过Endpoint指向多个Pod实例。
 
-![Service负载均衡原理](http://p2n2em8ut.bkt.clouddn.com/k8s-service-endpoints.png)
+![Service负载均衡原理](./static/k8s-service-endpoints.png)
 
 在Kubernetes中Service和Endpoint是两个独立的资源。如果创建Service的时，指定了Selector选择器。那么Kubernetes会自动根据选择器的去匹配Pod实例，并根据这些Pod的访问信息，自动创建Endpoint资源。
 
@@ -219,7 +219,7 @@ job="kubernetes-service-endpoints"
       target_label: job
 ```
 
-![Relabeling保留符合规则的Endpoint](http://p2n2em8ut.bkt.clouddn.com/kubernetes-service-endpoints-sd.png)
+![Relabeling保留符合规则的Endpoint](./static/kubernetes-service-endpoints-sd.png)
 
 这种基于Service的annotations来控制Prometheus的方式，还可以扩展出更多的玩法。例如，如果应用程序并没有通过/metrics暴露监控样本数据。 下面是一个更完整的采集任务配置如下所示：
 
@@ -268,4 +268,4 @@ metadata:
     prometheus.io/path: '/custom_metrics'
 ```
 
-![通过Endpoint发现的Node Exporter实例](http://p2n2em8ut.bkt.clouddn.com/kubernetes-service-endpoints-sd-targets.png)
+![通过Endpoint发现的Node Exporter实例](./static/kubernetes-service-endpoints-sd-targets.png)

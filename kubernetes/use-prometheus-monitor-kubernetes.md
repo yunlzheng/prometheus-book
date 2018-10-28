@@ -60,7 +60,7 @@ insecure_skip_verify为true即可。 这样Promthues在采集样本数据时，�
         regex: __meta_kubernetes_node_label_(.+)
 ```
 
-![直接采集kubelet监控指标](http://p2n2em8ut.bkt.clouddn.com/kubernetes-kubelets-step2.png)
+![直接采集kubelet监控指标](./static/kubernetes-kubelets-step2.png)
 
 第二种方式，不直接通过kubelet的metrics服务采集监控数据，而通过Kubernetes的api-server提供的代理API访问各个节点中kubelet的metrics服务，如下所示：
 
@@ -85,7 +85,7 @@ insecure_skip_verify为true即可。 这样Promthues在采集样本数据时，�
 
 通过relabeling，将从Kubernetes获取到的默认地址```__address__```替换为kubernetes.default.svc:443。同时将```__metrics_path__```替换为api-server的代理地址/api/v1/nodes/${1}/proxy/metrics。
 
-![通过api-server代理获取kubelet监控指标](http://p2n2em8ut.bkt.clouddn.com/kubernetes-kubelets-step3.png)
+![通过api-server代理获取kubelet监控指标](./static/kubernetes-kubelets-step3.png)
 
 通过获取各个节点中kubelet的监控指标，用户可以评估集群中各节点的性能表现。例如,通过指标kubelet_pod_start_latency_microseconds可以获得当前节点中Pod启动时间相关的统计数据。
 
@@ -93,7 +93,7 @@ insecure_skip_verify为true即可。 这样Promthues在采集样本数据时，�
 kubelet_pod_start_latency_microseconds{quantile="0.99"}
 ```
 
-![99%的Pod启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds.png)
+![99%的Pod启动时间](./static/kubelet_pod_start_latency_microseconds.png)
 
 Pod平均启动时间大致为42s左右（包含镜像下载时间）：
 
@@ -101,7 +101,7 @@ Pod平均启动时间大致为42s左右（包含镜像下载时间）：
 kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseconds_count
 ```
 
-![Pod平均启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds_avg.png)
+![Pod平均启动时间](./static/kubelet_pod_start_latency_microseconds_avg.png)
 
 除此以外，监控指标kubelet_docker_*还可以体现出kubelet与当前节点的docker服务的调用情况，从而可以反映出docker本身是否会影响kubelet的性能表现等问题。
 
@@ -130,7 +130,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
         regex: __meta_kubernetes_node_label_(.+)
 ```
 
-![使用api-server代理](http://p2n2em8ut.bkt.clouddn.com/prometheus-cadvisor-step1.png)
+![使用api-server代理](./static/prometheus-cadvisor-step1.png)
 
 方式二：通过api-server提供的代理地址访问kubelet的/metrics/cadvisor地址：
 
@@ -152,7 +152,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
         regex: __meta_kubernetes_node_label_(.+)
 ```
 
-![直接访问kubelet](http://p2n2em8ut.bkt.clouddn.com/prometheus-cadvisor-step2.png)
+![直接访问kubelet](./static/prometheus-cadvisor-step2.png)
 
 ## 使用NodeExporter监控集群资源使用情况
 
@@ -270,7 +270,7 @@ prometheus.io/path: 'metrics'
       target_label: kubernetes_pod_name
 ```
 
-![通过Pod模式自动发现Node Exporter实例](http://p2n2em8ut.bkt.clouddn.com/prometheus-pods-sd-ex1.png)
+![通过Pod模式自动发现Node Exporter实例](./static/prometheus-pods-sd-ex1.png)
 
 通过以上relabel过程实现对Pod实例的过滤，以及采集任务地址替换，从而实现对特定Pod实例监控指标的采集。需要说明的是kubernetes-pods并不是只针对Node Exporter而言，对于用户任意部署的Pod实例，只要其提供了对Prometheus的支持，用户都可以通过为Pod添加注解的形式为其添加监控指标采集的支持。
 
@@ -278,7 +278,7 @@ prometheus.io/path: 'metrics'
 
 在开始正式内容之前，我们需要先了解一下Kubernetes中Service是如何实现负载均衡的，如下图所示，一般来说Service有两个主要的使用场景：
 
-![Service负载均衡](http://p2n2em8ut.bkt.clouddn.com/kubernetes_service_endpoints.png)
+![Service负载均衡](./static/kubernetes_service_endpoints.png)
 
 * 代理对集群内部应用Pod实例的请求：当创建Service时如果指定了标签选择器，Kubernetes会监听集群中所有的Pod变化情况，通过Endpoints自动维护满足标签选择器的Pod实例的访问信息；
 * 代理对集群外部服务的请求：当创建Service时如果不指定任何的标签选择器，此时需要用户手动创建Service对应的Endpoint资源。 例如，一般来说，为了确保数据的安全，我们通常讲数据库服务部署到集群外。 这是为了避免集群内的应用硬编码数据库的访问信息，这是就可以通过在集群内创建Service，并指向外部的数据库服务实例。
@@ -323,7 +323,7 @@ kubernetes   10.0.2.15:8443   166d
 
 在relabel_configs配置中第一步用于判断当前endpoints是否为kube-apiserver对用的地址。第二步，替换监控采集地址到kubernetes.default.svc:443即可。重新加载配置文件，重建Promthues实例，得到以下结果。
 
-![apiserver任务状态](http://p2n2em8ut.bkt.clouddn.com/promethues-api-server-sd.eq1.png)
+![apiserver任务状态](./static/promethues-api-server-sd.eq1.png)
 
 ## 对Ingress和Service进行网络探测
 

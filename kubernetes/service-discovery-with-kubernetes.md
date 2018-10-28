@@ -186,7 +186,7 @@ prometheus-69f9ddb588-wtlsn        1/1       Running       0          14s
 
 Prometheus使用新的配置文件重建之后，打开Prometheus UI，通过Service Discovery页面可以查看到当前Prometheus通过Kubernetes发现的所有资源对象了：
 
-![Service Discovery发现的实例](http://p2n2em8ut.bkt.clouddn.com/prometheus-k8s-sd-example1.png)
+![Service Discovery发现的实例](./static/prometheus-k8s-sd-example1.png)
 
 同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Promthues获取到的Node节点的标签信息：
 
@@ -209,7 +209,7 @@ job="kubernetes-nodes"
 
 目前为止，我们已经能够通过Prometheus自动发现Kubernetes集群中的各类资源以及其基本信息。不过，如果现在查看Promtheus的Target状态页面，结果可能会让人不太满意：
 
-![Target页面状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-k8s-sd-example3.png)
+![Target页面状态](./static/prometheus-k8s-sd-example3.png)
 
 虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Promethues的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
 

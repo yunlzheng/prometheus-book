@@ -105,4 +105,4 @@ prometheus      NodePort    10.101.255.236   <none>        9090:32584/TCP   42s
 
 至此，我们可以通过MiniKube虚拟机的IP地址和端口32584访问到Prometheus的服务。
 
-![Prometheus UI](http://p2n2em8ut.bkt.clouddn.com/kubernetes-prometheus-step1.png)
+![Prometheus UI](./static/kubernetes-prometheus-step1.png)

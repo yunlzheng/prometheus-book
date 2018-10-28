@@ -44,7 +44,7 @@ Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和�
 
 基于以上服务发现以及relabel的过程后，Prometheus就能够正常的从apiserver中过去监控样本数据：
 
-![Kubernetes APIServer任务采集状态](http://p2n2em8ut.bkt.clouddn.com/kubernetes-apiservers-monitor.png)
+![Kubernetes APIServer任务采集状态](./static/kubernetes-apiservers-monitor.png)
 
 ## 评估Kubernetes性能
 
@@ -56,7 +56,7 @@ Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和�
 kubelet_pod_start_latency_microseconds{quantile="0.99"}
 ```
 
-![99%的Pod启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds.png)
+![99%的Pod启动时间](./static/kubelet_pod_start_latency_microseconds.png)
 
 Pod平均启动时间大致为42s左右（包含镜像下载时间）：
 
@@ -64,7 +64,7 @@ Pod平均启动时间大致为42s左右（包含镜像下载时间）：
 kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseconds_count
 ```
 
-![Pod平均启动时间](http://p2n2em8ut.bkt.clouddn.com/kubelet_pod_start_latency_microseconds_avg.png)
+![Pod平均启动时间](./static/kubelet_pod_start_latency_microseconds_avg.png)
 
 其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计以下各种类型API响应时间的分布情况：
 
