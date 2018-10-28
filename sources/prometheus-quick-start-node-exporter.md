@@ -57,7 +57,7 @@ service node_exporter start
 
 NodeExporter启动后，访问[http://192.168.33.10:9100/metrics](http://192.168.33.10:9100/metrics)，我们可以获取到当前NodeExporter所在主机的当前资源使用情况的监控数据。
 
-![http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_metrics.png)
+![./static/node_exporter_metrics.png](./static/node_exporter_metrics.png)
 
 ## 配置主机监控采集任务
 
@@ -101,7 +101,7 @@ sudo service prometheus restart
 
 访问[http://192.168.33.10:9090/targets](http://192.168.33.10:9090/targets)查看所有的采集目标实例，这时我们可以看到新的采集任务：node_exporter以及相应的实例。
 
-![http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png](http://p2n2em8ut.bkt.clouddn.com/node_exporter_targets.png)
+![./static/node_exporter_targets.png](./static/node_exporter_targets.png)
 
 这时我们可以通过PromQL语言在，Prometheus UI上直接查询主机相关资源的使用情况。
 
@@ -113,7 +113,7 @@ sudo service prometheus restart
 avg without (cpu)(irate(node_cpu{mode!="idle"}[5m]))
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/host_stats_cpu.png)
+![](./static/host_stats_cpu.png)
 
 查询主机CPU总体使用率：
 
@@ -121,7 +121,7 @@ avg without (cpu)(irate(node_cpu{mode!="idle"}[5m]))
 sum(avg without (cpu)(irate(node_cpu{mode!='idle'}[5m]))) by (instance)
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/node_cpu.png)
+![](./static/node_cpu.png)
 
 按主机查询主机内存使用量：
 
@@ -129,7 +129,7 @@ sum(avg without (cpu)(irate(node_cpu{mode!='idle'}[5m]))) by (instance)
 sum(node_memory_MemTotal - node_memory_MemFree - node_memory_Buffers - node_memory_Cached) by (instance)
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/host_stats_mem_used.png)
+![](./static/host_stats_mem_used.png)
 
 按主机查询各个磁盘的IO状态：
 
@@ -137,4 +137,4 @@ sum(node_memory_MemTotal - node_memory_MemFree - node_memory_Buffers - node_memo
 sum(irate(node_disk_io_time_ms{device!~'^(md\\\\d+$|dm-)'}[5m]) / 1000) by (instance, device)
 ```
 
-![](http://p2n2em8ut.bkt.clouddn.com/host_status_disk_io.png)
+![](./static/host_status_disk_io.png)

@@ -2,7 +2,7 @@
 
 在第1章的“初识Prometheus”中我们已经尝试通过Grafana快速搭建过一个主机监控的Dashboard，在本章中将会带来读者进一步学习和使用Grafana这一可视化工具。
 
-![Grafana Dashboard](http://p2n2em8ut.bkt.clouddn.com/grafana-dashboard-example.png)
+![Grafana Dashboard](./static/grafana-dashboard-example.png)
 
 > TODO: 添加图例，显示Grafana的逻辑结构
 
@@ -14,7 +14,7 @@ Grafana支持对接多种数据源，官方提供了对Prometheus，Graphite，I
 
 用户可以在Grafana的设置（Configuration）页面，添加自定义的数据源：
 
-![数据源管理](http://p2n2em8ut.bkt.clouddn.com/grafana_prometheus_datasources.png)
+![数据源管理](./static/grafana_prometheus_datasources.png)
 
 * 面板（Panel）
 
