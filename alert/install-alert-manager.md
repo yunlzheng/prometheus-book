@@ -8,28 +8,36 @@ Alertmanager和Prometheus Server一样均采用Golang实现，并且没有第三
 
 Alertmanager最新版本的下载地址可以从Prometheus官方网站[https://prometheus.io/download/](https://prometheus.io/download/)获取。
 
-```
-curl -LO https://github.com/prometheus/alertmanager/releases/download/v0.15.0-rc.0/alertmanager-0.15.0-rc.0.darwin-amd64.tar.gz
-
-tar xvf alertmanager-0.15.0-rc.0.darwin-amd64.tar.gz
-mkdir -p /data/alertmanager
+```shell
+export VERSION=0.15.2
+curl -LO https://github.com/prometheus/alertmanager/releases/download/v$VERSION/alertmanager-$VERSION.darwin-amd64.tar.gz
+tar xvf alertmanager-$VERSION.darwin-amd64.tar.gz
 ```
 
 ##### 创建alertmanager配置文件
 
-```
-cp alertmanager-0.15.0-rc.0.darwin-amd64/alertmanager /usr/local/bin/
-cp alertmanager-0.15.0-rc.0.darwin-amd64/amtool /usr/local/bin/
-sudo  vim /etc/prometheus/alertmanager.yml
-```
-
-配置文件中，目前只写入基本配置即可，如下所示：
+Alertmanager解压后会包含一个默认的alertmanager.yml配置文件，内容如下所示：
 
 ```
+global:
+  resolve_timeout: 5m
+
 route:
-  receiver: 'default-receiver'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
 receivers:
-  - name: default-receiver
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://127.0.0.1:5001/'
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
 ```
 
 Alertmanager的配置主要包含两个部分：路由(route)以及接收器(receivers)。所有的告警信息都会从配置中的顶级路由(route)进入路由树，根据路由规则将告警信息发送给相应的接收器。
@@ -42,11 +50,13 @@ Alertmanager的配置主要包含两个部分：路由(route)以及接收器(rec
 
 ##### 启动Alertmanager
 
+Alermanager会将数据保存到本地中，默认的存储路径为`data/`。因此，在启动Alertmanager之前需要创建相应的目录：
+
 ```
-alertmanager --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/
+./alertmanager
 ```
 
---config.file用于指定alertmanager配置文件路径，--storage.path用于指定数据存储路径。
+用户也在启动Alertmanager时使用参数修改相关配置。`--config.file`用于指定alertmanager配置文件路径，`--storage.path`用于指定数据存储路径。
 
 #### 查看运行状态
 
