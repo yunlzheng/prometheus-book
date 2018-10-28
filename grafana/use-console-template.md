@@ -77,7 +77,7 @@ Prometheus在`console_libraries`目录中已经内置了一些基本的界面组
 
 ## 定义图表
 
-添加图表
+在Console Template中我们可以在页面中使用内置的`PromConsole.Graph()`函数，该函数通过`head`加载相应的js源码，在该函数中，通过指定特定的DOM节点以及相应的PromQL表达式，即可在特定区域图形化显示相应的图表内容，如下所示：
 
 ```
 <h1>Prometheus HTTP Request Rate</h1>
@@ -97,19 +97,47 @@ new PromConsole.Graph({
 </script>
 ```
 
+这里创建了一个id为queryGraph的div节点，通过在页面中使用PromConsole.Graph函数，我们可以绘制出表达式`sum(rate(prometheus_http_request_duration_seconds_count{job='prometheus'}[5m]))`的可视化图表如下所示：
+
 ![](./static/query_graph.png)
 
-添加查询链接：
+除了最基本的node以及expr参数以外，该函数还支持的完整参数如下：
+
+|参数名称|作用|
+|---|-------|
+|expr| Required. Expression to graph. Can be a list. |
+|node| Required. DOM node to render into. |
+|duration| Optional. Duration of the graph. Defaults to 1 hour.|
+|endTime| Optional. Unixtime the graph ends at. Defaults to now.|
+|width| Optional. Width of the graph, excluding titles. Defaults to auto-detection.|
+|height|Optional. Height of the graph, excluding titles and legends. Defaults to 200 pixels.|
+|min|Optional. Minimum x-axis value. Defaults to lowest data value.|
+|max|Optional. Maximum y-axis value. Defaults to highest data value.|
+|renderer|	Optional. Type of graph. Options are line and area (stacked graph). Defaults to line.|
+|name|Optional. Title of plots in legend and hover detail. If passed a string, [[ label ]] will be substituted with the label value. If passed a function, it will be passed a map of labels and should return the name as a string. Can be a list.|
+|xTitle|Optional. Title of the x-axis. Defaults to Time.|
+|yUnits|Optional. Units of the y-axis. Defaults to empty.|
+|yTitle|Optional. Title of the y-axis. Defaults to empty.|
+|yAxisFormatter|Optional. Number formatter for the y-axis. Defaults to PromConsole.NumberFormatter.humanize.|
+|yHoverFormatter|Optional. Number formatter for the hover detail. Defaults to PromConsole.NumberFormatter.humanizeExact.|
+|colorScheme|Optional. Color scheme to be used by the plots. Can be either a list of hex color codes or one of the color scheme names supported by Rickshaw. Defaults to 'colorwheel'.|
+
+需要注意的是，如果参数`expr`和`name`均是list类型，其必须是一一对应的。
+
+除了直接使用`PromConsole.Graph`函数显示可视化图表以外，在Console Template中还可以使用模板组件`prom_query_drilldown`定义一个连接直接跳转到Graph页面，并显示相应表达式的查询结果， 如下所示：
 
 ```
 <h3>Links</h3>
-{{ template "prom_query_drilldown" (args "prometheus_build_info") }}
+{{ template "prom_query_drilldown" (args "prometheus_http_response_size_bytes_bucket") }}
 ```
 
-## 时间轴控制区域
+除了以上部分以外，我们也可以和原生Prometheus UI一样定义一个时间轴控制器，方便用户按需查询数据：
+
+![](./static/prom_graph_timecontrol.png)
+
+加入这个时间轴控制器的方式也很简单，直接引用以下模板即可：
 
 ```
 {{ template "prom_graph_timecontrol" . }}
 ```
 
-![](./static/prom_graph_timecontrol.png)
