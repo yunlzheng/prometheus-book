@@ -24,7 +24,7 @@ kubectl apply -f bundle.yaml
 
 Prometheus Operator建立在Kubernetes的资源以及控制器的概念之上，通过在Kubernetes中添加自定义资源类型，通过声明式的方式，Operator可以自动部署和管理Prometheus实例的运行状态，并且根据监控目标管理并重新加载Prometheus的配置文件，大大简化Prometheus这类有状态应用运维管理的复杂度。
 
-![Prometheus Operator架构](http://p2n2em8ut.bkt.clouddn.com/prometheus-architecture.png)
+![Prometheus Operator架构](./static/prometheus-architecture.png)
 
 如上所示，是Prometheus Operator的架构示意图。为了能够通过声明式的对Prometheus进行自动化管理。Prometheus Operator通过自定义资源类型的方式定义了一下3个主要自定义资源类型：
 

@@ -101,7 +101,7 @@ data:
 2. 默认返回的```__scheme__```为https，通过直接修改其值为http，从而可以让Prometheus通过访问[http://IP:4193/metrics](http://IP:4193/metrics)作为采集目标地址；
 3. 最后通过labelmap将该节点上的自定义标签，写入到样本中，从而可以方便用户通过这些标签对数据进行聚合。
 
-![cAdvisor数据采集状态](http://p2n2em8ut.bkt.clouddn.com/k8s-sd-with-node-with-relabel-1.png)
+![cAdvisor数据采集状态](./static/k8s-sd-with-node-with-relabel-1.png)
 
 如上所示，Prometheus通过自动发现Node节点，并通过Relabel自定义采集方式后的结果。
 
@@ -136,4 +136,4 @@ https://kubernetes.default.svc:443/api/v1/nodes/minikube/proxy/metrics/cadvisor
 
 如下图所示，Prometheus使用了访问地址后的任务采集状态：
 
-![基于API Server获取cAdvisor监控数据状态](http://p2n2em8ut.bkt.clouddn.com/k8s-sd-with-node-with-relabel-2.png)
+![基于API Server获取cAdvisor监控数据状态](./static/k8s-sd-with-node-with-relabel-2.png)

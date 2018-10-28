@@ -88,7 +88,7 @@ spec:
 
 访问Alertmanager UI，并查看当前集群状态：
 
-![Alertmanager集群状态](http://p2n2em8ut.bkt.clouddn.com/prometheus-alert-cluster-status.png)
+![Alertmanager集群状态](./static/prometheus-alert-cluster-status.png)
 
 接下来，我们只需要修改我们的Prometheus资源定义，通过alerting指定使用的Alertmanager资源即可：
 
@@ -118,6 +118,6 @@ spec:
 
 在Prometheus重新加载配置完成后，通过UI可以查看Prometheus最新的配置内容，如下所示：
 
-![Prometheus配置](http://p2n2em8ut.bkt.clouddn.com/prometheus-alerting-auto2.png)
+![Prometheus配置](./static/prometheus-alerting-auto2.png)
 
 自此，通过使用Prometheus Operator提供的自定义资源内容，声明式的创建和管理Prometheus实例以及Alertmanager集群。
