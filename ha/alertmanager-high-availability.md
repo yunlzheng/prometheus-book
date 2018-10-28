@@ -2,35 +2,35 @@
 
 在上一小节中我们主要讨论了Prometheus Server自身的高可用问题。而接下来，重点将放在告警处理也就是Alertmanager部分。如下所示。
 
-![Alertmanager成为单点](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-single-am.png)
+![Alertmanager成为单点](./static/prom-ha-with-single-am.png)
 
 为了提升Promthues的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以确保Promthues持续可用。
 
 同时基于Alertmanager的告警分组机制即使不同的Prometheus Sever分别发送相同的告警给Alertmanager，Alertmanager也可以自动将这些告警合并为一个通知向receiver发送。
 
-![Alertmanager特性](http://p2n2em8ut.bkt.clouddn.com/alertmanager-features.png)
+![Alertmanager特性](./static/alertmanager-features.png)
 
 但不幸的是，虽然Alertmanager能够同时处理多个相同的Prometheus Server所产生的告警。但是由于单个Alertmanager的存在，当前的部署结构存在明显的单点故障风险，当Alertmanager单点失效后，告警的后续所有业务全部失效。
 
 如下所示，最直接的方式，就是尝试部署多套Alertmanager。但是由于Alertmanager之间不存在并不了解彼此的存在，因此则会出现告警通知被不同的Alertmanager重复发送多次的问题。
 
-![](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-double-am.png)
+![](./static/prom-ha-with-double-am.png)
 
 为了解决这一问题，如下所示。Alertmanager引入了Gossip机制。Gossip机制为多个Alertmanager之间提供了信息传递的机制。确保及时在多个Alertmanager分别接收到相同告警信息的情况下，也只有一个告警通知被发送给Receiver。
 
-![Alertmanager Gossip](http://p2n2em8ut.bkt.clouddn.com/prom-ha-with-am-gossip.png)
+![Alertmanager Gossip](./static/prom-ha-with-am-gossip.png)
 
 ## Gossip协议
 
 Gossip是分布式系统中被广泛使用的协议，用于实现分布式节点之间的信息交换和状态同步。Gossip协议同步状态类似于流言或者病毒的传播，如下所示：
 
-![Gossip分布式协议](http://p2n2em8ut.bkt.clouddn.com/gossip-protoctl.png)
+![Gossip分布式协议](./static/gossip-protoctl.png)
 
 一般来说Gossip有两种实现方式分别为Push-based和Push-based。在Push-based当集群中某一节点A完成一个工作后，随机的从其它节点B并向其发送相应的消息，节点B接收到消息后在重复完成相同的工作，直到传播到集群中的所有节点。而Pull-based的实现中节点A会随机的向节点B发起询问是否有新的状态需要同步，如果有则返回。
 
 在简单了解了Gossip协议之后，我们来看Alertmanager是如何基于Gossip协议实现集群高可用的。如下所示，当Alertmanager接收到来自Prometheus的告警消息后，会按照以下流程对告警进行处理：
 
-![通知流水线](http://p2n2em8ut.bkt.clouddn.com/am-notifi-pipeline.png)
+![通知流水线](./static/am-notifi-pipeline.png)
 
 1. 在第一个阶段Silence中，Alertmanager会判断当前通知是否匹配到任何的静默规则，如果没有则进入下一个阶段，否则则中断流水线不发送通知。
 2. 在第二个阶段Wait中，Alertmanager会根据当前Alertmanager在集群中所在的顺序(index)等待index * 5s的时间。
@@ -39,7 +39,7 @@ Gossip是分布式系统中被广泛使用的协议，用于实现分布式节�
 
 因此如下所示，Gossip机制的关键在于两点：
 
-![Gossip机制](http://p2n2em8ut.bkt.clouddn.com/am-gossip.png)
+![Gossip机制](./static/am-gossip.png)
 
 * Silence设置同步：Alertmanager启动阶段基于Pull-based从集群其它节点同步Silence状态，当有新的Silence产生时使用Push-based方式在集群中传播Gossip信息。
 * 通知发送状态同步：告警通知发送完成后，基于Push-based同步告警发送状态。Wait阶段可以确保集群状态一致。
@@ -99,7 +99,7 @@ webhook
 
 示例结构如下所示：
 
-![Alertmanager HA部署结构](http://p2n2em8ut.bkt.clouddn.com/alertmanager-gossip-ha.png)
+![Alertmanager HA部署结构](./static/alertmanager-gossip-ha.png)
 
 创建alertmanager.procfile文件，并且定义了三个Alertmanager节点（a1，a2，a3）以及用于接收告警通知的webhook服务:
 
@@ -123,7 +123,7 @@ $ goreman -f alertmanager.procfile start
 
 启动完成后访问任意Alertmanager节点[http://localhost:9093/#/status](http://localhost:9093/#/status),可以查看当前Alertmanager集群的状态。
 
-![Alertmanager集群状态](http://p2n2em8ut.bkt.clouddn.com/am-ha-status.png)
+![Alertmanager集群状态](./static/am-ha-status.png)
 
 当集群中的Alertmanager节点不在一台主机时，通常需要使用--cluster.advertise-address参数指定当前节点所在网络地址。
 
@@ -265,7 +265,7 @@ groups:
 
 本示例部署结构如下所示：
 
-![Promthues与Alertmanager HA部署结构](http://p2n2em8ut.bkt.clouddn.com/promethues-alertmanager-ha.png)
+![Promthues与Alertmanager HA部署结构](./static/promethues-alertmanager-ha.png)
 
 创建prometheus.procfile文件，创建两个Promthues节点，分别监听9090和9091端口:
 
