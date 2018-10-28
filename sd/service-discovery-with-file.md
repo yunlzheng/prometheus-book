@@ -54,7 +54,7 @@ prometheus --config.file=/etc/prometheus/prometheus-file-sd.yml --storage.tsdb.p
 
 在Prometheus UI的Targets下就可以看到当前从targets.json文件中动态获取到的Target实例信息以及监控任务的采集状态，同时在Labels列下会包含用户添加的自定义标签:
 
-![基于文件动态发现Target对象](http://p2n2em8ut.bkt.clouddn.com/service_ds_with_file.png)
+![基于文件动态发现Target对象](./static/service_ds_with_file.png)
 
 Prometheus默认每5m重新读取一次文件内容，当需要修改时，可以通过refresh_interval进行设置，例如：
 
