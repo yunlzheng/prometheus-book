@@ -10,7 +10,7 @@ Prometheus的本地存储给Prometheus带来了简单高效的使用体验，可
 
 由于Promthues的Pull机制的设计，为了确保Promthues服务的可用性，用户只需要部署多套Prometheus Server实例，并且采集相同的Exporter目标即可。
 
-![基本HA](http://p2n2em8ut.bkt.clouddn.com/promethues-ha-01.png)
+![基本HA](./static/promethues-ha-01.png)
 
 基本的HA模式只能确保Promthues服务的可用性问题，但是不解决Prometheus Server之间的数据一致性问题以及持久化问题(数据丢失后无法恢复)，也无法进行动态的扩展。因此这种部署方式适合监控规模不大，Promthues Server也不会频繁发生迁移的情况，并且只需要保存短周期监控数据的场景。
 
@@ -18,7 +18,7 @@ Prometheus的本地存储给Prometheus带来了简单高效的使用体验，可
 
 在基本HA模式的基础上通过添加Remote Storage存储支持，将监控数据保存在第三方存储服务上。
 
-![HA + Remote Storage](http://p2n2em8ut.bkt.clouddn.com/prometheus-ha-remote-storage.png)
+![HA + Remote Storage](./static/prometheus-ha-remote-storage.png)
 
 在解决了Promthues服务可用性的基础上，同时确保了数据的持久化，当Promthues Server发生宕机或者数据丢失的情况下，可以快速的恢复。 同时Promthues Server可能很好的进行迁移。因此，该方案适用于用户监控规模不大，但是希望能够将监控数据持久化，同时能够确保Promthues Server的可迁移性的场景。
 
@@ -26,7 +26,7 @@ Prometheus的本地存储给Prometheus带来了简单高效的使用体验，可
 
 当单台Promthues Server无法处理大量的采集任务时，用户可以考虑基于Prometheus联邦集群的方式将监控采集任务划分到不同的Promthues实例当中即在任务级别功能分区。
 
-![基本HA + 远程存储 + 联邦集群](http://p2n2em8ut.bkt.clouddn.com/prometheus-ha-rs-fedreation.png)
+![基本HA + 远程存储 + 联邦集群](./static/prometheus-ha-rs-fedreation.png)
 
 这种部署方式一般适用于两种场景：
 
@@ -42,7 +42,7 @@ Prometheus的本地存储给Prometheus带来了简单高效的使用体验，可
 
 这时在考虑另外一种极端情况，即单个采集任务的Target数也变得非常巨大。这时简单通过联邦集群进行功能分区，Prometheus Server也无法有效处理时。这种情况只能考虑继续在实例级别进行功能划分。
 
-![实例级别功能分区](http://p2n2em8ut.bkt.clouddn.com/promethues-sharding-targets.png)
+![实例级别功能分区](./static/promethues-sharding-targets.png)
 
 如上图所示，将统一任务的不同实例的监控数据采集任务划分到不同的Prometheus实例。通过relabel设置，我们可以确保当前Prometheus Server只收集当前采集任务的一部分实例的监控指标。
 
