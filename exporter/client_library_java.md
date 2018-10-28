@@ -103,7 +103,7 @@ my_guage{l1="v1",l2="v2",} 3.0
 
 当然HTTPServer中并不存在什么黑魔法，其内部实现如下所示：
 
-![HTTPServer处理流程](http://p2n2em8ut.bkt.clouddn.com/prometheus_client_java_2.png)
+![HTTPServer处理流程](./static/prometheus_client_java_2.png)
 
 当调用Collector实例register()方法时，会将该实例保存到CollectorRegistry当中，CollectorRegistry负责维护当前系统中所有的Collector实例。 HTTPServer在接收到HTTP请求之后，会从CollectorRegistry中拿到所有的Collector实例，并调用其collect()方法获取所有样本，最后格式化为Prometheus的标准输出。
 
