@@ -1,5 +1,3 @@
 # 自定义Exporter实战
 
 除了使用Prometheus已经提供的大量Exporter以外，还可以通过Prometheus社区提供的Client Library用户可以完全根据自己的需求实现自定义Exporter。目前社区官方提供支持的包括：Go、Java、Python、Ruby。 除此之外还包括一些第三方的Client library如：Bash、C++、Node.js、PHP等等。即使找不到可以直接使用的client library，用户只需要按照Prometheus的格式输出指标数据即可。这一部分，我们将带来读者使用Prometheus的这些client library创建自定义Exporter。
-
-<!-- ![Prometheus Exporter](http://p2n2em8ut.bkt.clouddn.com/prometheus-exporters2.png) -->
