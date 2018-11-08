@@ -32,7 +32,7 @@ rate(node_cpu[2m])
 irate(node_cpu[2m])
 ```
 
-irate函数相比于rate函数提供了更高的灵敏度，不过当需要分析长期趋势或者在告警规则中，irate的这种灵敏度反而容器造成干扰。因此在长期趋势分析或者告警中更推荐使用rate函数。
+irate函数相比于rate函数提供了更高的灵敏度，不过当需要分析长期趋势或者在告警规则中，irate的这种灵敏度反而容易造成干扰。因此在长期趋势分析或者告警中更推荐使用rate函数。
 
 ![irate表现更高的灵敏度](./static/rate_vs_irate.png)
 
