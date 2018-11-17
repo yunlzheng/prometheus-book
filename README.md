@@ -60,7 +60,7 @@
   * [小结](./exporter/SUMMARY.md)
 * [第5章 数据与可视化](./grafana/README.md)
   * [使用Console Template](./grafana/use-console-template.md)
-  * [Grafana详解](./grafana/grafana-intro.md)
+  * [Grafana的基本概念](./grafana/grafana-intro.md)
     * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
       * [变化趋势：Graph面板](./grafana/use_graph_panel.md)
       * [分布统计：Heatmap面板](./grafana/use_heatmap_panel.md)
