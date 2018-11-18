@@ -96,3 +96,29 @@ receivers：
 而当告警项恢复正常后，则可以接收到如下通知：
 
 ![告警恢复信息](./static/slack_resolved_message.png)
+
+对于Incomming Webhhook支持的其它自定义参数，也可以在slack_config中进行定义，slack_config的主要配置如下：
+
+```
+channel: <tmpl_string>
+[ send_resolved: <boolean> | default = false ]
+[ api_url: <secret> | default = global.slack_api_url ]
+[ icon_emoji: <tmpl_string> ]
+[ icon_url: <tmpl_string> ]
+[ link_names: <boolean> | default = false ]
+[ username: <tmpl_string> | default = '{{ template "slack.default.username" . }}' ]
+[ color: <tmpl_string> | default = '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}' ]
+[ footer: <tmpl_string> | default = '{{ template "slack.default.footer" . }}' ]
+[ pretext: <tmpl_string> | default = '{{ template "slack.default.pretext" . }}' ]
+[ text: <tmpl_string> | default = '{{ template "slack.default.text" . }}' ]
+[ title: <tmpl_string> | default = '{{ template "slack.default.title" . }}' ]
+[ title_link: <tmpl_string> | default = '{{ template "slack.default.titlelink" . }}' ]
+[ image_url: <tmpl_string> ]
+[ thumb_url: <tmpl_string> ]
+```
+
+如果要覆盖默认的告警内容，直接使用Go Template即可。例如：
+
+```
+color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+```
