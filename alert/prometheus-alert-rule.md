@@ -153,10 +153,10 @@ cat /dev/zero>/dev/null
 
 ![](./static/node_cpu_alert_pending.png)
 
-如果1分钟后告警条件持续满足，则会实际触发告警并且告警状态为FIRING，如下图所示：
+如果1分钟后告警条件持续满足，则会实际触发告警并且告警状态为FIRING，如下图所示：
 
 ![](./static/node_cpu_alert_firing.png)
 
 ## 接下来
 
-在这一小节中介绍了如何配置和使用Prometheus提供的告警能力，并且尝试实现了对主机CPU以及内存的告警规则设置。目前为止，我们只能通过Prometheus UI查看当前告警的活动状态。接下来，接下来我们将尝试利用Prometheus体系中的另一个组件Alertmanager对这些触发的告警进行处理，实现告警通知。
+在这一小节中介绍了如何配置和使用Prometheus提供的告警能力，并且尝试实现了对主机CPU以及内存的告警规则设置。目前为止，我们只能通过Prometheus UI查看当前告警的活动状态。接下来，接下来我们将尝试利用Prometheus体系中的另一个组件Alertmanager对这些触发的告警进行处理，实现告警通知。
