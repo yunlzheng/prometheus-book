@@ -33,15 +33,13 @@
   * [Prometheus告警简介](./alert/prometheus-alert-manager-overview.md)
   * [自定义Prometheus告警规则](./alert/prometheus-alert-rule.md)
   * [部署AlertManager](./alert/install-alert-manager.md)
-  * [基于Label的动态告警处理](./alert/alert-manager-routes.md)
+  * [Alertmanager配置概述](./alert/alert-manager-routes.md)
   * [内置告警接收器Receiver](./alert/alert-manager-with-smtp.md)
-    * 集成邮件系统
-    * 集成Slack
-    * 集成微信
-    * 使用Webhook
-      * 集成企业钉钉
-    * 告警模板详解
-  * [使用Webhook扩展Alertmanager](./alert/alert-manager-extension-with-webhook.md)
+  * [集成邮件系统](./alert/alert-with-smtp.md)
+  * [集成Slack](./alert/alert-with-slack.md)
+  * [集成微信](./alert/alert-with-wechat.md)
+  * [使用Webhook：集成钉钉](./alert/alert-manager-extension-with-webhook.md)
+  * [告警模板详解](./alert/alert-template.md)
   * [屏蔽告警通知](./alert/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./alert/prometheus-recoding-rules.md)
   * [小结](./alert/SUMMARY.md)
@@ -60,14 +58,15 @@
   * [小结](./exporter/SUMMARY.md)
 * [第5章 数据与可视化](./grafana/README.md)
   * [使用Console Template](./grafana/use-console-template.md)
-  * [Grafana详解](./grafana/grafana-intro.md)
-    * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
-      * [变化趋势：Graph面板](./grafana/use_graph_panel.md)
-      * [分布统计：Heatmap面板](./grafana/use_heatmap_panel.md)
-      * [当前状态：SingleStat面板](./grafana/use_singlestat_panel.md)
-      * [表格：Tabel面板](./grafana/use_table_panel.md)
-    * [模板化Dashboard](./grafana/templating.md)
-    * [共享Dashboard](./grafana/share_dashboard.md)
+  * [Grafana的基本概念](./grafana/grafana-intro.md)
+  * 安装Grafana
+  * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
+    * [变化趋势：Graph面板](./grafana/use_graph_panel.md)
+    * [分布统计：Heatmap面板](./grafana/use_heatmap_panel.md)
+    * [当前状态：SingleStat面板](./grafana/use_singlestat_panel.md)
+    * [表格：Tabel面板](./grafana/use_table_panel.md)
+  * [模板化Dashboard](./grafana/templating.md)
+  * [共享Dashboard](./grafana/share_dashboard.md)
   * [小结](./grafana/SUMMARY.md)
 * [第6章 集群与高可用](./ha/READMD.md)
   * [本地存储](./ha/prometheus-local-storage.md)
