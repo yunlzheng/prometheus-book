@@ -33,15 +33,13 @@
   * [Prometheus告警简介](./alert/prometheus-alert-manager-overview.md)
   * [自定义Prometheus告警规则](./alert/prometheus-alert-rule.md)
   * [部署AlertManager](./alert/install-alert-manager.md)
-  * [基于Label的动态告警处理](./alert/alert-manager-routes.md)
+  * [Alertmanager配置概述](./alert/alert-manager-routes.md)
   * [内置告警接收器Receiver](./alert/alert-manager-with-smtp.md)
-    * 集成邮件系统
-    * 集成Slack
-    * 集成微信
-    * 使用Webhook
-      * 集成企业钉钉
-    * 告警模板详解
-  * [使用Webhook扩展Alertmanager](./alert/alert-manager-extension-with-webhook.md)
+  * [集成邮件系统](./alert/alert-with-smtp.md)
+  * [集成Slack](./alert/alert-with-slack.md)
+  * [集成微信](./alert/alert-with-wechat.md)
+  * [使用Webhook：集成钉钉](./alert/alert-manager-extension-with-webhook.md)
+  * [告警模板详解](./alert/alert-template.md)
   * [屏蔽告警通知](./alert/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./alert/prometheus-recoding-rules.md)
   * [小结](./alert/SUMMARY.md)
