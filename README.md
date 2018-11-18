@@ -39,7 +39,7 @@
     * [集成邮件系统](./alert/alert-with-smtp.md)
     * [集成Slack](./alert/alert-with-slack.md)
     * [集成微信](./alert/alert-with-wechat.md)
-    * [使用Webhook：集成钉钉](./alert/alert-manager-extension-with-webhook.md)
+    * [集成钉钉：基于Webhook的扩展](./alert/alert-manager-extension-with-webhook.md)
   * [告警模板详解](./alert/alert-template.md)
   * [屏蔽告警通知](./alert/alert-manager-inhibit.md)
   * [使用Recoding Rules优化性能](./alert/prometheus-recoding-rules.md)
