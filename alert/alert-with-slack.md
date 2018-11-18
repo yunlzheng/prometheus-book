@@ -34,7 +34,7 @@ Incomming Webhook的工作方式很简单，Slack为当前Channel创建了一个
 https://hooks.slack.com/services/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
 ```
 
-用户只需要使用Post方式向Channel发送需要通知的消息即可，例如，我们可以在命令行中通过curl模拟一次消息通知：
+用户只需要使用Post方式向Channel发送需要通知的消息即可，例如，我们可以在命令行中通过curl模拟一次消息通知：
 
 
 ```
@@ -45,7 +45,7 @@ curl -d "payload={'text': 'This is a line of text in a channel.\nAnd this is ano
 
 ![测试消息](./static/slack-receiver-message.png)
 
-除了发送纯文本以外，slack还支持在文本内容中添加链接，例如：
+除了发送纯文本以外，slack还支持在文本内容中添加链接，例如：
 
 ```
 payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
@@ -60,7 +60,7 @@ payload={"text": "A very important thing has occurred! <https://alert-system.com
 |icon_emoji|使用emoji作为聊天机器人的头像|:ghost:|
 |channel|消息发送的目标channel, 需要直接发给特定用户时使用@username即可|#monitoring 或者 @username|
 
-例如，使用以上参数发送一条更有趣的消息：
+例如，使用以上参数发送一条更有趣的消息：
 
 ```
 curl -X POST --data-urlencode "payload={'channel': '#monitoring', 'username': 'webhookbot', 'text': 'This is posted to #monitoring and comes from a bot named webhookbot.', 'icon_emoji': ':ghost:'}" https://hooks.slack.com/services/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
@@ -117,7 +117,7 @@ channel: <tmpl_string>
 [ thumb_url: <tmpl_string> ]
 ```
 
-如果要覆盖默认的告警内容，直接使用Go Template即可。例如：
+如果要覆盖默认的告警内容，直接使用Go Template即可。例如：
 
 ```
 color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
