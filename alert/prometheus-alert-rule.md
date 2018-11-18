@@ -149,7 +149,7 @@ cat /dev/zero>/dev/null
 
 ![](./static/node_cpu_usgae_high.png)
 
-Prometheus首次检测到满足触发条件后，hostCpuUsageAlert显示由一条告警处于活动状态。由于告警规则中设置了1m的等待时间，当前告警状态为PENDING，如下图所示：
+Prometheus首次检测到满足触发条件后，hostCpuUsageAlert显示由一条告警处于活动状态。由于告警规则中设置了1m的等待时间，当前告警状态为PENDING，如下图所示：
 
 ![](./static/node_cpu_alert_pending.png)
 
