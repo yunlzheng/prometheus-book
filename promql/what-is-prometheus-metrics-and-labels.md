@@ -11,7 +11,7 @@ node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 node_load1 3.0703125
 ```
 
-其中非#开头的每一行表示当前Node Exporter采集到的一个监控样本：node_cpu和node_load1表明了当前指标的名称、大括号中的标签则反映了当前样本的一些特征特征和维度、浮点数则是该监控样本的具体值。
+其中非#开头的每一行表示当前Node Exporter采集到的一个监控样本：node_cpu和node_load1表明了当前指标的名称、大括号中的标签则反映了当前样本的一些特征和维度、浮点数则是该监控样本的具体值。
 
 ## 样本
 
@@ -53,7 +53,7 @@ http_request_total{status="200", method="POST"}@1434417561287 => 4785
 <metric name>{<label name>=<label value>, ...}
 ```
 
-指标的名称(metric name)可以反映被监控样本的含义（比如，http_request_total - 表示当前系统接收到的HTTP请求总量）。指标名称只能由ASCII字符、数字、下划线以及冒号组成并必须符合正则表达式```[a-zA-Z_:][a-zA-Z0-9_:]*```。
+指标的名称(metric name)可以反映被监控样本的含义（比如，`http_request_total` - 表示当前系统接收到的HTTP请求总量）。指标名称只能由ASCII字符、数字、下划线以及冒号组成并必须符合正则表达式```[a-zA-Z_:][a-zA-Z0-9_:]*```。
 
 标签(label)反映了当前样本的特征维度，通过这些维度Prometheus可以对样本数据进行过滤，聚合等。标签的名称只能由ASCII字符、数字以及下划线组成并满足正则表达式```[a-zA-Z_][a-zA-Z0-9_]*```。
 
