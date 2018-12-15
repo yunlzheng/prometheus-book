@@ -98,7 +98,4 @@
   * [使用Operator管理Prometheus](./operator/use-operator-manage-prometheus.md)
   * [使用Operator管理监控配置](./operator/use-operator-manage-monitor.md)
   * [使用Prometheus Operator管理Alertmanager](./operator/use-operator-manage-alertmanager.md)
-  <!-- * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md) -->
-  <!-- * [使用Prometheus Operator监控用户应用](./kubernetes/use-operator-monitor-app.md) -->
-  <!-- * [使用Prometheus Operator管理Alertmanager](./kubernetes/use-operator-alerting.md) -->
 * [参考资料](./REFERENCES.md)
