@@ -94,9 +94,13 @@
   * [使用Grafana创建可视化仪表盘](./kubernetes/use-grafana-in-k8s.md)
   * [基于Prometheus的弹性伸缩](./kubernetes/hap-with-prometheus.md)
   * [小结](./kubernetes/SUMMARY.md)
-* 第9章 Prometheus Operator
-  * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md)
-  * [使用Prometheus Operator监控用户应用](./kubernetes/use-operator-monitor-app.md)
-  * [使用Prometheus Operator管理Alertmanager](./kubernetes/use-operator-alerting.md)
-* [第10章 使用Prometheus监控Rancher集群](./rancher/README.md)
+* [第9章 Prometheus Operator](./operator/README.md)
+  * [什么是Prometheus Operator](./operator/what-is-prometheus-operator.md)
+  * [基于Prometheus Operator管理Prometheus](./operator/use-operator-manage-prometheus.md)
+  * [使用Operator自动化管理监控和告警配置](./operator/use-operator-manage-monitor.md)
+  * [使用Prometheus Operator管理Alertmanager](./operator/use-operator-manage-alertmanager.md)
+
+  <!-- * [使用Opertor管理Prometheus](./kubernetes/use-operator-manage-prometheus.md) -->
+  <!-- * [使用Prometheus Operator监控用户应用](./kubernetes/use-operator-monitor-app.md) -->
+  <!-- * [使用Prometheus Operator管理Alertmanager](./kubernetes/use-operator-alerting.md) -->
 * [参考资料](./REFERENCES.md)
