@@ -1,6 +1,6 @@
-## 使用Operator管理Prometheus
+# 使用Operator管理Prometheus
 
-### 创建Prometheus实例
+## 创建Prometheus实例
 
 当集群中已经安装Prometheus Operator之后，对于部署Prometheus Server实例就变成了声明一个Prometheus资源，如下所示，我们在Monitoring命名空间下创建一个Prometheus实例：
 
@@ -265,7 +265,7 @@ scrape_configs:
 level=error ts=2018-12-15T12:52:48.452108433Z caller=main.go:240 component=k8s_client_runtime err="github.com/prometheus/prometheus/discovery/kubernetes/kubernetes.go:300: Failed to list *v1.Endpoints: endpoints is forbidden: User \"system:serviceaccount:monitoring:default\" cannot list endpoints in the namespace \"default\""
 ```
 
-### 自定义ServiceAccount
+## 自定义ServiceAccount
 
 由于默认创建的Prometheus实例使用的是monitoring命名空间下的default账号，该账号并没有权限能够获取default命名空间下的任何资源信息。
 

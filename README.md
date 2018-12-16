@@ -97,5 +97,5 @@
   * [什么是Prometheus Operator](./operator/what-is-prometheus-operator.md)
   * [使用Operator管理Prometheus](./operator/use-operator-manage-prometheus.md)
   * [使用Operator管理监控配置](./operator/use-operator-manage-monitor.md)
-  * [使用Prometheus Operator管理Alertmanager](./operator/use-operator-manage-alertmanager.md)
+  * [在Prometheus Operator中使用自定义配置](./operator/use-custom-configuration-in-operator.md)
 * [参考资料](./REFERENCES.md)
