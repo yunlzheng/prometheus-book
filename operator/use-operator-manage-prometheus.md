@@ -53,7 +53,7 @@ $ kubectl -n monitoring port-forward statefulsets/prometheus-inst 9090:9090
 
 ## 使用ServiceMonitor管理监控配置
 
-修改监控配置项也是Prometheus下常用的运维操作之一，为了能够自动化的管理Prometheus的配置，Prometheus Operator使用了自定义资源类型ServiceMonitor来描述监控对象的信息。
+修改监控配置项也是Prometheus下常用的运维操作之一，为了能够自动化的管理Prometheus的配置，Prometheus Operator使用了自定义资源类型ServiceMonitor来描述监控对象的信息。
 
 这里我们首先在集群中部署一个示例应用，将以下内容保存到example-app.yaml，并使用kubectl命令行工具创建：
 
@@ -137,7 +137,7 @@ spec:
   - port: web
 ```
 
-通过定义selector中的标签定义选择监控目标的Pod对象，同时在endpoints中指定port名称为web的端口。默认情况下ServiceMonitor和监控对象必须是在相同Namespace下的。在本示例中由于Prometheus是部署在Monitoring命名空间下，因此为了能够关联default命名空间下的example对象，需要使用namespaceSelector定义让其可以跨命名空间关联ServiceMonitor资源。保存以上内容到example-app-service-monitor.yaml文件中，并通过kubectl创建：
+通过定义selector中的标签定义选择监控目标的Pod对象，同时在endpoints中指定port名称为web的端口。默认情况下ServiceMonitor和监控对象必须是在相同Namespace下的。在本示例中由于Prometheus是部署在Monitoring命名空间下，因此为了能够关联default命名空间下的example对象，需要使用namespaceSelector定义让其可以跨命名空间关联ServiceMonitor资源。保存以上内容到example-app-service-monitor.yaml文件中，并通过kubectl创建：
 
 ```
 $ kubectl create -f example-app-service-monitor.yaml
@@ -153,6 +153,7 @@ spec:
 ```
 
 Prometheus与ServiceMonitor之间的关联关系使用serviceMonitorSelector定义，在Prometheus中通过标签选择当前需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
+为了能够让Prometheus关联到ServiceMonitor，需要在Pormtheus定义中使用serviceMonitorSelector，我们可以通过标签选择当前Prometheus需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
 
 ```
 apiVersion: monitoring.coreos.com/v1
@@ -319,7 +320,7 @@ clusterrole.rbac.authorization.k8s.io/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
 ```
 
-在完成ServiceAccount创建后，修改prometheus-inst.yaml，并添加ServiceAccount如下所示：
+在完成ServiceAccount创建后，修改prometheus-inst.yaml，并添加ServiceAccount如下所示：
 
 ```
 apiVersion: monitoring.coreos.com/v1
@@ -337,12 +338,12 @@ spec:
       memory: 400Mi
 ```
 
-保存Prometheus变更到集群中：
+保存Prometheus变更到集群中：
 
 ```
 $ kubectl -n monitoring apply -f prometheus-inst.yaml
 prometheus.monitoring.coreos.com/inst configured
 ```
 
-等待Prometheus Operator完成相关配置变更后，此时查看Prometheus，我们就能看到当前Prometheus已经能够正常的采集实例应用的相关监控数据了。
+等待Prometheus Operator完成相关配置变更后，此时查看Prometheus，我们就能看到当前Prometheus已经能够正常的采集实例应用的相关监控数据了。
 
