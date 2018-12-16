@@ -50,7 +50,6 @@ $ kubectl -n monitoring port-forward statefulsets/prometheus-inst 9090:9090
 
 ![](./static/operator-01.png)
 
-
 ## 使用ServiceMonitor管理监控配置
 
 修改监控配置项也是Prometheus下常用的运维操作之一，为了能够自动化的管理Prometheus的配置，Prometheus Operator使用了自定义资源类型ServiceMonitor来描述监控对象的信息。
