@@ -311,7 +311,7 @@ clusterrole.rbac.authorization.k8s.io/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
 ```
 
-在完成ServiceAccount创建后，修改prometheus-inst.yaml，并添加ServiceAccount如下所示：
+在完成ServiceAccount创建后，修改prometheus-inst.yaml，并添加ServiceAccount如下所示：
 
 ```
 apiVersion: monitoring.coreos.com/v1
@@ -336,5 +336,5 @@ $ kubectl -n monitoring apply -f prometheus-inst.yaml
 prometheus.monitoring.coreos.com/inst configured
 ```
 
-等待Prometheus Operator完成相关配置变更后，此时查看Prometheus，我们就能看到当前Prometheus已经能够正常的采集实例应用的相关监控数据了。
+等待Prometheus Operator完成相关配置变更后，此时查看Prometheus，我们就能看到当前Prometheus已经能够正常的采集实例应用的相关监控数据了。
 
