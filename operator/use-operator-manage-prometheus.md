@@ -53,7 +53,7 @@ $ kubectl -n monitoring port-forward statefulsets/prometheus-inst 9090:9090
 
 ## 使用ServiceMonitor管理监控配置
 
-修改监控配置项也是Prometheus下常用的运维操作之一，为了能够自动化的管理Prometheus的配置，Prometheus Operator使用了自定义资源类型ServiceMonitor来描述监控对象的信息。
+修改监控配置项也是Prometheus下常用的运维操作之一，为了能够自动化的管理Prometheus的配置，Prometheus Operator使用了自定义资源类型ServiceMonitor来描述监控对象的信息。
 
 这里我们首先在集群中部署一个示例应用，将以下内容保存到example-app.yaml，并使用kubectl命令行工具创建：
 
@@ -144,7 +144,7 @@ $ kubectl create -f example-app-service-monitor.yaml
 servicemonitor.monitoring.coreos.com/example-app created
 ```
 
-为了能够让Prometheus关联到ServiceMonitor，需要在Pormtheus定义中使用serviceMonitorSelector，我们可以通过标签选择当前Prometheus需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
+为了能够让Prometheus关联到ServiceMonitor，需要在Pormtheus定义中使用serviceMonitorSelector，我们可以通过标签选择当前Prometheus需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
 
 ```
 apiVersion: monitoring.coreos.com/v1
@@ -329,7 +329,7 @@ spec:
       memory: 400Mi
 ```
 
-保存Prometheus变更到集群中：
+保存Prometheus变更到集群中：
 
 ```
 $ kubectl -n monitoring apply -f prometheus-inst.yaml
