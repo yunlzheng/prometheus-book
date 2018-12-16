@@ -144,7 +144,15 @@ $ kubectl create -f example-app-service-monitor.yaml
 servicemonitor.monitoring.coreos.com/example-app created
 ```
 
-为了能够让Prometheus关联到ServiceMonitor，需要在Pormtheus定义中使用serviceMonitorSelector，我们可以通过标签选择当前Prometheus需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
+如果希望ServiceMonitor可以关联任意命名空间下的标签，则通过以下方式定义：
+
+```
+spec:
+  namespaceSelector:
+    any: true
+```
+
+Prometheus与ServiceMonitor之间的关联关系使用serviceMonitorSelector定义，在Prometheus中通过标签选择当前需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
 
 ```
 apiVersion: monitoring.coreos.com/v1
