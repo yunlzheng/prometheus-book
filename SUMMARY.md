@@ -13,15 +13,10 @@
     * [监控数据可视化](./quickstart/use-grafana-create-dashboard.md)
   * [任务和实例](./quickstart/prometheus-job-and-instance.md)
   * [Prometheus核心组件](./quickstart/prometheus-architecture-and-components.md)
-  * 对比其它监控解决方案
   * [小结](./quickstart/SUMMARY.md)
 * [第2章 探索PromQL](./promql/README.md)
   * [理解时间序列](./promql/what-is-prometheus-metrics-and-labels.md)
   * [Metrics类型](./promql/prometheus-metrics-types.md)
-    * Counter计数器
-    * Gauges仪表盘
-    * Histograms桶
-    * Summaries概要
   * [初识PromQL](./promql/prometheus-query-language.md)
   * [PromQL操作符](./promql/prometheus-promql-operators-v2.md)
   * [PromQL聚合操作](./promql/prometheus-aggr-ops.md)
