@@ -98,4 +98,5 @@
   * [使用Operator管理Prometheus](./operator/use-operator-manage-prometheus.md)
   * [使用Operator管理监控配置](./operator/use-operator-manage-monitor.md)
   * [在Prometheus Operator中使用自定义配置](./operator/use-custom-configuration-in-operator.md)
+  * [小结](./operator/SUMMARY.md)
 * [参考资料](./REFERENCES.md)

@@ -1,0 +1,3 @@
+# 小结
+
+在本章中，我们介绍了在Kubernetes下如何使用Operator来有状态的运维和管理Prometheus以及Alertmanager等组件。

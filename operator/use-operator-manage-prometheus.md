@@ -151,6 +151,49 @@ spec:
     any: true
 ```
 
+如果监控的Target对象启用了BasicAuth认证，那在定义ServiceMonitor对象时，可以使用endpoints配置中定义basicAuth如下所示：
+
+```
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: example-app
+  namespace: monitoring
+  labels:
+    team: frontend
+spec:
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: example-app
+  endpoints:
+  - basicAuth:
+      password:
+        name: basic-auth
+        key: password
+      username:
+        name: basic-auth
+        key: user
+    port: web
+```
+
+其中basicAuth中关联了名为basic-auth的Secret对象，用户需要手动将认证信息保存到Secret中:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: basic-auth
+data:
+  password: dG9vcg== # base64编码后的密码
+  user: YWRtaW4= # base64编码后的用户名
+type: Opaque
+```
+
+## 关联Promethues与ServiceMonitor
+
 Prometheus与ServiceMonitor之间的关联关系使用serviceMonitorSelector定义，在Prometheus中通过标签选择当前需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
 为了能够让Prometheus关联到ServiceMonitor，需要在Pormtheus定义中使用serviceMonitorSelector，我们可以通过标签选择当前Prometheus需要监控的ServiceMonitor对象。修改prometheus-inst.yaml中Prometheus的定义如下所示：
 
@@ -345,4 +388,3 @@ prometheus.monitoring.coreos.com/inst configured
 ```
 
 等待Prometheus Operator完成相关配置变更后，此时查看Prometheus，我们就能看到当前Prometheus已经能够正常的采集实例应用的相关监控数据了。
-
