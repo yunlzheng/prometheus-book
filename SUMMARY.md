@@ -62,7 +62,6 @@
     * [当前状态：SingleStat面板](./grafana/use_singlestat_panel.md)
     * [表格：Tabel面板](./grafana/use_table_panel.md)
   * [模板化Dashboard](./grafana/templating.md)
-  * [共享Dashboard](./grafana/share_dashboard.md)
   * [小结](./grafana/SUMMARY.md)
 * [第6章 集群与高可用](./ha/READMD.md)
   * [本地存储](./ha/prometheus-local-storage.md)
