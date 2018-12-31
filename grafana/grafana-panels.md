@@ -1,4 +1,4 @@
-# Panel与数据可视化
+# Grafana与数据可视化
 
 在第1章的“初始Prometheus”部分，我们已经带领读者大致了解了Grafana的基本使用方式。对于Grafana而言，Prometheus就是一个用于存储监控样本数据的数据源（Data Source）通过使用PromQL查询特定Prometheus实例中的数据并且在Panel中实现可视化。
 
@@ -16,11 +16,7 @@ Grafana中所有的面板均以插件的形式进行使用，当前内置了5种
 
 ![添加Panel](./static/grafana_dashboard_add_panel.png)
 
-选择想要创建的面板类型即可。这里以Graph面板为例，创建Panel之后，并切换到编辑模式，就可以看到类似于如下的面板编辑界面了：
-
-![编辑Panel信息](./static/grafana_edit_panel.png)
-
-对于一个Panel而言，一般来说会包含2个主要的配置选项：General（通用设置）、Metrics（度量指标）。其余的配置则根据Panel类型的不同而不同。
+选择想要创建的面板类型即可。这里以Graph面板为例，创建Panel之后，并切换到编辑模式，就可以进入Panel的配置页面。对于一个Panel而言，一般来说会包含2个主要的配置选项：General（通用设置）、Metrics（度量指标）。其余的配置则根据Panel类型的不同而不同。
 
 在通用设置中，除了一些Panel的基本信息以外，最主要的能力就是定义动态Panel的能力，这部分内容会在本章的“模板化Dashboard”小结中详细介绍。
 

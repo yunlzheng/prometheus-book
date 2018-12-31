@@ -8,37 +8,31 @@ Graph面板是最常用的一种可视化面板，其通过折线图或者柱状
 
 Graph面板通过折线图或者柱状图的形式，能够展示监控样本数据在一段时间内的变化趋势，因此其天生适合Prometheus中的Counter和Gauge类型的监控指标的可视化，对于Histogram类型的指标也可以支持，不过可视化效果不如Heatmap Panel来的直观。
 
-接下来，我们将尝试使用Graph面板可视化Prometheus中常用的4中指标类型的监控指标。
-
 ### 使用Graph面板可视化Counter/Gauge
+
+以主机为例，CPU使用率的变化趋势天然适用于使用Grapn面板来进行展示：
 
 ![Prometheus Counter可视化](./static/grafana_graph_counter_demo_v2.png)
 
-#### Metrics：控制数据源
-
-这里以可视化主机CPU使用率为例，选中**Metrics选项**：
-
-![Metrics选项](./static/grafana_graph_counter_demo_metrics.png)
-
-如上所示，这里使用了如下PromQL查询主机的CPU使用率：
+在**Metrics选项**中，我们使用以下PromQL定义如何从Prometheus中读取数据：
 
 ```
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
+如下所示：
+
+![Metrics选项](./static/grafana_graph_counter_demo_metrics.png)
+
 根据当前Prometheus的数据采集情况，该PromQL会返回多条时间序列（在示例中会返回3条）。Graph面板会从时间序列中获取样本数据，并绘制到图表中。 为了让折线图有更好的可读性，我们可以通过定义**Legend format**为```{{ instance }}```控制每条线的图例名称：
 
 ![使用Legend format模板化图例](./static/grafana_graph_counter_demo_metrics_legend.png)
 
-#### Axes：管理坐标轴
-
-在Graph面板的**Axes选项**中可以控制图标的X轴和Y轴相关的行为，如下所示：
+由于当前使用的PromQL的数据范围为0~1表示CPU的使用率，为了能够更有效的表达出度量单位的概念，我们需要对Graph图表的坐标轴显示进行优化。如下所示，在**Axes选项**中可以控制图标的X轴和Y轴相关的行为：
 
 ![Axes选项](./static/grafana_graph_counter_demo_axes.png)
 
 默认情况下，Y轴会直接显示当前样本的值，通过**Left Y**的**Unit**可以让Graph面板自动格式化样本值。当前表达式返回的当前主机CPU使用率的小数表示，因此，这里选择单位为**percent(0.0.-1.0)**。除了百分比以外，Graph面板支持如日期、货币、重量、面积等各种类型单位的自动换算，用户根据自己当前样本的值含义选择即可。
-
-#### Legend：图例管理
 
 除了在Metrics设置图例的显示名称以外，在Graph面板的**Legend选项**可以进一步控制图例的显示方式，如下所示：
 
@@ -48,9 +42,7 @@ Graph面板通过折线图或者柱状图的形式，能够展示监控样本数
 
 ![Legend控制图例的显示示例](./static/grafana_graph_counter_demo_legend_sample.png)
 
-#### Display: 自定义图形展示
-
-**Display选项**主要用于控制可视化图形的显示，包含三个部分：Draw options、Series overrides和Thresholds。
+除了以上设置以外，我们可能还需要对图表进行一些更高级的定制化，以便能够更直观的从可视化图表中获取信息。在Graph面板中**Display选项**可以帮助我们实现更多的可视化定制的能力，其中包含三个部分：Draw options、Series overrides和Thresholds。
 
 ![Display选项](./static/grafana_graph_counter_demo_display_draw.png)
 
@@ -74,7 +66,7 @@ Graph面板则会在图表中显示一条阈值，并且将所有高于该阈�
 
 ### 使用Graph面板可视化Histogram
 
-这里以Prometheus自身的监控指标prometheus_tsdb_compaction_duration为例，该监控指标记录了Prometheus进行数据压缩任务的运行耗时的分布统计情况。如下所示，是Prometheus返回的样本数据：
+以Prometheus自身的监控指标prometheus_tsdb_compaction_duration为例，该监控指标记录了Prometheus进行数据压缩任务的运行耗时的分布统计情况。如下所示，是Prometheus返回的样本数据：
 
 ```
 # HELP prometheus_tsdb_compaction_duration Duration of compaction runs.

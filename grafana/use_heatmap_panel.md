@@ -16,17 +16,11 @@ Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图�
 
 其中大部分的配置选项与Graph面板基本保持一致，这里就不重复介绍了。
 
-### Metrics：控制数据源
-
-如下所示，当使用Heatmap可视化Histogram类型的监控指标时，需要设置**Format as**选项为**Heatmap**。当使用Heatmap格式化数据后，Grafana会自动根据样本的中的le标签，计算各个Bucket桶内的分布，并且按照Bucket对数据进行重新排序：
+当使用Heatmap可视化Histogram类型的监控指标时，需要设置**Format as**选项为**Heatmap**。当使用Heatmap格式化数据后，Grafana会自动根据样本的中的le标签，计算各个Bucket桶内的分布，并且按照Bucket对数据进行重新排序。**Legend format**模板则将会控制Y轴中的显示内容。如下所示：
 
 ![Mteircs设置](./static/grafana_heatmap_metrics_setting.png)
 
-而**Legend format**模板将会控制Y轴中的显示内容。
-
-### Axes：管理坐标轴
-
-由于Histogram类型指标自带了分区范围Bucket，因此这里的Date format需要定义为**Time series buckets**。该选项表示Heatmap Panel不需要自身对数据的分布情况进行计算，直接使用时间序列中返回的Bucket即可。
+默认情况下，Heatmap Panel会自行对PromQL查询出的数据进行分布情况统计，而在Prometheus中Histogram类型的监控指标其实是已经自带了分布的Bucket信息的，因此为了直接使用这些Bucket信息，我们需要在**Axes选项**中定义数据的Date format需要定义为**Time series buckets**。该选项表示Heatmap Panel不需要自身对数据的分布情况进行计算，直接使用时间序列中返回的Bucket即可。如下所示：
 
 ![Axes设置](./static/grafana_heatmap_axes_setting.png)
 
