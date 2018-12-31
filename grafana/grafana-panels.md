@@ -1,14 +1,16 @@
-# 使用Panel可视化监控数据
+# Panel与数据可视化
+
+在第1章的“初始Prometheus”部分，我们已经带领读者大致了解了Grafana的基本使用方式。对于Grafana而言，Prometheus就是一个用于存储监控样本数据的数据源（Data Source）通过使用PromQL查询特定Prometheus实例中的数据并且在Panel中实现可视化。
+
+接下来，我们将带领读者了解如何通过Panel创建精美的可视化图表。
+
+## 认识Panel
 
 Panel是Grafana中最基本的可视化单元。每一种类型的面板都提供了相应的查询编辑器(Query Editor)，让用户可以从不同的数据源（如Prometheus）中查询出相应的监控数据，并且以可视化的方式展现。
 
 Grafana中所有的面板均以插件的形式进行使用，当前内置了5种类型的面板，分别是：Graph，Singlestat，Heatmap, Dashlist，Table以及Text。
 
 其中像Graph这样的面板允许用户可视化任意多个监控指标以及多条时间序列。而Siglestat则必须要求查询结果为单个样本。Dashlist和Text相对比较特殊，它们与特定的数据源无关。
-
-接下来，我们将带领读者了解如何通过Panel创建精美的可视化图表。
-
-## 添加Panel
 
 通过Grafana UI用户可以在一个Dashboard下添加Panel，点击Dashboard右上角的“Add Panel”按钮，如下所示，将会显示当前系统中所有可使用的Panel类型：
 
@@ -18,21 +20,11 @@ Grafana中所有的面板均以插件的形式进行使用，当前内置了5种
 
 ![编辑Panel信息](./static/grafana_edit_panel.png)
 
-## 通用设置
+对于一个Panel而言，一般来说会包含2个主要的配置选项：General（通用设置）、Metrics（度量指标）。其余的配置则根据Panel类型的不同而不同。
 
-Grafana中所有类型的Panel都会包含一个General选项:
+在通用设置中，除了一些Panel的基本信息以外，最主要的能力就是定义动态Panel的能力，这部分内容会在本章的“模板化Dashboard”小结中详细介绍。
 
-![通用设置](./static/grafana_panel_general.png)
-
-在该选项中主要包含3部分配置：
-
-* Info：定义当前Panel显示的标题，描述信息以及基本的样式等；
-* Drildown：用于为当前Panel添加一些跳转链接，可以跳转到其它的Dashboard页面，也可以跳转到指定的URL地址；
-* Repeat：用于自定当前Panel是否根据模板参数的值动态生成，这部分会在后续小节介绍。
-
-## 认识Prometheus Query Editor
-
-Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。**Data Source**中指定当前查询的数据源，Grafana会加载当前组织中添加的所有数据源。其中还会包含两个特殊的数据源：**Mixed**和**Grafana**。 Mixed用于需要从多个数据源中查询和渲染数据的场景，Grafana则用于需要查询Grafana自身状态时使用。
+对于使用Prometheus作为数据源的用户，最主要的需要了解的就是Metrics设置的使用。在Metric选项中可以定义了Grafana从哪些数据源中查询样本数据。**Data Source**中指定当前查询的数据源，Grafana会加载当前组织中添加的所有数据源。其中还会包含两个特殊的数据源：**Mixed**和**Grafana**。 Mixed用于需要从多个数据源中查询和渲染数据的场景，Grafana则用于需要查询Grafana自身状态时使用。
 
 当选中数据源时，Panel会根据当前数据源类型加载不同的Query Editor界面。这里我们主要介绍Prometheus Query Editor，如下所示，当选中的数据源类型为Prometheus时，会显示如下界面：
 

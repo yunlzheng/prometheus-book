@@ -33,7 +33,6 @@
   * [使用Receiver接收告警信息](./alert/alert-manager-use-receiver.md)
     * [集成邮件系统](./alert/alert-with-smtp.md)
     * [集成Slack](./alert/alert-with-slack.md)
-    * [集成微信](./alert/alert-with-wechat.md)
     * [使用Webhook：集成钉钉](./alert/alert-manager-extension-with-webhook.md)
   * [告警模板详解](./alert/alert-template.md)
   * [屏蔽告警通知](./alert/alert-manager-inhibit.md)
@@ -55,7 +54,6 @@
 * [第5章 数据与可视化](./grafana/README.md)
   * [使用Console Template](./grafana/use-console-template.md)
   * [Grafana的基本概念](./grafana/grafana-intro.md)
-  * 安装Grafana
   * [使用Panel可视化监控数据](./grafana/grafana-panels.md)
     * [变化趋势：Graph面板](./grafana/use_graph_panel.md)
     * [分布统计：Heatmap面板](./grafana/use_heatmap_panel.md)
@@ -74,7 +72,6 @@
   * [Prometheus与服务发现](./sd/why-need-service-discovery.md)
   * [基于文件的服务发现](./sd/service-discovery-with-file.md)
   * [基于Consul的服务发现](./sd/service-discovery-with-consul.md)
-  * 自定义服务发现
   * [服务发现与Relabel](./sd/service-discovery-with-relabel.md)
   * [小结](./sd/SUMMARY.md)
 
