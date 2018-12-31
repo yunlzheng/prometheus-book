@@ -10,10 +10,6 @@ Console Teamplet虽然能满足一定的可视化需求，但是也仅仅是对P
 
 对于Grafana而言，Prometheus这类为其提供数据的对象均称为数据源（Data Source）。目前，Grafana官方提供了对：Graphite, InfluxDB, OpenTSDB, Prometheus, Elasticsearch, CloudWatch的支持。对于Grafana管理员而言，只需要将这些对象以数据源的形式添加到Grafana中，Grafana便可以轻松的实现对这些数据的可视化工作。
 
-<!-- 对于Grafana管理员而言，可以在Grafana的设置（Configuration）页面，添加自定义的数据源： -->
-
-<!-- ![数据源管理](./static/grafana_prometheus_datasources.png) -->
-
 ### 仪表盘（Dashboard）
 
 通过数据源定义好可视化的数据来源之后，对于用户而言最重要的事情就是实现数据的可视化。在Grafana中，我们通过Dashboard来组织和管理我们的数据可视化图表：

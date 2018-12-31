@@ -4,7 +4,7 @@
 
 接下来，我们将带领读者了解如何通过Panel创建精美的可视化图表。
 
-## 认识Panel
+## 认识面板（Panel）
 
 Panel是Grafana中最基本的可视化单元。每一种类型的面板都提供了相应的查询编辑器(Query Editor)，让用户可以从不同的数据源（如Prometheus）中查询出相应的监控数据，并且以可视化的方式展现。
 
@@ -32,7 +32,7 @@ Grafana提供了对PromQL的完整支持，在Query Editor中，可以添加任�
 avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
 ```
 
-每个PromQL表达式都可能范围多条时间序列。**Legend format**用于控制如何格式化每条时间序列的图例信息。Grafana支持通过模板的方式，根据时间序列的标签动态生成图例名称，例如：使用{{instance}}表示使用当前事件序列instance标签的值作为图例名称：
+每个PromQL表达式都可能返回多条时间序列。**Legend format**用于控制如何格式化每条时间序列的图例信息。Grafana支持通过模板的方式，根据时间序列的标签动态生成图例名称，例如：使用{{instance}}表示使用当前时间序列中的instance标签的值作为图例名称：
 
 ```
 {{instance}}-{{mode}}
