@@ -93,7 +93,7 @@ ca.crt     namespace  token
 
 ## 服务发现
 
-在Kubernetes下，Promethues通过与Kubernetes API集成目前主要支持5中服务发现模式，分别是：Node、Service、Pod、Endpoints、Ingress。
+在Kubernetes下，Promethues通过与Kubernetes API集成目前主要支持5种服务发现模式，分别是：Node、Service、Pod、Endpoints、Ingress。
 
 通过kubectl命令行，可以方便的获取到当前集群中的所有节点信息：
 
@@ -103,7 +103,7 @@ NAME       STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE       
 minikube   Ready     <none>    164d      v1.8.0    <none>        Buildroot 2017.02   4.9.13           docker://Unknown
 ```
 
-为了能够让Prometheus能够获取到当前集群中所有节点的信息，在Promthues的配置文件中，我们添加如下Job配置：
+为了能够让Prometheus能够获取到当前集群中所有节点的信息，在Promtheus的配置文件中，我们添加如下Job配置：
 
 ```
 - job_name: 'kubernetes-nodes'
