@@ -49,7 +49,7 @@ Prometheus基于Pull模型的架构方式，可以在任何地方（本地电脑
 
 Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的Client库，用户可以轻松的在应用程序中添加对Prometheus的支持，从而让用户可以获取服务和应用内部真正的运行状态。
 
-![监控服务内部运行状态](./static/pullvspush.png)
+![监控服务内部运行状态](./static/monitor-internal.png)
 
 ### 强大的数据模型
 
