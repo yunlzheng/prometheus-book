@@ -309,7 +309,7 @@ level=error ts=2018-12-15T12:52:48.452108433Z caller=main.go:240 component=k8s_c
 
 ## 自定义ServiceAccount
 
-由于默认创建的Prometheus实例使用的是monitoring命名空间下的default账号，该账号并没有权限能够获取default命名空间下的任何资源信息。
+由于默认创建的Prometheus实例使用的是monitoring命名空间下的default账号，该账号并没有权限能够获取default命名空间下的任何资源信息。
 
 为了修复这个问题，我们需要在Monitoring命名空间下为创建一个名为Prometheus的ServiceAccount，并且为该账号赋予相应的集群访问权限。
 
