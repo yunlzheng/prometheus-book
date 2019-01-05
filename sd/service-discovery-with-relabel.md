@@ -39,7 +39,7 @@ node_cpu{cpu="cpu0",env="prod",instance="localhost:9100",job="node",mode="idle"}
 
 这种发生在采集样本数据之前，对Target实例的标签进行重写的机制在Prometheus被称为Relabeling。
 
-![Relabeling作用时间](./static/when-relabel-work.png)
+![Relabeling作用时机](./static/when-relabel-work.png)
 
 Prometheus允许用户在采集任务设置中通过relabel_configs来添加自定义的Relabeling过程。
 
