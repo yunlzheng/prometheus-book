@@ -45,7 +45,7 @@ Prometheus允许用户在采集任务设置中通过relabel_configs来添加自�
 
 ## 使用replace/labelmap重写标签
 
-Relabeling最基本的应用场景就是基于Target实例中包含的metadata标签，动态的添加或者覆盖标签。例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
+Relabeling最基本的应用场景就是基于Target实例中包含的metadata标签，动态的添加或者覆盖标签。例如，通过Consul动态发现的服务实例还会包含以下Metadata标签信息：
 
 * __meta_consul_address：consul地址
 * __meta_consul_dc：consul中服务所在的数据中心
