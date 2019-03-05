@@ -79,12 +79,28 @@ localhost:9100
 |label_values(label)|返回Promthues所有监控指标中，标签名为label的所有可选值|
 |label_values(metric, label)|返回Promthues所有监控指标metric中，标签名为label的所有可选值|
 |metrics(metric)|返回所有指标名称满足metric定义正则表达式的指标名称|
+|query_result(query)|返回prometheus查询语句的查询结果|
 
 例如，当需要监控Prometheus所有采集任务的状态时，可以使用如下方式，获取当前所有采集任务的名称：
 
 ```
 label_values(up, job)
 ```
+
+例如，有时候我们想要动态修改变量查询结果。比如某一个节点绑定了多个ip，一个用于内网访问，一个用于外网访问，此时prometheus采集到的指标是内网的ip，但我们需要的是外网ip。这里我们想要能在Grafana中动态改变标签值，进行ip段的替换，而避免从prometheus或exporter中修改采集指标。
+
+这时需要使用grafana的query_result函数
+```
+# 将10.10.15.xxx段的ip地址替换为10.20.15.xxx段 注：替换端口同理
+query_result(label_replace(kube_pod_info{pod=~"$pod"}, "node", "10.20.15.$1", "node", "10.10.15.(.*)"))
+```
+```
+# 通过正则从返回结果中匹配出所需要的ip地址
+regex：/.*node="(.*?)".*/
+```
+在grafana中配置如图：
+![Grafana中动态修改变量](./static/grafana_templating_query_result.png)
+
 
 ## 使用变量动态创建Panel和Row
 
