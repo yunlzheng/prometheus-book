@@ -8,7 +8,7 @@
 
 如下图所示，样本增长率反映出了样本变化的剧烈程度：
 
-![通过正常率表示样本的变化情况](./static/counter-to-rate.png)
+![通过增长率表示样本的变化情况](./static/counter-to-rate.png)
 
 increase(v range-vector)函数是PromQL中提供的众多内置函数之一。其中参数v是一个区间向量，increase函数获取区间向量中的第一个后最后一个样本并返回其增长量。因此，可以通过以下表达式Counter类型指标的增长率：
 
