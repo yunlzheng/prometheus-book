@@ -81,7 +81,7 @@ spec:
       volumes:
       - name: prometheus-config
         configMap:
-          name: prometheus
+          name: prometheus-config
 ```
 
 该文件中分别定义了Service和Deployment，Service类型为NodePort，这样我们可以通过虚拟机IP和端口访问到Prometheus实例。为了能够让Prometheus实例使用ConfigMap中管理的配置文件，这里通过volumes声明了一个磁盘卷。并且通过volumeMounts将该磁盘卷挂载到了Prometheus实例的/etc/prometheus目录下。
