@@ -32,7 +32,7 @@
 
 ![为Dashboard添加变量](./static/grafana_templating_add_variables.png)
 
-用户需要指定变量的名称，后续用户就可以通过$variable_name的形式引用该变量。Grafana目前支持6种不同的变量类型，而能和Prometheus一起工作的主要包含以下5种类型：
+用户需要指定变量的名称，后续用户就可以通过$variable_name的形式引用该变量。Grafana目前支持6种不同的变量类型，而能和Prometheus一起工作的主要包含以下5种类型：
 
 |类型|工作方式|
 |-|--|
@@ -64,13 +64,13 @@ foo:9100
 localhost:9100
 ```
 
-**Selection Options**选项中可以指定该变量的下拉框是否支持多选，以及是否包含全选（All）选项。
+**Selection Options**选项中可以指定该变量的下拉框是否支持多选，以及是否包含全选（All）选项。
 
 保存变量后，用户可以在Panel的General或者Metrics中通过$node的方式使用该变量，如下所示：
 
 ![在Metrics中使用变量](./static/grafana_templating_variables_filter.png)
 
-这里需要注意的是，如果允许用户多选在PromQL表达式中应该使用标签的正则匹配模式，因为Grafana会自动将多个选项格式化为如“foo:9100|localhost:9100”的形式。
+这里需要注意的是，如果允许用户多选在PromQL表达式中应该使用标签的正则匹配模式，因为Grafana会自动将多个选项格式化为如“foo:9100|localhost:9100”的形式。
 
 使用Query类型的变量能够根据允许用户能够根据时间序列的特征维度对数据进行过滤。在定义Query类型变量时，除了使用PromQL查询时间序列以过滤标签的方式以外，Grafana还提供了几个有用的函数：
 
@@ -104,7 +104,7 @@ regex：/.*node="(.*?)".*/
 
 ## 使用变量动态创建Panel和Row
 
-当在一个Panel中展示多条时间序列数据时，通过使用变量可以轻松实现对时间序列的过滤，提高用户交互性。除此以外，我们还可以使用变量自动生成Panel或者Row。 如下所示，当需要可视化当前系统中所有采集任务的监控任务运行状态时，由于Prometheus的采集任务配置可能随时发生变更，通过硬编码的形式实现，会导致Dashboard配置的频繁变更：
+当在一个Panel中展示多条时间序列数据时，通过使用变量可以轻松实现对时间序列的过滤，提高用户交互性。除此以外，我们还可以使用变量自动生成Panel或者Row。 如下所示，当需要可视化当前系统中所有采集任务的监控任务运行状态时，由于Prometheus的采集任务配置可能随时发生变更，通过硬编码的形式实现，会导致Dashboard配置的频繁变更：
 
 ![Prometheus采集任务状态](./static/grafana_templating_repeat_example1.png)
 
@@ -122,7 +122,7 @@ label_values(up, job)
 
 ![General中的Repeat选项](./static/grafana_templating_repeat_e2.png)
 
-Repeat选项设置完成后，Grafana会根据当前用户的选择，自动创建一个到多个Panel实例。 为了能够使Singlestat Panel能够展示正确的数据，如下所示，在Prometheus中，我们依然使用了$job变量，不过此时的$job反应的是当前迭代的值：
+Repeat选项设置完成后，Grafana会根据当前用户的选择，自动创建一个到多个Panel实例。 为了能够使Singlestat Panel能够展示正确的数据，如下所示，在Prometheus中，我们依然使用了$job变量，不过此时的$job反应的是当前迭代的值：
 
 ![在Metric中使用变量](./static/grafana_templating_repeat_e3.png)
 
