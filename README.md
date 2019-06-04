@@ -67,7 +67,7 @@
   * [联邦集群](./ha/scale-prometheus-with-federation.md)
   * [Prometheus高可用](./ha/prometheus-and-high-availability.md)
   * [Alertmanager高可用](./ha/alertmanager-high-availability.md)
-  * [总结](./ha/SUMMARY.md)
+  * [小结](./ha/SUMMARY.md)
 * [第7章 Prometheus服务发现](./sd/README.md)
   * [Prometheus与服务发现](./sd/why-need-service-discovery.md)
   * [基于文件的服务发现](./sd/service-discovery-with-file.md)
