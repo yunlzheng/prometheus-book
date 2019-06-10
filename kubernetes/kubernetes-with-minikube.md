@@ -71,13 +71,13 @@ Kubernetes的最终目标还是需要为业务服务，因此我们还需要能�
 
 安装MiniKube的方式很简单，对于Mac用户可以直接使用Brew进行安装:
 
-```
+```shell
 brew cask install minikube
 ```
 
 其它操作系统用户，可以查看Minikube项目的官方说明文档进行安装即可。安装完成后，在本机通过命令行启动Kubernetes集群:
 
-```
+```shell
 $ minikube start
 Starting local Kubernetes v1.7.5 cluster...
 Starting VM...
@@ -91,22 +91,22 @@ Kubectl is now configured to use the cluster.
 
 MiniKube会自动配置本机的kubelet命令行工具，用于与对集群资源进行管理。同时Kubernetes也提供了一个Dashboard管理界面，在MiniKube下可以通过以下命令打开：
 
-```
+```shell
 $ minikube dashboard
 Opening kubernetes dashboard in default browser...
 ```
 
 Kubernetes中的Dashboard本身也是通过Deployment进行部署的，因此可以通过MiniKube找到当前集群虚拟机的IP地址：
 
-```
+```shell
 $ minikube ip
 192.168.99.100
 ```
 
 通过kubectl命令行工具，找到Dashboard对应的Service对外暴露的端口，如下所示，kubernetes-dashboard是一个NodePort类型的Service，并对外暴露了30000端口：
 
-```
-kubectl get service --namespace=kube-system
+```shell
+$ kubectl get service --namespace=kube-system
 NAME                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
 kube-dns               ClusterIP   10.96.0.10       <none>        53/UDP,53/TCP   131d
 kubernetes-dashboard   NodePort    10.105.168.160   <none>        80:30000/TCP    131d
@@ -118,7 +118,7 @@ kubernetes-dashboard   NodePort    10.105.168.160   <none>        80:30000/TCP  
 
 Kubernetes环境准备完成后，就可以开始尝试在Kubernetes下尝试部署一个应用程序。Kubernetes中管理的所有资源都可以通过YAML文件进行描述。如下所示，创建了一个名为nginx-deploymeht.yml文件：
 
-```
+```yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -146,14 +146,14 @@ spec:
 
 在命令行中使用，如下命令：
 
-```
+```shell
 $ kubectl create -f nginx-deploymeht.yml
 deployment "nginx-deployment" created
 ```
 
 在未指定命名空间的情况下，kubectl默认关联default命名空间。由于这里没有指定Namespace，该Deployment将会在默认的命令空间default中创建。 通过kubectl get命令查看当前Deployment的部署进度：
 
-```
+```shell
 # 查看Deployment的运行状态
 $ kubectl get deployments
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
@@ -169,7 +169,7 @@ nginx-deployment-6d8f46cfb7-nfmsw   1/1       Running   0          1m
 
 为了能够让用户或者其它服务能够访问到Nginx实例，这里通过一个名为nginx-service.yml的文件定义Service资源：
 
-```
+```yaml
 kind: Service
 apiVersion: v1
 metadata:
@@ -188,7 +188,7 @@ spec:
 
 创建并查看Service资源：
 
-```
+```shell
 $ kubectl create -f nginx-service.yml
 service "nginx-service" created
 
@@ -204,14 +204,14 @@ nginx-service   NodePort    10.104.103.112   <none>        80:32022/TCP   10s
 
 部署完成后，如果需要对Nginx实例进行扩展，可以使用：
 
-```
+```shell
 $ kubectl scale deployments/nginx-deployment --replicas=4
 deployment "nginx-deployment" scaled
 ```
 
 通过kubectl命令还可以对镜像进行滚动升级：
 
-```
+```shell
 $ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
 deployment "nginx-deployment" image updated
 
@@ -227,7 +227,7 @@ nginx-deployment-6d8f46cfb7-nfmsw   1/1       Running             0          45m
 
 如果升级后服务出现异常，那么可以通过以下命令对应用进行回滚：
 
-```
+```shell
 $ kubectl rollout undo deployment/nginx-deployment
 deployment "nginx-deployment"
 ```
