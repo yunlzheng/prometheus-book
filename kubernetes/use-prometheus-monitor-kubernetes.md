@@ -116,6 +116,28 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
       scheme: https
       tls_config:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      kubernetes_sd_configs:
+      - role: node
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: metrics/cadvisor
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+```
+
+![直接访问kubelet](./static/prometheus-cadvisor-step1.png)
+
+方式二：通过api-server提供的代理地址访问kubelet的/metrics/cadvisor地址：
+
+```
+	- job_name: 'kubernetes-cadvisor'
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes_sd_configs:
       - role: node
@@ -130,29 +152,7 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
         regex: __meta_kubernetes_node_label_(.+)
 ```
 
-![使用api-server代理](./static/prometheus-cadvisor-step1.png)
-
-方式二：通过api-server提供的代理地址访问kubelet的/metrics/cadvisor地址：
-
-```
-    - job_name: 'kubernetes-cadvisor'
-      scheme: https
-      tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        insecure_skip_verify: true
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-      kubernetes_sd_configs:
-      - role: node
-      relabel_configs:
-      - source_labels: [__meta_kubernetes_node_name]
-        regex: (.+)
-        target_label: __metrics_path__
-        replacement: metrics/cadvisor
-      - action: labelmap
-        regex: __meta_kubernetes_node_label_(.+)
-```
-
-![直接访问kubelet](./static/prometheus-cadvisor-step2.png)
+![使用api-server代理](./static/prometheus-cadvisor-step2.png)
 
 ## 使用NodeExporter监控集群资源使用情况
 
