@@ -76,7 +76,7 @@ Alert菜单下可以查看Alertmanager接收到的告警内容。Silences菜单�
 alerting:
   alertmanagers:
     - static_configs:
-        targets: ['localhost:9093']
+        - targets: ['localhost:9093']
 ```
 
 重启Prometheus服务，成功后，可以从[http://192.168.33.10:9090/config](http://192.168.33.10:9090/config)查看alerting配置是否生效。
