@@ -18,7 +18,8 @@ node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 
 Counter类型的指标其工作方式和计数器一样，只增不减（除非系统发生重置）。常见的监控指标，如http_requests_total，node_cpu都是Counter类型的监控指标。 一般在定义Counter类型指标的名称时推荐使用_total作为后缀。
 
-Counter是一个简单但有强大的工具，例如我们可以在应用程序中记录某些事件发生的次数，通过以时序的形式存储这些数据，我们可以轻松的了解该事件产生速率的变化。PromQL内置的聚合操作和函数可以用户对这些数据进行进一步的分析：
+Counter是一个简单但有强大的工具，例如我们可以在应用程序中记录某些事件发生的次数，通过以时序的形式存储这些数据，我们可以轻松的了解该事件产生速率的变化。
+PromQL内置的聚合操作和函数可以让用户对这些数据进行进一步的分析：
 
 例如，通过rate()函数获取HTTP请求量的增长率：
 
@@ -56,7 +57,7 @@ predict_linear(node_filesystem_free{job="node"}[1h], 4 * 3600)
 
 ## 使用Histogram和Summary分析数据分布情况
 
-除了Counter和Gauge类型的监控指标以外，Prometheus还定义分别定义Histogram和Summary的指标类型。Histogram和Summary主用用于统计和分析样本的分布情况。
+除了Counter和Gauge类型的监控指标以外，Prometheus还定义了Histogram和Summary的指标类型。Histogram和Summary主用用于统计和分析样本的分布情况。
 
 在大多数情况下人们都倾向于使用某些量化指标的平均值，例如CPU的平均使用率、页面的平均响应时间。这种方式的问题很明显，以系统API调用的平均响应时间为例：如果大多数API请求都维持在100ms的响应时间范围内，而个别请求的响应时间需要5s，那么就会导致某些WEB页面的响应时间落到中位数的情况，而这种现象被称为长尾问题。
 
