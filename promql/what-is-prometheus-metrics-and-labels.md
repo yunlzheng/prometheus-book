@@ -69,7 +69,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 {__name__="api_http_requests_total"，method="POST", handler="/messages"}
 ```
 
-在Prometheus源码中也可以指标(Metric)对应的数据结构，如下所示：
+在Prometheus源码中也可以看到指标(Metric)对应的数据结构，如下所示：
 
 ```
 type Metric LabelSet
