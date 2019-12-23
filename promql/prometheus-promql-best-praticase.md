@@ -8,7 +8,7 @@
 
 |   级别               | 监控什么                                              |    Exporter                     | 
 |--------             |---------                                             |                       ----------|
-|   网络               | 网络协议：http、dns、tcp、icmp；网络硬件：路由器，交换机等  | BlockBox Exporter;SNMP Exporter |
+|   网络               | 网络协议：http、dns、tcp、icmp；网络硬件：路由器，交换机等  | BlackBox Exporter;SNMP Exporter |
 |   主机               | 资源用量                                              |     node exporter               |
 |   容器               | 资源用量                                              |     cAdvisor                    |
 |   应用(包括Library)   |  延迟，错误，QPS，内部状态等                             |     代码中集成Prmometheus Client  |
