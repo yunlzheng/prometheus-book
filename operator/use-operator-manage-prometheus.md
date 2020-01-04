@@ -23,7 +23,7 @@ $ kubectl create -f prometheus-inst.yaml
 prometheus.monitoring.coreos.com/inst-1 created
 ```
 
-此时，查看default命名空间下的statefulsets资源，可以看到Prometheus Operator自动通过Statefulset创建的Prometheus实例：
+此时，查看monitoring命名空间下的statefulsets资源，可以看到Prometheus Operator自动通过Statefulset创建的Prometheus实例：
 
 ```
 $ kubectl -n monitoring get statefulsets
