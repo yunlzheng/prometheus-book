@@ -12,7 +12,7 @@ Prometheus还提供了下列内置的聚合操作符，这些操作符作用域�
 * ```count_values``` (对value进行计数)
 * ```bottomk``` (后n条时序)
 * ```topk``` (前n条时序)
-* ```quantile``` (分布统计)
+* ```quantile``` (分位数)
 
 使用聚合操作的语法如下：
 
