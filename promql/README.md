@@ -5,6 +5,6 @@
 本章的主要内容：
 
 * Prometheus的数据模型
-* Promthues中监控指标的类型
+* Prometheus中监控指标的类型
 * 深入PromQL
 * 4个黄金指标和USE方法
