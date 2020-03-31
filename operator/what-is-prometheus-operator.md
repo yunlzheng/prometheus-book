@@ -43,7 +43,7 @@ git clone https://github.com/coreos/prometheus-operator.git
 kubectl create namespace monitoring
 ```
 
-由于需要对Prometheus Operator进行RBAC授权，而默认的bundle.yaml中使用了default命名空间，因此，在安装Prometheus Operator之前需要先替换一下bundle.yaml文件中ClusterRoleBinding以及ServiceAccount的namespace定义。 通过运行一下命令安装Prometheus Operator的Deployment实例：
+由于需要对Prometheus Operator进行RBAC授权，而默认的bundle.yaml中使用了default命名空间，因此，在安装Prometheus Operator之前需要先替换一下bundle.yaml文件中所有namespace定义，由default修改为monitoring。 通过运行一下命令安装Prometheus Operator的Deployment实例：
 
 ```
 $ kubectl -n monitoring apply -f bundle.yaml
@@ -51,6 +51,7 @@ clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
 clusterrole.rbac.authorization.k8s.io/prometheus-operator created
 deployment.apps/prometheus-operator created
 serviceaccount/prometheus-operator created
+service/prometheus-operator created
 ```
 
 Prometheus Operator通过Deployment的形式进行部署，为了能够让Prometheus Operator能够监听和管理Kubernetes资源同时也创建了单独的ServiceAccount以及相关的授权动作。
