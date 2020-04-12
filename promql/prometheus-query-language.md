@@ -51,7 +51,7 @@ http_requests_total{instance!="localhost:9090"}
 * 使用```label=~regx```表示选择那些标签符合正则表达式定义的时间序列；
 * 反之使用```label!~regx```进行排除；
 
-例如，如果想查询多个环节下的时间序列序列可以使用如下表达式：
+例如，如果想查询多个环境下的时间序列序列可以使用如下表达式：
 
 ```
 http_requests_total{environment=~"staging|testing|development",method!="GET"}
