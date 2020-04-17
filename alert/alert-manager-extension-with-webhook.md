@@ -122,6 +122,10 @@ func main() {
 
 ![群机器人](./static/dingding-group-robot.png)
 
+请注意建立群机器人的时候，有关键词选项，prometheus 产生的告警信息必须包含所填的关键词，否则钉钉将收不到信息。
+
+![api 关键字](./static/dingtalk-message-keys.png)
+
 选择“自定义机器人”，并且按照提示填写机器人名称，获取机器人webhook地址，如下所示：
 
 ![获取webhook地址](./static/dingtalk-robot-create-webhook.png)
