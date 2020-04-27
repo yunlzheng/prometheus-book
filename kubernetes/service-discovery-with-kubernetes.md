@@ -93,7 +93,7 @@ ca.crt     namespace  token
 
 ## 服务发现
 
-在Kubernetes下，Promethues通过与Kubernetes API集成目前主要支持5种服务发现模式，分别是：Node、Service、Pod、Endpoints、Ingress。
+在Kubernetes下，Prometheus通过与Kubernetes API集成目前主要支持5种服务发现模式，分别是：Node、Service、Pod、Endpoints、Ingress。
 
 通过kubectl命令行，可以方便的获取到当前集群中的所有节点信息：
 
@@ -188,7 +188,7 @@ Prometheus使用新的配置文件重建之后，打开Prometheus UI，通过Ser
 
 ![Service Discovery发现的实例](./static/prometheus-k8s-sd-example1.png)
 
-同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Promthues获取到的Node节点的标签信息：
+同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Prometheus获取到的Node节点的标签信息：
 
 ```
 __address__="192.168.99.100:10250"
@@ -211,6 +211,6 @@ job="kubernetes-nodes"
 
 ![Target页面状态](./static/prometheus-k8s-sd-example3.png)
 
-虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Promethues的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
+虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Prometheus的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
 
 接下来，我们将利用Promtheus的服务发现能力，实现对Kubernetes集群的全面监控。

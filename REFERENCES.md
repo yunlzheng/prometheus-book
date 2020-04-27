@@ -24,10 +24,10 @@
 * https://jaxenter.com/prometheus-product-devops-mindset-130860.html
 * https://www.slideshare.net/brianbrazil/so-you-want-to-write-an-exporter
 
-### PromSQL
+### PromQL
 
 * https://www.youtube.com/watch?v=lrfTpnzq3Kw
 
-### Exporters:
+### Exporters
 
 * https://blog.csdn.net/zhaowenbo168/article/details/53196063

@@ -46,7 +46,7 @@
   * [Exporter是什么](./exporter/what-is-prometheus-exporter.md)
   * [常用Exporter](./exporter/commonly-eporter-usage.md)
     * [容器监控：cAdvisor](./exporter/use-prometheus-monitor-container.md)
-    * [监控MySQL运行状态：MySQLD Exporter](./exporter/use-promethues-monitor-mysql.md)
+    * [监控MySQL运行状态：MySQLD Exporter](./exporter/use-prometheus-monitor-mysql.md)
     * [网络探测：Blackbox Exporter](./exporter/install_blackbox_exporter.md)
   * [使用Java自定义Exporter](./exporter/custom_exporter_with_java.md)
     * [使用Client Java构建Exporter程序](./exporter/client_library_java.md)

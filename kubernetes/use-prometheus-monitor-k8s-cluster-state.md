@@ -22,7 +22,7 @@ kubernetes   10.0.2.15:8443   133d
 
 Apiserver组件内置了对Prometheus的支持，因此只要通过CA证书和令牌访问[https://kubernetes.default.svc:443/metrics](https://kubernetes.default.svc:443/metrics)即可获取apiserver组件中记录的所有监控样数据。
 
-了解以上基础知识以后，我们只需要对应修改Prometheus的配置文件即可。修改prometheus-config.yml文件，为Pometheus配置文件添加以下内容：
+了解以上基础知识以后，我们只需要对应修改Prometheus的配置文件即可。修改prometheus-config.yml文件，为Prometheus配置文件添加以下内容：
 
 ```
  - job_name: 'kubernetes-apiservers'
@@ -68,9 +68,9 @@ kubelet_pod_start_latency_microseconds_sum / kubelet_pod_start_latency_microseco
 
 其次，对于用户而言，他们更关注通过容器启动服务所需的时间，因此，第二个关键指标即Pod的启动时间。指标apiserver_request_latencies_summary和apiserver_request_latencies_bucket均可用于统计以下各种类型API响应时间的分布情况：
 
-|Action|Resources|
-|-|-|
-|PUT|Pods, Nodes, Deployments, DaemonSets等|
-|POST|Pods, Nodes, Deployments, DaemonSets等|
-|LIST|Pods, Nodes, Deployments, DaemonSets等|
-|GET|Pods, Nodes, Deployments, DaemonSets等|
+| Action | Resources                              |
+| ------ | -------------------------------------- |
+| PUT    | Pods, Nodes, Deployments, DaemonSets等 |
+| POST   | Pods, Nodes, Deployments, DaemonSets等 |
+| LIST   | Pods, Nodes, Deployments, DaemonSets等 |
+| GET    | Pods, Nodes, Deployments, DaemonSets等 |

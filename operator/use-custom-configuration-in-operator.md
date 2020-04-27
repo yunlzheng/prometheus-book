@@ -34,7 +34,7 @@ volumes:
       secretName: prometheus-inst-cc
 ```
 
-Prometheus的配置文件实际上是保存在名为`prometheus-<name-of-prometheus-object>`的Secret中，当用户创建的Prometheus中关联ServiceMonitor这类会影响配置文件内容的定义时，Promethues Operator会自动管理。而如果Prometheus定义中不包含任何与配置相关的定义，那么Secret的管理权限就落到了用户自己手中。
+Prometheus的配置文件实际上是保存在名为`prometheus-<name-of-prometheus-object>`的Secret中，当用户创建的Prometheus中关联ServiceMonitor这类会影响配置文件内容的定义时，Prometheus Operator会自动管理。而如果Prometheus定义中不包含任何与配置相关的定义，那么Secret的管理权限就落到了用户自己手中。
 
 通过修改prometheus-inst-cc的内容，从而可以让用户可以使用自定义的Prometheus配置文件，作为示例，我们创建一个prometheus.yaml文件并添加以下内容：
 

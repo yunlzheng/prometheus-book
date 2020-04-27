@@ -37,7 +37,7 @@ Prometheus的本职就是一组用户自定义的CRD资源以及Controller的实
 git clone https://github.com/coreos/prometheus-operator.git
 ```
 
-这里，我们为Promethues Operator创建一个单独的命名空间monitoring：
+这里，我们为Prometheus Operator创建一个单独的命名空间monitoring：
 
 ```
 kubectl create namespace monitoring

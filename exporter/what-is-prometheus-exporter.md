@@ -12,21 +12,21 @@
 
 Prometheus社区提供了丰富的Exporter实现，涵盖了从基础设施，中间件以及网络等各个方面的监控功能。这些Exporter可以实现大部分通用的监控需求。下表列举一些社区中常用的Exporter：
 
-| 范围       |  常用Exporter |
-|------     |-------------|
-|   数据库   | MySQL Exporter, Redis Exporter, MongoDB Exporter, MSSQL Exporter等|
-|   硬件    | Apcupsd Exporter，IoT Edison Exporter， IPMI Exporter, Node Exporter等   |
-|   消息队列| Beanstalkd Exporter, Kafka Exporter, NSQ Exporter, RabbitMQ Exporter等 |
-|   存储| Ceph Exporter, Gluster Exporter, HDFS Exporter, ScaleIO Exporter等|
-|   HTTP服务 | Apache Exporter, HAProxy Exporter, Nginx Exporter等|
-|   API服务| AWS ECS Exporter， Docker Cloud Exporter, Docker Hub Exporter, GitHub Exporter等 |
-|   日志   | Fluentd Exporter, Grok Exporter等 |
-|   监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等   |
-|   其它| Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等|
+| 范围     | 常用Exporter                                                                              |
+| -------- | ----------------------------------------------------------------------------------------- |
+| 数据库   | MySQL Exporter, Redis Exporter, MongoDB Exporter, MSSQL Exporter等                        |
+| 硬件     | Apcupsd Exporter，IoT Edison Exporter， IPMI Exporter, Node Exporter等                    |
+| 消息队列 | Beanstalkd Exporter, Kafka Exporter, NSQ Exporter, RabbitMQ Exporter等                    |
+| 存储     | Ceph Exporter, Gluster Exporter, HDFS Exporter, ScaleIO Exporter等                        |
+| HTTP服务 | Apache Exporter, HAProxy Exporter, Nginx Exporter等                                       |
+| API服务  | AWS ECS Exporter， Docker Cloud Exporter, Docker Hub Exporter, GitHub Exporter等          |
+| 日志     | Fluentd Exporter, Grok Exporter等                                                         |
+| 监控系统 | Collectd Exporter, Graphite Exporter, InfluxDB Exporter, Nagios Exporter, SNMP Exporter等 |
+| 其它     | Blockbox Exporter, JIRA Exporter, Jenkins Exporter， Confluence Exporter等                |
 
 * 用户自定义的
 
-除了直接使用社区提供的Exporter程序以外，用户还可以基于Prometheus提供的Client Library创建自己的Exporter程序，目前Promthues社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
+除了直接使用社区提供的Exporter程序以外，用户还可以基于Prometheus提供的Client Library创建自己的Exporter程序，目前Prometheus社区官方提供了对以下编程语言的支持：Go、Java/Scala、Python、Ruby。同时还有第三方实现的如：Bash、C++、Common Lisp、Erlang,、Haskeel、Lua、Node.js、PHP、Rust等。
 
 ## Exporter的运行方式
 
