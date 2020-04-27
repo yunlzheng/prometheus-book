@@ -1,19 +1,19 @@
 # 最佳实践：4个黄金指标和USE方法
 
-前面部分介绍了Prometheus的数据存储模型以及4种指标类型，同时Prometheus提供的强大的PromQL可以实现对数据的个性化处理。Promthues基于指标提供了一个通用的监控解决方案。这里先思考一个基本的问题，在实现监控时，我们到底应该监控哪些对象以及哪些指标？
+前面部分介绍了Prometheus的数据存储模型以及4种指标类型，同时Prometheus提供的强大的PromQL可以实现对数据的个性化处理。Prometheus基于指标提供了一个通用的监控解决方案。这里先思考一个基本的问题，在实现监控时，我们到底应该监控哪些对象以及哪些指标？
 
 ## 监控所有
 
 在之前**Prometheus简介**部分介绍监控的基本目标，首先是及时发现问题其次是要能够快速对问题进行定位。对于传统监控解决方案而言，用户看到的依然是一个黑盒，用户无法真正了解系统的真正的运行状态。因此Prometheus鼓励用户监控所有的东西。下面列举一些常用的监控维度。
 
-|   级别               | 监控什么                                              |    Exporter                     | 
-|--------             |---------                                             |                       ----------|
-|   网络               | 网络协议：http、dns、tcp、icmp；网络硬件：路由器，交换机等  | BlackBox Exporter;SNMP Exporter |
-|   主机               | 资源用量                                              |     node exporter               |
-|   容器               | 资源用量                                              |     cAdvisor                    |
-|   应用(包括Library)   |  延迟，错误，QPS，内部状态等                             |     代码中集成Prmometheus Client  |
-|   中间件状态          |  资源用量，以及服务状态                                 |     代码中集成Prmometheus Client  |
-|   编排工具           |  集群资源用量，调度等                                    |     Kubernetes Components       |
+| 级别              | 监控什么                                                   | Exporter                        |
+| ----------------- | ---------------------------------------------------------- | ------------------------------- |
+| 网络              | 网络协议：http、dns、tcp、icmp；网络硬件：路由器，交换机等 | BlackBox Exporter;SNMP Exporter |
+| 主机              | 资源用量                                                   | node exporter                   |
+| 容器              | 资源用量                                                   | cAdvisor                        |
+| 应用(包括Library) | 延迟，错误，QPS，内部状态等                                | 代码中集成Prmometheus Client    |
+| 中间件状态        | 资源用量，以及服务状态                                     | 代码中集成Prmometheus Client    |
+| 编排工具          | 集群资源用量，调度等                                       | Kubernetes Components           |
 
 ## 监控模式
 

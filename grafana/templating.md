@@ -6,7 +6,7 @@
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
-该表达式会返回当前Promthues中存储的所有时间序列，每一台主机都会有一条单独的曲线用于体现其CPU使用率的变化情况：
+该表达式会返回当前Prometheus中存储的所有时间序列，每一台主机都会有一条单独的曲线用于体现其CPU使用率的变化情况：
 
 ![主机CPU使用率](./static/grafana_templating_variables_example.png)
 
@@ -34,13 +34,13 @@
 
 用户需要指定变量的名称，后续用户就可以通过$variable_name的形式引用该变量。Grafana目前支持6种不同的变量类型，而能和Prometheus一起工作的主要包含以下5种类型：
 
-|类型|工作方式|
-|-|--|
-|Query|允许用户通过Datasource查询表达式的返回值动态生成变量的可选值|
-|Interval|该变量代表时间跨度，通过Interval类型的变量，可以动态改变PromQL区间向量表达式中的时间范围。如rate(node_cpu[2m])|
-|Datasource|允许用户动态切换当前Dashboard的数据源，特别适用于同一个Dashboard展示多个数据源数据的情况|
-|Custom|用户直接通过手动的方式，定义变量的可选值|
-|Constant|常量，在导入Dashboard时，会要求用户设置该常量的值|
+| 类型       | 工作方式                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------- |
+| Query      | 允许用户通过Datasource查询表达式的返回值动态生成变量的可选值                                                   |
+| Interval   | 该变量代表时间跨度，通过Interval类型的变量，可以动态改变PromQL区间向量表达式中的时间范围。如rate(node_cpu[2m]) |
+| Datasource | 允许用户动态切换当前Dashboard的数据源，特别适用于同一个Dashboard展示多个数据源数据的情况                       |
+| Custom     | 用户直接通过手动的方式，定义变量的可选值                                                                       |
+| Constant   | 常量，在导入Dashboard时，会要求用户设置该常量的值                                                              |
 
 Label属性用于指定界面中变量的显示名称，Hide属性则用于指定在渲染界面时是否隐藏该变量的下拉框。
 
@@ -74,12 +74,12 @@ localhost:9100
 
 使用Query类型的变量能够根据允许用户能够根据时间序列的特征维度对数据进行过滤。在定义Query类型变量时，除了使用PromQL查询时间序列以过滤标签的方式以外，Grafana还提供了几个有用的函数：
 
-|函数|作用|
-|--|---|
-|label_values(label)|返回Promthues所有监控指标中，标签名为label的所有可选值|
-|label_values(metric, label)|返回Promthues所有监控指标metric中，标签名为label的所有可选值|
-|metrics(metric)|返回所有指标名称满足metric定义正则表达式的指标名称|
-|query_result(query)|返回prometheus查询语句的查询结果|
+| 函数                        | 作用                                                          |
+| --------------------------- | ------------------------------------------------------------- |
+| label_values(label)         | 返回Prometheus所有监控指标中，标签名为label的所有可选值       |
+| label_values(metric, label) | 返回Prometheus所有监控指标metric中，标签名为label的所有可选值 |
+| metrics(metric)             | 返回所有指标名称满足metric定义正则表达式的指标名称           |
+| query_result(query)         | 返回prometheus查询语句的查询结果                              |
 
 例如，当需要监控Prometheus所有采集任务的状态时，可以使用如下方式，获取当前所有采集任务的名称：
 
@@ -112,7 +112,7 @@ regex：/.*node="(.*?)".*/
 
 ![使用变量获取当前所有可选任务](./static/grafana_templating_repeat_var.png)
 
-通过使用label_values函数，获取到当前Promthues监控指标up中所有可选的job标签的值：
+通过使用label_values函数，获取到当前Prometheus监控指标up中所有可选的job标签的值：
 
 ```
 label_values(up, job)
