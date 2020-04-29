@@ -147,7 +147,7 @@ spec:
 在命令行中使用，如下命令：
 
 ```shell
-$ kubectl create -f nginx-deploymeht.yml
+$ kubectl create -f nginx-deployment.yml
 deployment "nginx-deployment" created
 ```
 
