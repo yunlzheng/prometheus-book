@@ -70,11 +70,14 @@ spec:
   - name: web
     port: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-app
 spec:
+  selector:
+    matchLabels:
+      app: example-app
   replicas: 3
   template:
     metadata:
@@ -87,6 +90,7 @@ spec:
         ports:
         - name: web
           containerPort: 8080
+
 ```
 
 示例应用会通过Deployment创建3个Pod实例，并且通过Service暴露应用访问信息。
