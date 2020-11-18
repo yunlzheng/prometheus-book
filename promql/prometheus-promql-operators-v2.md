@@ -135,7 +135,7 @@ http_requests_total{code="200",handler="query_range",instance="localhost:9090",j
 vector1 <operator> vector2
 ```
 
-在操作符两边表达式标签不一致的情况下，可以使用on(label list)或者ignoring(label list）来修改便签的匹配行为。使用ignoreing可以在匹配时忽略某些便签。而on则用于将匹配行为限定在某些便签之内。
+在操作符两边表达式标签不一致的情况下，可以使用on(label list)或者ignoring(label list）来修改标签的匹配行为。使用ignoreing可以在匹配时忽略某些标签。而on则用于将匹配行为限定在某些标签之内。
 
 ```
 <vector expr> <bin-op> ignoring(<label list>) <vector expr>
