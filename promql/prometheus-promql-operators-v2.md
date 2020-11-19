@@ -192,8 +192,7 @@ method_code:http_errors:rate5m{code="500"} / ignoring(code) method:http_requests
 method_code:http_errors:rate5m / ignoring(code) group_left method:http_requests:rate5m
 ```
 
-该表达式中，左向量```method_code:http_errors:rate5m```包含两个标签method和code。而右向量```method:http_requests:rate5m```中只包含一个标签method，因此匹配时需要使用ignoring限定匹配的标签为code。 在限定匹配标签后，右向量中的元素可能匹配到多个左向量中的元素
-因此该表达式的匹配模式为多对一，需要使用group修饰符group_left指定左向量具有更好的基数。
+该表达式中，左向量```method_code:http_errors:rate5m```包含两个标签method和code。而右向量```method:http_requests:rate5m```中只包含一个标签method，因此匹配时需要使用ignoring限定匹配的标签为code。 在限定匹配标签后，右向量中的元素可能匹配到多个左向量中的元素，因此该表达式的匹配模式为多对一，需要使用group修饰符group_left指定左向量具有更好的基数。
 
 最终的运算结果如下：
 
