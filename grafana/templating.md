@@ -6,7 +6,7 @@
 1 - (avg(irate(node_cpu{mode='idle'}[5m])) without (cpu))
 ```
 
-该表达式会返回当前Promthues中存储的所有时间序列，每一台主机都会有一条单独的曲线用于体现其CPU使用率的变化情况：
+该表达式会返回当前Prometheus中存储的所有时间序列，每一台主机都会有一条单独的曲线用于体现其CPU使用率的变化情况：
 
 ![主机CPU使用率](./static/grafana_templating_variables_example.png)
 
@@ -76,8 +76,8 @@ localhost:9100
 
 |函数|作用|
 |--|---|
-|label_values(label)|返回Promthues所有监控指标中，标签名为label的所有可选值|
-|label_values(metric, label)|返回Promthues所有监控指标metric中，标签名为label的所有可选值|
+|label_values(label)|返回Prometheus所有监控指标中，标签名为label的所有可选值|
+|label_values(metric, label)|返回Prometheus所有监控指标metric中，标签名为label的所有可选值|
 |metrics(metric)|返回所有指标名称满足metric定义正则表达式的指标名称|
 |query_result(query)|返回prometheus查询语句的查询结果|
 
@@ -112,7 +112,7 @@ regex：/.*node="(.*?)".*/
 
 ![使用变量获取当前所有可选任务](./static/grafana_templating_repeat_var.png)
 
-通过使用label_values函数，获取到当前Promthues监控指标up中所有可选的job标签的值：
+通过使用label_values函数，获取到当前Prometheus监控指标up中所有可选的job标签的值：
 
 ```
 label_values(up, job)

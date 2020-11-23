@@ -188,7 +188,7 @@ Prometheus使用新的配置文件重建之后，打开Prometheus UI，通过Ser
 
 ![Service Discovery发现的实例](./static/prometheus-k8s-sd-example1.png)
 
-同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Promthues获取到的Node节点的标签信息：
+同时Prometheus会自动将该资源的所有信息，并通过标签的形式体现在Target对象上。如下所示，是Prometheus获取到的Node节点的标签信息：
 
 ```
 __address__="192.168.99.100:10250"
