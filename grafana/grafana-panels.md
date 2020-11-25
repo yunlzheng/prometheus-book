@@ -1,6 +1,6 @@
 # Grafana与数据可视化
 
-在第1章的“初始Prometheus”部分，我们已经带领读者大致了解了Grafana的基本使用方式。对于Grafana而言，Prometheus就是一个用于存储监控样本数据的数据源（Data Source）通过使用PromQL查询特定Prometheus实例中的数据并且在Panel中实现可视化。
+在第1章的“初始Prometheus”部分，我们已经带领读者大致了解了Grafana的基本使用方式。对于Grafana而言，Prometheus就是一个用于存储监控样本数据的数据源（Data Source），通过使用PromQL查询特定Prometheus实例中的数据并且在Panel中实现可视化。
 
 接下来，我们将带领读者了解如何通过Panel创建精美的可视化图表。
 
