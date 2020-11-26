@@ -1,6 +1,6 @@
 # 在Kubernetes下部署Prometheus
 
-在上一小节总我们介绍了与Kubernetes的应用管理模型，并且利用MiniKube在本地搭建了一个单节点的Kubernetes。这一部分我们将带领读者通过Kubernetes部署Prometheus实例。
+在上一小节中我们介绍了与Kubernetes的应用管理模型，并且利用MiniKube在本地搭建了一个单节点的Kubernetes。这一部分我们将带领读者通过Kubernetes部署Prometheus实例。
 
 ## 使用ConfigMaps管理应用配置
 
