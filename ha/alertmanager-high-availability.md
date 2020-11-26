@@ -4,7 +4,7 @@
 
 ![Alertmanager成为单点](./static/prom-ha-with-single-am.png)
 
-为了提升Promthues的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以确保Promthues持续可用。
+为了提升Prometheus的服务可用性，通常用户会部署两个或者两个以上的Promthus Server，它们具有完全相同的配置包括Job配置，以及告警配置等。当某一个Prometheus Server发生故障后可以确保Prometheus持续可用。
 
 同时基于Alertmanager的告警分组机制即使不同的Prometheus Sever分别发送相同的告警给Alertmanager，Alertmanager也可以自动将这些告警合并为一个通知向receiver发送。
 
@@ -44,7 +44,7 @@ Gossip是分布式系统中被广泛使用的协议，用于实现分布式节�
 * Silence设置同步：Alertmanager启动阶段基于Pull-based从集群其它节点同步Silence状态，当有新的Silence产生时使用Push-based方式在集群中传播Gossip信息。
 * 通知发送状态同步：告警通知发送完成后，基于Push-based同步告警发送状态。Wait阶段可以确保集群状态一致。
 
-Alertmanager基于Gossip实现的集群机制虽然不能保证所有实例上的数据时刻保持一致，但是实现了CAP理论中的AP系统，即可用性和分区容错性。同时对于Prometheus Server而言保持了配置了简单性，Promthues Server之间不需要任何的状态同步。
+Alertmanager基于Gossip实现的集群机制虽然不能保证所有实例上的数据时刻保持一致，但是实现了CAP理论中的AP系统，即可用性和分区容错性。同时对于Prometheus Server而言保持了配置了简单性，Prometheus Server之间不需要任何的状态同步。
 
 ## 搭建本地集群环境
 
@@ -201,7 +201,7 @@ curl -XPOST -d"$alerts1" http://localhost:9095/api/v1/alerts
 
 ### 多实例Prometheus与Alertmanager集群
 
-由于Gossip机制的实现，在Promthues和Alertmanager实例之间不要使用任何的负载均衡，需要确保Promthues将告警发送到所有的Alertmanager实例中：
+由于Gossip机制的实现，在Prometheus和Alertmanager实例之间不要使用任何的负载均衡，需要确保Prometheus将告警发送到所有的Alertmanager实例中：
 
 ```
 alerting:
@@ -213,7 +213,7 @@ alerting:
       - 127.0.0.1:9095
 ```
 
-创建Promthues集群配置文件/etc/prometheus/prometheus-ha.yml，完整内容如下：
+创建Prometheus集群配置文件/etc/prometheus/prometheus-ha.yml，完整内容如下：
 
 ```
 global:
@@ -265,9 +265,9 @@ groups:
 
 本示例部署结构如下所示：
 
-![Promthues与Alertmanager HA部署结构](./static/promethues-alertmanager-ha.png)
+![Prometheus与Alertmanager HA部署结构](./static/promethues-alertmanager-ha.png)
 
-创建prometheus.procfile文件，创建两个Promthues节点，分别监听9090和9091端口:
+创建prometheus.procfile文件，创建两个Prometheus节点，分别监听9090和9091端口:
 
 ```
 p1: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.path=/data/prometheus/ --web.listen-address="127.0.0.1:9090"
@@ -276,13 +276,13 @@ p2: prometheus --config.file=/etc/prometheus/prometheus-ha.yml --storage.tsdb.pa
 node_exporter: node_exporter -web.listen-address="0.0.0.0:9100"
 ```
 
-使用goreman启动多节点Promthues：
+使用goreman启动多节点Prometheus：
 
 ```
 goreman -f prometheus.procfile -p 8556 start
 ```
 
-Promthues启动完成后，手动拉高系统CPU使用率：
+Prometheus启动完成后，手动拉高系统CPU使用率：
 
 ```
 cat /dev/zero>/dev/null

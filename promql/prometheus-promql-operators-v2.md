@@ -4,7 +4,7 @@
 
 ## 数学运算
 
-例如，我们可以通过指标node_memory_free_bytes_total获取当前主机可用的内存空间大小，其样本单位为Bytes。这是如果客户端要求使用MB作为单位响应数据，那只需要将查询到的时间序列的样本值进行单位换算即可：
+例如，我们可以通过指标node_memory_free_bytes_total获取当前主机可用的内存空间大小，其样本单位为Bytes。这时如果客户端要求使用MB作为单位响应数据，那只需要将查询到的时间序列的样本值进行单位换算即可：
 
 ```
 node_memory_free_bytes_total / (1024 * 1024)
@@ -12,7 +12,7 @@ node_memory_free_bytes_total / (1024 * 1024)
 
 node_memory_free_bytes_total表达式会查询出所有满足表达式条件的时间序列，在上一小节中我们称该表达式为瞬时向量表达式，而返回的结果成为瞬时向量。
 
-当瞬时向量与标量之间进行数学运算时，数学运算符会依次作用域瞬时向量中的每一个样本值，从而得到一组新的时间序列。
+当瞬时向量与标量之间进行数学运算时，数学运算符会依次作用于瞬时向量中的每一个样本值，从而得到一组新的时间序列。
 
 而如果是瞬时向量与瞬时向量之间进行数学运算时，过程会相对复杂一点。 例如，如果我们想根据node_disk_bytes_written和node_disk_bytes_read获取主机磁盘IO的总量，可以使用如下表达式：
 
@@ -135,7 +135,7 @@ http_requests_total{code="200",handler="query_range",instance="localhost:9090",j
 vector1 <operator> vector2
 ```
 
-在操作符两边表达式标签不一致的情况下，可以使用on(label list)或者ignoring(label list）来修改便签的匹配行为。使用ignoreing可以在匹配时忽略某些便签。而on则用于将匹配行为限定在某些便签之内。
+在操作符两边表达式标签不一致的情况下，可以使用on(label list)或者ignoring(label list）来修改标签的匹配行为。使用ignoreing可以在匹配时忽略某些标签。而on则用于将匹配行为限定在某些标签之内。
 
 ```
 <vector expr> <bin-op> ignoring(<label list>) <vector expr>
@@ -192,8 +192,7 @@ method_code:http_errors:rate5m{code="500"} / ignoring(code) method:http_requests
 method_code:http_errors:rate5m / ignoring(code) group_left method:http_requests:rate5m
 ```
 
-该表达式中，左向量```method_code:http_errors:rate5m```包含两个标签method和code。而右向量```method:http_requests:rate5m```中只包含一个标签method，因此匹配时需要使用ignoring限定匹配的标签为code。 在限定匹配标签后，右向量中的元素可能匹配到多个左向量中的元素
-因此该表达式的匹配模式为多对一，需要使用group修饰符group_left指定左向量具有更好的基数。
+该表达式中，左向量```method_code:http_errors:rate5m```包含两个标签method和code。而右向量```method:http_requests:rate5m```中只包含一个标签method，因此匹配时需要使用ignoring限定匹配的标签为code。 在限定匹配标签后，右向量中的元素可能匹配到多个左向量中的元素，因此该表达式的匹配模式为多对一，需要使用group修饰符group_left指定左向量具有更好的基数。
 
 最终的运算结果如下：
 
