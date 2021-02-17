@@ -40,5 +40,5 @@ Alertmanager除了提供基本的告警通知能力以外，还主要提供了�
 
 静默提供了一个简单的机制可以快速根据标签对告警进行静默处理。如果接收到的告警符合静默的配置，Alertmanager则不会发送告警通知。
 
-静默设置需要在Alertmanager的Werb页面上进行设置。
+静默设置需要在Alertmanager的Web页面上进行设置。
 
