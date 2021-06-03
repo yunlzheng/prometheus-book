@@ -35,7 +35,7 @@ topk(10, http_requests_total)
 
 ## Gauge：可增可减的仪表盘
 
-与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内容大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
+与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内存大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
 
 通过Gauge指标，用户可以直接查看系统的当前状态：
 
