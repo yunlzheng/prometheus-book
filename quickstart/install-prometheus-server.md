@@ -18,7 +18,7 @@ tar -xzf prometheus-${VERSION}.darwin-amd64.tar.gz
 cd prometheus-${VERSION}.darwin-amd64
 ```
 
-解压后当前目录会包含默认的Prometheus配置文件promethes.yml:
+解压后当前目录会包含默认的Prometheus配置文件prometheus.yml:
 
 ```
 # my global config
