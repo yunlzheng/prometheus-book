@@ -1,6 +1,6 @@
 # 应用容器监控
 
-在第4章的”监控容器运行状态“小节中，我们介绍了如何使用cAdvisor监控主机中容器的运行状态。而Kubernetes直接在Kubelet组件中集成了cAdvisor，cAdvisor会自动采集当前节点上容器CPU，内存，文件系统，网络等资源的使用情况，其默认运行端口为4194。
+在第4章的“监控容器运行状态”小节中，我们介绍了如何使用cAdvisor监控主机中容器的运行状态。而Kubernetes直接在Kubelet组件中集成了cAdvisor，cAdvisor会自动采集当前节点上容器CPU，内存，文件系统，网络等资源的使用情况，其默认运行端口为4194。
 
 登录到MiniKube主机，并且访问本机的4194端口，可以获取到当前节点上cAdvisor的监控样本数据：
 
@@ -97,7 +97,7 @@ data:
 
 这里定义了三个relabel步骤：
 
-1. 默认获取到的target地址为，当前节点中kubelet的访问地址。因此通过通过正则表达式(.+):(.+)匹配出IP地址和端口，并将将匹配到的内容按照$1:4194的形式覆盖```__address__```的值。 从而获得cAdvisor访问地址；
+1. 默认获取到的target地址为，当前节点中kubelet的访问地址。因此通过正则表达式(.+):(.+)匹配出IP地址和端口，并将将匹配到的内容按照$1:4194的形式覆盖```__address__```的值。 从而获得cAdvisor访问地址；
 2. 默认返回的```__scheme__```为https，通过直接修改其值为http，从而可以让Prometheus通过访问[http://IP:4193/metrics](http://IP:4193/metrics)作为采集目标地址；
 3. 最后通过labelmap将该节点上的自定义标签，写入到样本中，从而可以方便用户通过这些标签对数据进行聚合。
 
@@ -105,7 +105,7 @@ data:
 
 如上所示，Prometheus通过自动发现Node节点，并通过Relabel自定义采集方式后的结果。
 
-> 需要注意的是，通过集群中主机的4194端口获取cAdvisor数据，并不适用于所以Kubernetes集群，这种方式限制了cAdvisor服务的运行端口。除了直接访问各个节点的cAdvisor服务以外，我们还可以通过Kubernetes的API Server作为代理获取节点上的cAdvisor监控数据。
+> 需要注意的是，通过集群中主机的4194端口获取cAdvisor数据，并不适用于Kubernetes集群，这种方式限制了cAdvisor服务的运行端口。除了直接访问各个节点的cAdvisor服务以外，我们还可以通过Kubernetes的API Server作为代理获取节点上的cAdvisor监控数据。
 
 除了直接访问cAdvisor监听的端口以外，更通用的方式是通过apiserver访问kubelet提供的/metrics/cadvisor接口获取cAdvisor的样本数据。例如，想要获取节点minikube上cAdvisor的监控数据可以使用ca证书和令牌在Kubernetes集群内访问以下地址获取：
 

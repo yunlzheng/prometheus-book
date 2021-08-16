@@ -63,4 +63,4 @@ source_match_re:
 
 ![告警信息](./static/alertmanager-slicense-alerts-result.png)
 
-对于已经生效的规则，用户可以通过手动点击”Expire“按钮使当前规则过期。
+对于已经生效的规则，用户可以通过手动点击“Expire”按钮使当前规则过期。

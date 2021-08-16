@@ -42,7 +42,7 @@ avg (irate(node_cpu{mode!='idle'}[2m])) without (cpu)
 
 **Resolution**选项，则可以控制Grafana自身渲染的数据量。例如，如果**Resolution**的值为**1/10**，Grafana会将Prometeus返回的10个样本数据合并成一个点。因此**Resolution**越小可视化的精确性越高，反之，可视化的精度越低。
 
-**Format as**选项定义如何格式化Prometheus返回的样本数据。这里提供了3个选项：Table,Time Series和Heatmap，分别用于Tabel面板，Graph面板和Heatmap面板的数据可视化。
+**Format as**选项定义如何格式化Prometheus返回的样本数据。这里提供了3个选项：Table,Time Series和Heatmap，分别用于Table面板，Graph面板和Heatmap面板的数据可视化。
 
 除此以外，Query Editor还提供了调试相关的功能，点击**Query Inspector**可以展开相关的调试面板：
 
