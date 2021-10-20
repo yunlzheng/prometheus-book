@@ -260,7 +260,7 @@ mysql_global_status_innodb_buffer_pool_reads 443
 
 通过以上监控指标，以及实际监控的场景，我们可以利用PromQL快速建立多个监控项。
 
-通过以下PromQL可以得到各个MySQL实例的缓冲池利用率。一般来说还需要结合Innodb_buffer_pool_reads的增长率情况来结合判断缓冲池大小是否合理：
+通过以下PromQL可以得到各个MySQL实例的缓冲池利用率。一般来说还需要结合Innodb_buffer_pool_reads的增长率情况来判断缓冲池大小是否合理：
 
 ```
 (sum(mysql_global_status_buffer_pool_pages) by (instance) - sum(mysql_global_status_buffer_pool_pages{state="free"}) by (instance)) / sum(mysql_global_status_buffer_pool_pages) by (instance)

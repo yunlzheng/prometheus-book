@@ -2,7 +2,7 @@
 
 这里假定你已经对Linux系统以及Docker技术有一定的基本认识，也可能使用过像Java，Golang这样的编程语言，在本书中我们不会事无巨细的讲述所有事。
 
-第1章，是Prometheus基础的综述，通过一个简单案例（使用Prometheus采集主机的监控数据）来了解Prometheus是什么，能做什么，以及它的架构组成。通过阅读本章希望读者能对Promentheus有一个基本的理解和认识。
+第1章，是Prometheus基础的综述，通过一个简单案例（使用Prometheus采集主机的监控数据）来了解Prometheus是什么，能做什么，以及它的架构组成。通过阅读本章希望读者能对Prometheus有一个基本的理解和认识。
 
 第2章，读者将会了解到Prometheus的数据模型，以及时间序列模型。同时会学习到如何利用Prometheus的数据查询语言PrmQL(Prometheus Query Language)对监控数据进行查询、聚合、计算等。
 
