@@ -18,7 +18,7 @@ tar -xzf prometheus-${VERSION}.darwin-amd64.tar.gz
 cd prometheus-${VERSION}.darwin-amd64
 ```
 
-解压后当前目录会包含默认的Prometheus配置文件promethes.yml:
+解压后当前目录会包含默认的Prometheus配置文件prometheus.yml:
 
 ```
 # my global config
@@ -52,7 +52,7 @@ scrape_configs:
     - targets: ['localhost:9090']
 ```
 
-Promtheus作为一个时间序列数据库，其采集的数据会以文件的形式存储在本地中，默认的存储路径为`data/`，因此我们需要先手动创建该目录：
+Prometheus作为一个时间序列数据库，其采集的数据会以文件的形式存储在本地中，默认的存储路径为`data/`，因此我们需要先手动创建该目录：
 
 ```
 mkdir -p data

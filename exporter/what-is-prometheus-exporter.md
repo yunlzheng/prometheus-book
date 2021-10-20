@@ -101,7 +101,7 @@ http_request_duration_seconds_bucket{le="+Inf"} 144320
 http_request_duration_seconds_sum 53423
 http_request_duration_seconds_count 144320
 
-# Finally a summary, which has a complex representation, too:
+# Finaly a summary, which has a complex representation, too:
 # HELP rpc_duration_seconds A summary of the RPC duration in seconds.
 # TYPE rpc_duration_seconds summary
 rpc_duration_seconds{quantile="0.01"} 3102

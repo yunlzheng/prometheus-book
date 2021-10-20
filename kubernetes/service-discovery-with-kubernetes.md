@@ -103,7 +103,7 @@ NAME       STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE       
 minikube   Ready     <none>    164d      v1.8.0    <none>        Buildroot 2017.02   4.9.13           docker://Unknown
 ```
 
-为了能够让Prometheus能够获取到当前集群中所有节点的信息，在Promtheus的配置文件中，我们添加如下Job配置：
+为了能够让Prometheus能够获取到当前集群中所有节点的信息，在Prometheus的配置文件中，我们添加如下Job配置：
 
 ```
 - job_name: 'kubernetes-nodes'
@@ -207,10 +207,10 @@ instance="minikube"
 job="kubernetes-nodes"
 ```
 
-目前为止，我们已经能够通过Prometheus自动发现Kubernetes集群中的各类资源以及其基本信息。不过，如果现在查看Promtheus的Target状态页面，结果可能会让人不太满意：
+目前为止，我们已经能够通过Prometheus自动发现Kubernetes集群中的各类资源以及其基本信息。不过，如果现在查看Prometheus的Target状态页面，结果可能会让人不太满意：
 
 ![Target页面状态](./static/prometheus-k8s-sd-example3.png)
 
 虽然Prometheus能够自动发现所有的资源对象，并且将其作为Target对象进行数据采集。 但并不是所有的资源对象都是支持Promethues的，并且不同类型资源对象的采集方式可能是不同的。因此，在实际的操作中，我们需要有明确的监控目标，并且针对不同类型的监控目标设置不同的数据采集方式。
 
-接下来，我们将利用Promtheus的服务发现能力，实现对Kubernetes集群的全面监控。
+接下来，我们将利用Prometheus的服务发现能力，实现对Kubernetes集群的全面监控。

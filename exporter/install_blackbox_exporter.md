@@ -148,8 +148,8 @@ scrape_configs:
 这里针对每一个探针服务（如http_2xx）定义一个采集任务，并且直接将任务的采集目标定义为我们需要探测的站点。在采集样本数据之前通过relabel_configs对采集任务进行动态设置。 
 
 * 第1步，根据Target实例的地址，写入```__param_target```标签中。```__param_<name>```形式的标签表示，在采集任务时会在请求目标地址中添加```<name>```参数，等同于params的设置；
-* 第2步，获取__param_target的值，并覆写到instance标签中；
-* 第3步，覆写Target实例的```__address__```标签值为BlockBox Exporter实例的访问地址。
+* 第2步，获取__param_target的值，并复写到instance标签中；
+* 第3步，复写Target实例的```__address__```标签值为BlockBox Exporter实例的访问地址。
 
 通过以上3个relabel步骤，即可大大简化Prometheus任务配置的复杂度:
 

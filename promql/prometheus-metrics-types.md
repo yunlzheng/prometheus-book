@@ -35,7 +35,7 @@ topk(10, http_requests_total)
 
 ## Gauge：可增可减的仪表盘
 
-与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内容大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
+与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内存大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
 
 通过Gauge指标，用户可以直接查看系统的当前状态：
 
@@ -57,7 +57,7 @@ predict_linear(node_filesystem_free{job="node"}[1h], 4 * 3600)
 
 ## 使用Histogram和Summary分析数据分布情况
 
-除了Counter和Gauge类型的监控指标以外，Prometheus还定义了Histogram和Summary的指标类型。Histogram和Summary主用用于统计和分析样本的分布情况。
+除了Counter和Gauge类型的监控指标以外，Prometheus还定义了Histogram和Summary的指标类型。Histogram和Summary主要用于统计和分析样本的分布情况。
 
 在大多数情况下人们都倾向于使用某些量化指标的平均值，例如CPU的平均使用率、页面的平均响应时间。这种方式的问题很明显，以系统API调用的平均响应时间为例：如果大多数API请求都维持在100ms的响应时间范围内，而个别请求的响应时间需要5s，那么就会导致某些WEB页面的响应时间落到中位数的情况，而这种现象被称为长尾问题。
 

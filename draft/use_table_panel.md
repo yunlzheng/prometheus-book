@@ -1,4 +1,4 @@
-# 表格：Tabel Panel
+# 表格：Table Panel
 
 通过表格的形式可以同时显示多条时间序列中的数据，可以方便的查看和比较监控指标的数据。Table Panel是Grafana提供的基础可视化组件之一。
 
