@@ -9,7 +9,7 @@
 |从集群各节点kubelet组件中获取节点kubelet的基本运行状态的监控指标|node|白盒监控| kubelet |
 |从集群各节点kubelet内置的cAdvisor中获取，节点中运行的容器的监控指标|node|白盒监控| kubelet|
 |从部署到各个节点的Node Exporter中采集主机资源相关的运行资源|node|白盒监控| node exporter |
-|对于内置了Promthues支持的应用，需要从Pod实例中采集其自定义监控指标|pod|白盒监控| custom pod|
+|对于内置了Prometheus支持的应用，需要从Pod实例中采集其自定义监控指标|pod|白盒监控| custom pod|
 |获取API Server组件的访问地址，并从中获取Kubernetes集群相关的运行监控指标|endpoints|白盒监控| api server |
 |获取集群中Service的访问地址，并通过Blackbox Exporter获取网络探测指标|service|黑盒监控| blackbox exporter|
 |获取集群中Ingress的访问信息，并通过Blackbox Exporter获取网络探测指标|ingress|黑盒监控| blackbox exporter |
@@ -37,14 +37,14 @@ Kubelet组件运行在Kubernetes集群的各个节点中，其负责维护和管
 
 这里使用Node模式自动发现集群中所有Kubelet作为监控的数据采集目标，同时通过labelmap步骤，将Node节点上的标签，作为样本的标签保存到时间序列当中。
 
-重新加载promethues配置文件，并重建Promthues的Pod实例后，查看kubernetes-kubelet任务采集状态，我们会看到以下错误提示信息：
+重新加载promethues配置文件，并重建Prometheus的Pod实例后，查看kubernetes-kubelet任务采集状态，我们会看到以下错误提示信息：
 
 ```
 Get https://192.168.99.100:10250/metrics: x509: cannot validate certificate for 192.168.99.100 because it doesn't contain any IP SANs
 ```
 
 这是由于当前使用的ca证书中，并不包含192.168.99.100的地址信息。为了解决该问题，第一种方法是直接跳过ca证书校验过程，通过在tls_config中设置
-insecure_skip_verify为true即可。 这样Promthues在采集样本数据时，将会自动跳过ca证书的校验过程，从而从kubelet采集到监控数据：
+insecure_skip_verify为true即可。 这样Prometheus在采集样本数据时，将会自动跳过ca证书的校验过程，从而从kubelet采集到监控数据：
 
 ```
   - job_name: 'kubernetes-kubelet'
@@ -321,7 +321,7 @@ kubernetes   10.0.2.15:8443   166d
         replacement: kubernetes.default.svc:443
 ```
 
-在relabel_configs配置中第一步用于判断当前endpoints是否为kube-apiserver对用的地址。第二步，替换监控采集地址到kubernetes.default.svc:443即可。重新加载配置文件，重建Promthues实例，得到以下结果。
+在relabel_configs配置中第一步用于判断当前endpoints是否为kube-apiserver对用的地址。第二步，替换监控采集地址到kubernetes.default.svc:443即可。重新加载配置文件，重建Prometheus实例，得到以下结果。
 
 ![apiserver任务状态](./static/promethues-api-server-sd.eq1.png)
 
@@ -444,7 +444,7 @@ blackbox-exporter           ClusterIP   10.109.144.192   <none>        9115/TCP 
         target_label: kubernetes_name
 ```
 
-对于Ingress而言，也是一个相对类似的过程，这里给出对Ingress探测的Promthues任务配置作为参考：
+对于Ingress而言，也是一个相对类似的过程，这里给出对Ingress探测的Prometheus任务配置作为参考：
 
 ```
     - job_name: 'kubernetes-ingresses'

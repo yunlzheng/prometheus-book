@@ -1,6 +1,6 @@
 # 分布统计：Heatmap面板
 
-Heatmap是是Grafana v4.3版本以后新添加的可视化面板，通过热图可以直观的查看样本的分布情况。在Grafana v5.1版本中Heatmap完善了对Prometheus的支持。这部分，将介绍如何使用Heatmap Panel实现对Prometheus监控指标的可视化。
+Heatmap是Grafana v4.3版本以后新添加的可视化面板，通过热图可以直观的查看样本的分布情况。在Grafana v5.1版本中Heatmap完善了对Prometheus的支持。这部分，将介绍如何使用Heatmap Panel实现对Prometheus监控指标的可视化。
 
 ## 使用Heatmap可视化Histogram样本分布情况
 

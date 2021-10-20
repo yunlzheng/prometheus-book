@@ -6,4 +6,4 @@
 
 * Prometheus的前世今生
 * 使用Prometheus监控主机
-* Promthues的核心组件和概念
+* Prometheus的核心组件和概念
